@@ -1,17 +1,21 @@
-package de.kochen.food;
+package de.kochen.food.controller;
 
+import de.kochen.food.service.FoodService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "api/v1/food")
 public class FoodController {
+    private final FoodService foodService;
 
     @GetMapping(path = "{foodId}")
     public String getFoodById(@PathVariable("foodId") Long foodId) {
-        return "Kuchen";
+        return foodService.getFoodById(foodId);
     }
 
 

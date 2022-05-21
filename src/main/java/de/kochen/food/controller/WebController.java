@@ -1,4 +1,4 @@
-package de.kochen.food;
+package de.kochen.food.controller;
 
 
 import org.springframework.stereotype.Controller;
