@@ -22,7 +22,7 @@ class FoodControllerTest {
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'name':'Kuchen'}"))
-                .andExpect(jsonPath("$.unit.name").value("Stück"));
+                .andExpect(jsonPath("$.unitName").value("Stück"));
     }
 
     @IntegrationTest

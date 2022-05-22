@@ -4,6 +4,7 @@ import de.kochen.food.model.Food;
 import de.kochen.food.model.Unit;
 import de.kochen.food.repository.FoodRepository;
 import de.kochen.food.repository.UnitRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,11 @@ import java.util.List;
 
 @Configuration
 public class DataConfiguration {
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 
     @Bean
     CommandLineRunner commandLineRunnerUnit(UnitRepository unitRepository) {

@@ -1,6 +1,6 @@
 package de.kochen.food.controller;
 
-import de.kochen.food.model.Food;
+import de.kochen.food.dto.FoodDto;
 import de.kochen.food.service.FoodService;
 import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class FoodController {
 
 
     @GetMapping(path = "{foodId}")
-    public Food getFoodById(@PathVariable Long foodId) throws NotFoundException {
+    public FoodDto getFoodById(@PathVariable Long foodId) throws NotFoundException {
         return foodService.getFoodById(foodId);
     }
 
