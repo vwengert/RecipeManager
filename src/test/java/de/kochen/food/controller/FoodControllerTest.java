@@ -19,8 +19,15 @@ class FoodControllerTest {
     @Test
     void getFoodById_Returns200() throws Exception {
         mockMvc.perform(get("/api/v1/food/1")
-                .contentType("application/json"))
+                        .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'name':'Kuchen'}"));
+    }
+
+    @Test
+    void getFoodById_ReturnsFailureWhenFoodNotExists() throws Exception {
+        mockMvc.perform(get("/api/v1/food/3")
+                        .contentType("application/json"))
+                .andExpect(status().isNotFound());
     }
 }

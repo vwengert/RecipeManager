@@ -19,9 +19,16 @@ class UnitControllerTest {
     @Test
     void getUnitById_Returns200() throws Exception {
         mockMvc.perform(get("/api/v1/unit/1")
-                .contentType("application/json"))
+                        .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'name':'Stück'}"));
 
+    }
+
+    @Test
+    void getUnitById_ReturnsFailureWhenFoodNotExists() throws Exception {
+        mockMvc.perform(get("/api/v1/unit/3")
+                        .contentType("application/json"))
+                .andExpect(status().isNotFound());
     }
 }

@@ -2,9 +2,12 @@ package de.kochen.food.controller;
 
 import de.kochen.food.model.Food;
 import de.kochen.food.service.FoodService;
+import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
@@ -14,7 +17,7 @@ public class FoodController {
 
 
     @GetMapping(path = "{foodId}")
-    public Food getFoodById(@PathVariable Long foodId) {
+    public Food getFoodById(@PathVariable Long foodId) throws NotFoundException {
         return foodService.getFoodById(foodId);
     }
 
