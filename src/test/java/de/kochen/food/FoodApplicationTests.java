@@ -3,7 +3,6 @@ package de.kochen.food;
 import de.kochen.food.controller.FoodController;
 import de.kochen.food.controller.UnitController;
 import de.kochen.food.util.IntegrationTest;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
