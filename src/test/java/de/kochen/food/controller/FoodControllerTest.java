@@ -1,5 +1,7 @@
 package de.kochen.food.controller;
 
+import de.kochen.food.util.IntegrationTest;
+import de.kochen.food.util.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,7 +18,7 @@ class FoodControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
+    @IntegrationTest
     void getFoodById_Returns200() throws Exception {
         mockMvc.perform(get("/api/v1/food/1")
                         .contentType("application/json"))
@@ -24,7 +26,7 @@ class FoodControllerTest {
                 .andExpect(content().json("{'name':'Kuchen'}"));
     }
 
-    @Test
+    @IntegrationTest
     void getFoodById_ReturnsFailureWhenFoodNotExists() throws Exception {
         mockMvc.perform(get("/api/v1/food/3")
                         .contentType("application/json"))

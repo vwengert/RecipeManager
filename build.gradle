@@ -71,3 +71,17 @@ tasks.named('contractTest') {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task unitTest(type: Test) {
+	useJUnitPlatform() {
+		excludeTags 'Integration'
+//		includeTags 'Unit'
+	}
+}
+
+task IntegrationTest(type: Test) {
+	useJUnitPlatform() {
+		excludeTags 'Unit'
+//		includeTags 'Integration'
+	}
+}
