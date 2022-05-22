@@ -1,7 +1,7 @@
 package de.kochen.food.dto;
 
 
-import lombok.*;
+import lombok.Data;
 
 @Data
 public class FoodDto {
