@@ -23,10 +23,10 @@ public class DataConfiguration {
     }
 
     @Bean
-    CommandLineRunner commandLineRunnerFood(FoodRepository foodRepository) {
+    CommandLineRunner commandLineRunnerFood(FoodRepository foodRepository, UnitRepository unitRepository) {
         return args -> {
-            Food foodKuchen = new Food(1L, "Kuchen", 1L);
-            Food foodKartoffeln = new Food(2L, "Kartoffeln", 2L);
+            Food foodKuchen = new Food(1L, "Kuchen", unitRepository.findById(1L).orElseThrow(IllegalArgumentException::new));
+            Food foodKartoffeln = new Food(2L, "Kartoffeln", unitRepository.findById(2L).orElseThrow(IllegalArgumentException::new));
             foodRepository.saveAll(List.of(foodKuchen, foodKartoffeln));
         };
     }

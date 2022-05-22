@@ -6,9 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -21,7 +21,8 @@ class FoodControllerTest {
         mockMvc.perform(get("/api/v1/food/1")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{'name':'Kuchen'}"));
+                .andExpect(content().json("{'name':'Kuchen'}"))
+                .andExpect(jsonPath("$.unit.name").value("Stück"));
     }
 
     @IntegrationTest

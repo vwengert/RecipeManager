@@ -20,7 +20,7 @@ class FoodApplicationTests {
     @IntegrationTest
     void contextLoads() {
         assertThat(unitController).isNotNull();
-        assertThat(unitController).isNotNull();
+        assertThat(foodController).isNotNull();
     }
 
 }

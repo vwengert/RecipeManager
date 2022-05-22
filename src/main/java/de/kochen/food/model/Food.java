@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -19,5 +17,8 @@ public class Food {
     @Id
     private Long guid;
     private String name;
-    private Long unitGuid;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "unitId")
+    private Unit unit;
 }

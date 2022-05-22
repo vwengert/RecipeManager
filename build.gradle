@@ -75,13 +75,11 @@ tasks.named('test') {
 task unitTest(type: Test) {
     useJUnitPlatform() {
         excludeTags 'Integration'
-//		includeTags 'Unit'
     }
 }
 
 task IntegrationTest(type: Test) {
     useJUnitPlatform() {
         excludeTags 'Unit'
-//		includeTags 'Integration'
     }
 }
