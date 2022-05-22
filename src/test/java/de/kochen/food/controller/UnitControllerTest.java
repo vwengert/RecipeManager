@@ -12,15 +12,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-class FoodControllerTest {
+class UnitControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void getFoodById_Returns200() throws Exception {
-        mockMvc.perform(get("/api/v1/food/1")
+    void getUnitById_Returns200() throws Exception {
+        mockMvc.perform(get("/api/v1/unit/1")
                 .contentType("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{'name':'Kuchen'}"));
+                .andExpect(content().json("{'name':'Stück'}"));
+
     }
 }

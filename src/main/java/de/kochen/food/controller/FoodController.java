@@ -1,11 +1,10 @@
 package de.kochen.food.controller;
 
+import de.kochen.food.model.Food;
 import de.kochen.food.service.FoodService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -13,8 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class FoodController {
     private final FoodService foodService;
 
+
     @GetMapping(path = "{foodId}")
-    public String getFoodById(@PathVariable("foodId") Long foodId) {
+    public Food getFoodById(@PathVariable Long foodId) {
         return foodService.getFoodById(foodId);
     }
 

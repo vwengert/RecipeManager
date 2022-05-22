@@ -1,5 +1,7 @@
 package de.kochen.food.service;
 
+import de.kochen.food.model.Food;
+
 public interface FoodService {
-    String getFoodById(Long foodId);
+    Food getFoodById(Long foodId);
 }
