@@ -25,10 +25,7 @@ public class FoodController {
 
     @GetMapping()
     public List<FoodDto> getFood() {
-        return List.of(
-                FoodDto.builder().name("Kuchen").build(),
-                FoodDto.builder().name("Kartoffeln").build()
-        );
+        return foodService.getFood();
     }
 
 
