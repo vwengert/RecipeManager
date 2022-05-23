@@ -30,4 +30,14 @@ class FoodControllerTest {
                         .contentType("application/json"))
                 .andExpect(status().isNotFound());
     }
+
+    @IntegrationTest
+    void getFoodReturnsArray() throws Exception {
+        mockMvc.perform(get("/api/v1/food")
+                    .contentType("application/json"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value("Kuchen"))
+                .andExpect(jsonPath("$[1].name").value("Kartoffeln"));
+    }
+
 }
