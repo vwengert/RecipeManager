@@ -17,7 +17,7 @@ class FoodControllerTest {
 
     @IntegrationTest
     void getFoodById_Returns200() throws Exception {
-        mockMvc.perform(get("/api/v1/food/1")
+        mockMvc.perform(get("/food/api/v1/byId/1")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'name':'Kuchen'}"))
@@ -26,18 +26,26 @@ class FoodControllerTest {
 
     @IntegrationTest
     void getFoodById_ReturnsFailureWhenFoodNotExists() throws Exception {
-        mockMvc.perform(get("/api/v1/food/3")
+        mockMvc.perform(get("/food/api/v1/byId/3")
                         .contentType("application/json"))
                 .andExpect(status().isNotFound());
     }
 
     @IntegrationTest
     void getFoodReturnsArray() throws Exception {
-        mockMvc.perform(get("/api/v1/food")
+        mockMvc.perform(get("/food/api/v1/food")
                     .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Kuchen"))
                 .andExpect(jsonPath("$[1].name").value("Kartoffeln"));
+    }
+
+    @IntegrationTest
+    void getFoodByName_ReturnsFood() throws Exception {
+        mockMvc.perform(get("/food/api/v1/byName/Kuchen")
+                    .contentType("application/json"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{'name':'Kuchen'}"));
     }
 
 }

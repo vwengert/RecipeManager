@@ -13,19 +13,24 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "api/v1/food")
+@RequestMapping(path = "/food/api/v1/")
 public class FoodController {
     private final FoodService foodService;
 
 
-    @GetMapping(path = "{foodId}")
+    @GetMapping(path = "byId/{foodId}")
     public FoodDto getFoodById(@PathVariable Long foodId) throws NotFoundException {
         return foodService.getFoodById(foodId);
     }
 
-    @GetMapping()
+    @GetMapping("food")
     public List<FoodDto> getFood() {
         return foodService.getFood();
+    }
+
+    @GetMapping(path ="byName/{name}")
+    public FoodDto getFoodByName(@PathVariable String name) throws NotFoundException {
+        return foodService.getFoodByName(name);
     }
 
 

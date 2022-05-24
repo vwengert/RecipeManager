@@ -30,4 +30,9 @@ public class FoodServiceImpl implements FoodService {
                 .map(food -> modelMapper.map(food, FoodDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public FoodDto getFoodByName(String name) throws NotFoundException {
+        return modelMapper.map(foodRepository.findByName(name).orElseThrow(NotFoundException::new), FoodDto.class);
+    }
 }
