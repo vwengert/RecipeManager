@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "api/v1/")
@@ -19,6 +21,11 @@ public class UnitController {
     @GetMapping(path = "unitById/{unitId}")
     public ResponseEntity<Unit> getUnitById(@PathVariable Long unitId) throws NotFoundException {
         return new ResponseEntity<>(unitService.getUnitById(unitId), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "unit")
+    public ResponseEntity<List<Unit>> getUnit() {
+        return new ResponseEntity<>(unitService.getUnit(), HttpStatus.OK);
     }
 
     @PostMapping(path = "unit",

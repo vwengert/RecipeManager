@@ -17,7 +17,7 @@ public interface FoodService {
     FoodDto getFoodById(Long foodId) throws NotFoundException;
 
     /**
-     * @return get List of all Food
+     * @return Array of Food
      */
     List<FoodDto> getFood();
 

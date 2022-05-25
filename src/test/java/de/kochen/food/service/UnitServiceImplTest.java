@@ -7,7 +7,6 @@ import de.kochen.food.util.NotFoundException;
 import de.kochen.food.util.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +47,17 @@ class UnitServiceImplTest {
     }
 
     @UnitTest
-    @Transactional
+    public void getUnitReturnsArray() {
+        when(unitRepository.findAll()).thenReturn(unitList);
+
+        List<Unit> units = unitService.getUnit();
+
+        assertNotNull(units);
+        assertEquals("piece", units.get(0).getName());
+        assertEquals("kg", units.get(1).getName());
+    }
+
+    @UnitTest
     public void postUnitReturnsUnitWhenCreated() throws FoundException {
         when(unitRepository.existsByName(any())).thenReturn(false);
         when(unitRepository.save(any())).thenReturn(unitList.get(0));
@@ -60,7 +69,6 @@ class UnitServiceImplTest {
     }
 
     @UnitTest
-    @Transactional
     public void postUnitThrows200WhenUnitAlreadyExists() {
         when(unitRepository.existsByName(any())).thenReturn(true);
 

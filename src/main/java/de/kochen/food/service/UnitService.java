@@ -4,6 +4,8 @@ import de.kochen.food.model.Unit;
 import de.kochen.food.util.FoundException;
 import de.kochen.food.util.NotFoundException;
 
+import java.util.List;
+
 public interface UnitService {
 
     /**
@@ -12,6 +14,11 @@ public interface UnitService {
      * @throws NotFoundException Unit not found
      */
     Unit getUnitById(Long unitId) throws NotFoundException;
+
+    /**
+     * @return Array of Units
+     */
+    List<Unit> getUnit();
 
     /**
      * @param unit neue anzulegende Unit

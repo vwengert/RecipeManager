@@ -16,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -60,6 +59,17 @@ class UnitControllerTest {
         mockMvc.perform(get("/api/v1/unitById/" + id)
                         .contentType("application/json"))
                 .andExpect(status().isNotFound());
+    }
+
+    @IntegrationTest
+    @Transactional
+    void getUnitReturnsArray() throws Exception {
+
+        mockMvc.perform(get("/api/v1/unit")
+                        .contentType("application/json"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value("Stück"))
+                .andExpect(jsonPath("$[1].name").value("kg"));
     }
 
     @IntegrationTest

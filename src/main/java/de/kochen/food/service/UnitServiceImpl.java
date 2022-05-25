@@ -7,6 +7,8 @@ import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class UnitServiceImpl implements UnitService {
@@ -17,6 +19,11 @@ public class UnitServiceImpl implements UnitService {
         return unitRepository.findById(unitId).orElseThrow(
                 NotFoundException::new
         );
+    }
+
+    @Override
+    public List<Unit> getUnit() {
+        return unitRepository.findAll();
     }
 
     @Override
