@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,7 +20,7 @@ public class FoodController {
     private final FoodService foodService;
 
     @GetMapping(path = "foodById/{foodId}")
-    public ResponseEntity<FoodDto> getFoodById(@PathVariable UUID foodId) throws NotFoundException {
+    public ResponseEntity<FoodDto> getFoodById(@PathVariable Long foodId) throws NotFoundException {
         return new ResponseEntity<>(foodService.getFoodById(foodId), HttpStatus.OK);
     }
 

@@ -1,11 +1,9 @@
 package de.kochen.food.model;
 
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -16,12 +14,8 @@ import java.util.UUID;
 @Table
 public class Food implements Serializable {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

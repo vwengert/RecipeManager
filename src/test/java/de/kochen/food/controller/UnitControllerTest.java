@@ -7,12 +7,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,6 +26,7 @@ class UnitControllerTest {
     MockMvc mockMvc;
     @Autowired
     UnitRepository unitRepository;
+
 
     Unit unitStueck;
     Unit unitKg;
@@ -50,12 +54,35 @@ class UnitControllerTest {
     @IntegrationTest
     @Transactional
     void getUnitById_ReturnsFailureWhenFoodNotExists() throws Exception {
-        UUID id = unitKg.getId();
+        Long id = unitKg.getId();
         unitRepository.delete(unitKg);
 
         mockMvc.perform(get("/api/v1/unitById/" + id)
                         .contentType("application/json"))
                 .andExpect(status().isNotFound());
+    }
+
+    @IntegrationTest
+    @Transactional
+    void postUnitReturns201() throws Exception {
+
+        mockMvc.perform(post("/api/v1/unit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Meter\"}"))
+                .andExpect(status().isCreated());
+
+        assertEquals("Meter", unitRepository.findByName("Meter").get().getName());
+        assertNotNull(unitRepository.findByName("Meter").get().getId());
+    }
+
+    @IntegrationTest
+    @Transactional
+    void postUnitReturns200IfFoodAlreadyExists() throws Exception {
+
+        mockMvc.perform(post("/api/v1/unit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Stück\"}"))
+                .andExpect(status().isOk());
     }
 
 }

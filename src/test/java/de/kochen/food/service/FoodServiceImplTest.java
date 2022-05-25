@@ -14,7 +14,6 @@ import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,12 +32,12 @@ class FoodServiceImplTest {
     @BeforeEach
     public void setUp() {
         unitList = List.of(
-                Unit.builder().id(new UUID(1, 1)).name("piece").build(),
-                Unit.builder().id(new UUID(2, 2)).name("kg").build()
+                Unit.builder().id(1L).name("piece").build(),
+                Unit.builder().id(2L).name("kg").build()
         );
         foodList = List.of(
-                Food.builder().id(new UUID(1, 1)).name("cake").unit(unitList.get(0)).build(),
-                Food.builder().id(new UUID(2, 2)).name("potato").unit(unitList.get(1)).build()
+                Food.builder().id(1L).name("cake").unit(unitList.get(0)).build(),
+                Food.builder().id(2L).name("potato").unit(unitList.get(1)).build()
         );
         foodDtoList = List.of(
                 FoodDto.builder().name("cake").unitName("piece").build(),
@@ -48,9 +47,9 @@ class FoodServiceImplTest {
 
     @UnitTest
     public void getUnitByIdReturnsFood() throws NotFoundException {
-        when(foodRepository.findById(new UUID(1, 1))).thenReturn(Optional.of(foodList.get(0)));
+        when(foodRepository.findById(1L)).thenReturn(Optional.of(foodList.get(0)));
 
-        FoodDto foodDto = foodService.getFoodById(new UUID(1, 1));
+        FoodDto foodDto = foodService.getFoodById(1L);
 
         assertNotNull(foodDto);
         assertEquals("cake", foodDto.getName());
@@ -59,9 +58,9 @@ class FoodServiceImplTest {
 
     @UnitTest
     public void getUnitByIdThrowsWhenNotFound() {
-        when(foodRepository.findById(new UUID(3, 3))).thenReturn(Optional.empty());
+        when(foodRepository.findById(3L)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> foodService.getFoodById(new UUID(3, 3)));
+        assertThrows(NotFoundException.class, () -> foodService.getFoodById(3L));
     }
 
     @UnitTest
@@ -96,10 +95,10 @@ class FoodServiceImplTest {
 
     @UnitTest
     public void postFoodThrowsIdNotAllowedWhenRequestSendsIds() {
-        foodDtoList.get(0).setGuid(new UUID(1, 1));
-        foodDtoList.get(1).setUnitGuid(new UUID(1, 1));
-        foodDtoList.get(2).setGuid(new UUID(1, 1));
-        foodDtoList.get(2).setUnitGuid(new UUID(1, 1));
+        foodDtoList.get(0).setId(1L);
+        foodDtoList.get(1).setUnitId(1L);
+        foodDtoList.get(2).setId(1L);
+        foodDtoList.get(2).setUnitId(1L);
 
         assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(0)));
         assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(1)));
@@ -124,7 +123,7 @@ class FoodServiceImplTest {
     public void postFoodSavesAndReturnsFoodWhenNameIsNewAndUnitExists() throws FoundException, NotFoundException, IdNotAllowedException {
         when(unitRepository.findByName("piece")).thenReturn(Optional.of(unitList.get(0)));
         when(foodRepository.findByName("apple")).thenReturn(Optional.empty());
-        when(foodRepository.save(any())).thenReturn(new Food(new UUID(3, 3), "apple", new Unit(new UUID(1, 1), "piece")));
+        when(foodRepository.save(any())).thenReturn(new Food(3L, "apple", new Unit(1L, "piece")));
 
         FoodDto foodDto = foodService.postFood(foodDtoList.get(2));
         assertEquals("apple", foodDto.getName());
