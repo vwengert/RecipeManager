@@ -1,8 +1,11 @@
 package de.kochen.food.model;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -11,12 +14,17 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table
-public class Food {
+public class Food implements Serializable {
     @Id
-    private Long guid;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private UUID id;
     private String name;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "unitId")
     private Unit unit;
 }

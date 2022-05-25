@@ -2,36 +2,44 @@ package de.kochen.food.controller;
 
 import de.kochen.food.dto.FoodDto;
 import de.kochen.food.service.FoodService;
+import de.kochen.food.util.FoundException;
+import de.kochen.food.util.IdNotAllowedException;
 import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/food/api/v1/")
+@RequestMapping(path = "/api/v1/")
 public class FoodController {
     private final FoodService foodService;
 
-
-    @GetMapping(path = "byId/{foodId}")
-    public FoodDto getFoodById(@PathVariable Long foodId) throws NotFoundException {
-        return foodService.getFoodById(foodId);
+    @GetMapping(path = "foodById/{foodId}")
+    public ResponseEntity<FoodDto> getFoodById(@PathVariable UUID foodId) throws NotFoundException {
+        return new ResponseEntity<>(foodService.getFoodById(foodId), HttpStatus.OK);
     }
 
-    @GetMapping("food")
-    public List<FoodDto> getFood() {
-        return foodService.getFood();
+    @GetMapping(path = "food")
+    public ResponseEntity<List<FoodDto>> getFood() {
+        return new ResponseEntity<>(foodService.getFood(), HttpStatus.OK);
     }
 
-    @GetMapping(path ="byName/{name}")
-    public FoodDto getFoodByName(@PathVariable String name) throws NotFoundException {
-        return foodService.getFoodByName(name);
+    @GetMapping(path = "foodByName/{name}")
+    public ResponseEntity<FoodDto> getFoodByName(@PathVariable String name) throws NotFoundException {
+        return new ResponseEntity<>(foodService.getFoodByName(name), HttpStatus.OK);
     }
 
+    @PostMapping(path = "food",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<FoodDto> postFood(@RequestBody FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
+        return new ResponseEntity<>(foodService.postFood(foodDto), HttpStatus.CREATED);
+    }
 
 }
