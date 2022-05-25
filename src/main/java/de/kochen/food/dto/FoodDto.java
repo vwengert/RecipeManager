@@ -7,15 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class FoodDto implements Serializable {
-    private UUID guid;
+    private Long id;
     private String name;
-    private UUID unitGuid;
+    private Long unitId;
     private String unitName;
 }

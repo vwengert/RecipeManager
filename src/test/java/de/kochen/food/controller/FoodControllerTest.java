@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -64,7 +63,7 @@ class FoodControllerTest {
     @IntegrationTest
     @Transactional
     void getFoodById_ReturnsFailureWhenFoodNotExists() throws Exception {
-        UUID id = foodKartoffeln.getId();
+        Long id = foodKartoffeln.getId();
         foodRepository.delete(foodKartoffeln);
 
         mockMvc.perform(get("/api/v1/foodById/" + id)
@@ -94,6 +93,7 @@ class FoodControllerTest {
     }
 
     @IntegrationTest
+    @Transactional
     void postFoodReturns201() throws Exception {
 
         mockMvc.perform(post("/api/v1/food")

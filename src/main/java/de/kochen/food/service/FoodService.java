@@ -6,7 +6,6 @@ import de.kochen.food.util.IdNotAllowedException;
 import de.kochen.food.util.NotFoundException;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface FoodService {
 
@@ -15,7 +14,7 @@ public interface FoodService {
      * @return Food with Baseunit
      * @throws NotFoundException Food not found
      */
-    FoodDto getFoodById(UUID foodId) throws NotFoundException;
+    FoodDto getFoodById(Long foodId) throws NotFoundException;
 
     /**
      * @return get List of all Food

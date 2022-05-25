@@ -1,9 +1,8 @@
 package de.kochen.food.service;
 
 import de.kochen.food.model.Unit;
+import de.kochen.food.util.FoundException;
 import de.kochen.food.util.NotFoundException;
-
-import java.util.UUID;
 
 public interface UnitService {
 
@@ -12,5 +11,11 @@ public interface UnitService {
      * @return Unit
      * @throws NotFoundException Unit not found
      */
-    Unit getUnitById(UUID unitId) throws NotFoundException;
+    Unit getUnitById(Long unitId) throws NotFoundException;
+
+    /**
+     * @param unit neue anzulegende Unit
+     * @return neu angelegte Unit
+     */
+    Unit postUnit(Unit unit) throws FoundException;
 }

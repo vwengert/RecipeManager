@@ -13,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class FoodServiceImpl implements FoodService {
     private final ModelMapper modelMapper;
 
     @Override
-    public FoodDto getFoodById(UUID foodId) throws NotFoundException {
+    public FoodDto getFoodById(Long foodId) throws NotFoundException {
         return modelMapper.map(foodRepository.findById(foodId).orElseThrow(NotFoundException::new), FoodDto.class);
     }
 
@@ -44,7 +43,7 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public FoodDto postFood(FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
-        if (foodDto.getGuid() != null || foodDto.getUnitGuid() != null)
+        if (foodDto.getId() != null || foodDto.getUnitId() != null)
             throw new IdNotAllowedException();
         if (foodRepository.findByName(foodDto.getName()).isPresent())
             throw new FoundException();
@@ -54,7 +53,7 @@ public class FoodServiceImpl implements FoodService {
         food.setUnit(unit);
         Food savedFood = foodRepository.save(food);
 
-
         return modelMapper.map(savedFood, FoodDto.class);
     }
+
 }
