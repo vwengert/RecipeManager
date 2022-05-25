@@ -6,6 +6,7 @@ import de.kochen.food.util.NotFoundException;
 import de.kochen.food.util.UnitTest;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,18 +20,18 @@ class UnitServiceImplTest {
 
     @UnitTest
     public void getUnitByIdReturnsFood() throws NotFoundException {
-        when(unitRepository.findById(1L)).thenReturn(Optional.of(new Unit(1L, "piece")));
+        when(unitRepository.findById(new UUID(1, 1))).thenReturn(Optional.of(new Unit(new UUID(1, 1), "piece")));
 
-        Unit unit = unitService.getUnitById(1L);
+        Unit unit = unitService.getUnitById(new UUID(1, 1));
 
         assertEquals("piece", unit.getName());
     }
 
     @UnitTest
     public void getUnitByIdThrowsWhenNotFound() {
-        when(unitRepository.findById(3L)).thenReturn(Optional.empty());
+        when(unitRepository.findById(new UUID(3, 3))).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> unitService.getUnitById(3L));
+        assertThrows(NotFoundException.class, () -> unitService.getUnitById(new UUID(3, 3)));
     }
 
 }

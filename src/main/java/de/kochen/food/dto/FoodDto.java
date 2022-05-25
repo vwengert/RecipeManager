@@ -6,13 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FoodDto {
-    private Long guid;
+public class FoodDto implements Serializable {
+    private UUID guid;
     private String name;
-    private Long unitGuid;
+    private UUID unitGuid;
     private String unitName;
 }
