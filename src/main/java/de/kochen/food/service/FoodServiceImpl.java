@@ -51,6 +51,7 @@ public class FoodServiceImpl implements FoodService {
         Unit unit = unitRepository.findByName(foodDto.getUnitName()).orElseThrow(NotFoundException::new);
 
         Food food = modelMapper.map(foodDto, Food.class);
+        food.setUnit(unit);
         Food savedFood = foodRepository.save(food);
 
 

@@ -24,7 +24,7 @@ public class Food implements Serializable {
     private UUID id;
     private String name;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unitId")
     private Unit unit;
 }
