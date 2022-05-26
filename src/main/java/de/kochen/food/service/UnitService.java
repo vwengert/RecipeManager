@@ -38,7 +38,6 @@ public interface UnitService {
 	Unit putUnit(Unit unit) throws NotFoundException;
 
 	/**
-	 *
 	 * @param id of unit to delete
 	 * @throws NoContentException unit not found
 	 */
