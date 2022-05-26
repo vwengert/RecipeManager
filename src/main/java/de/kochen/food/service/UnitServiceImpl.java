@@ -40,4 +40,14 @@ public class UnitServiceImpl implements UnitService {
 		return unitRepository.save(unit);
 	}
 
+	@Override
+	public Unit putUnit(Unit unit) throws NotFoundException {
+		Unit searchedUnit = unitRepository.findById(unit.getId()).orElseThrow(
+				NotFoundException::new
+		);
+		searchedUnit.setName(unit.getName());
+
+		return unitRepository.save(searchedUnit);
+	}
+
 }

@@ -12,14 +12,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
-
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = FoodApplication.class)
@@ -38,9 +36,9 @@ class UnitControllerTest {
 	@Transactional
 	void setUp() {
 		unitStueck = new Unit(null, "Stück");
-		unitStueck = unitRepository.saveAndFlush(unitStueck);
+		unitStueck = unitRepository.save(unitStueck);
 		unitKg = new Unit(null, "kg");
-		unitKg = unitRepository.saveAndFlush(unitKg);
+		unitKg = unitRepository.save(unitKg);
 	}
 
 	@IntegrationTest
@@ -108,7 +106,6 @@ class UnitControllerTest {
 				.andExpect(status().isCreated());
 
 		Optional<Unit> unitOptional = unitRepository.findByName("Meter");
-		assertThat(unitOptional.isPresent());
 		assertEquals("Meter", unitOptional.get().getName());
 		assertNotNull(unitOptional.get().getId());
 	}
@@ -121,6 +118,30 @@ class UnitControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"name\":\"Stück\"}"))
 				.andExpect(status().isOk());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void putUnitReturnsWith200WhenExistingResourceIsModified() throws Exception {
+
+		mockMvc.perform(put("/api/v1/unit")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"id\":\"" + unitStueck.getId() + "\",\"name\":\"Käse\"}"))
+				.andExpect(status().isOk());
+
+		Unit unit = unitRepository.findById(unitStueck.getId()).orElse(null);
+		assertNotNull(unit);
+		assertEquals("Käse", unit.getName());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void putUnitReturnsNotFoundWhenIdNotExists() throws Exception {
+
+		mockMvc.perform(put("/api/v1/unit")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"id\":\"77\",\"name\":\"Käse\"}"))
+				.andExpect(status().isNotFound());
 	}
 
 }
