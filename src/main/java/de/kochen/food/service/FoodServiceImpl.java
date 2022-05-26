@@ -7,6 +7,7 @@ import de.kochen.food.repository.FoodRepository;
 import de.kochen.food.repository.UnitRepository;
 import de.kochen.food.util.FoundException;
 import de.kochen.food.util.IdNotAllowedException;
+import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -70,6 +71,14 @@ public class FoodServiceImpl implements FoodService {
 		Food savedFood = foodRepository.save(food);
 
 		return modelMapper.map(savedFood, FoodDto.class);
+	}
+
+	@Override
+	public void deleteFood(Long foodId) throws NoContentException {
+		Food food = foodRepository.findById(foodId).orElseThrow(
+				NoContentException::new
+		);
+		foodRepository.delete(food);
 	}
 
 }

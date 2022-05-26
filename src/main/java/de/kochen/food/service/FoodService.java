@@ -3,6 +3,7 @@ package de.kochen.food.service;
 import de.kochen.food.dto.FoodDto;
 import de.kochen.food.util.FoundException;
 import de.kochen.food.util.IdNotAllowedException;
+import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 
 import java.util.List;
@@ -10,8 +11,8 @@ import java.util.List;
 public interface FoodService {
 
 	/**
-	 * @param foodId Id to search for food
-	 * @return Food with Baseunit
+	 * @param foodId id to search for food
+	 * @return Food with base unit
 	 * @throws NotFoundException Food not found
 	 */
 	FoodDto getFoodById(Long foodId) throws NotFoundException;
@@ -38,10 +39,15 @@ public interface FoodService {
 	FoodDto postFood(FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException;
 
 	/**
-	 *
 	 * @param foodDto food Dto to change
 	 * @return changed food Dto
 	 * @throws NotFoundException data not found
 	 */
 	FoodDto putFood(FoodDto foodDto) throws NotFoundException;
+
+	/**
+	 * @param foodId food to delete
+	 * @throws NoContentException content to delete not found
+	 */
+	void deleteFood(Long foodId) throws NoContentException;
 }

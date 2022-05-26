@@ -12,5 +12,6 @@ import java.util.Optional;
 @Repository
 public interface UnitRepository extends JpaRepository<Unit, Long> {
 	Optional<Unit> findByName(String name);
+
 	Boolean existsByName(String name);
 }

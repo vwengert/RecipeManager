@@ -4,6 +4,7 @@ import de.kochen.food.dto.FoodDto;
 import de.kochen.food.service.FoodService;
 import de.kochen.food.util.FoundException;
 import de.kochen.food.util.IdNotAllowedException;
+import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,12 @@ public class FoodController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<FoodDto> putFood(@RequestBody FoodDto foodDto) throws NotFoundException {
 		return new ResponseEntity<>(foodService.putFood(foodDto), HttpStatus.OK);
+	}
+
+	@DeleteMapping(path = "food/{foodId}")
+	public ResponseEntity<?> deleteFood(@PathVariable Long foodId) throws NoContentException {
+		foodService.deleteFood(foodId);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }

@@ -5,10 +5,7 @@ import de.kochen.food.model.Food;
 import de.kochen.food.model.Unit;
 import de.kochen.food.repository.FoodRepository;
 import de.kochen.food.repository.UnitRepository;
-import de.kochen.food.util.FoundException;
-import de.kochen.food.util.IdNotAllowedException;
-import de.kochen.food.util.NotFoundException;
-import de.kochen.food.util.UnitTest;
+import de.kochen.food.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.modelmapper.ModelMapper;
 
@@ -157,6 +154,22 @@ class FoodServiceImplTest {
 		FoodDto foodDto = foodService.putFood(foodDtoToChange);
 
 		assertEquals(foodDtoList.get(0).getUnitName(), foodDto.getUnitName());
+	}
+
+	@UnitTest
+	public void deleteThrowsNotFoundWhenFoodNotExists() {
+		when(foodRepository.findById(any())).thenReturn(Optional.empty());
+
+		assertThrows(NoContentException.class, () -> foodService.deleteFood(8888L));
+	}
+
+	@UnitTest
+	public void deleteOnlyDeletesFoodButNotUnit() {
+		Unit unit = new Unit(13L, "don't delete me");
+		Food food = new Food(13L, "delete me", unit);
+		when(foodRepository.findById(any())).thenReturn(Optional.of(food));
+
+		assertDoesNotThrow(() -> foodService.deleteFood(food.getId()));
 	}
 
 }
