@@ -1,5 +1,6 @@
 package de.kochen.food.controller;
 
+import de.kochen.food.FoodApplication;
 import de.kochen.food.model.Unit;
 import de.kochen.food.repository.UnitRepository;
 import de.kochen.food.util.IntegrationTest;
@@ -12,13 +13,16 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = FoodApplication.class)
 @AutoConfigureMockMvc
 class UnitControllerTest {
 	@Autowired
@@ -63,6 +67,28 @@ class UnitControllerTest {
 
 	@IntegrationTest
 	@Transactional
+	void getUnitByName_Returns200() throws Exception {
+
+		mockMvc.perform(get("/api/v1/unitByName/" + unitStueck.getName())
+						.contentType("application/json"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{'name':'Stück'}"));
+
+	}
+
+	@IntegrationTest
+	@Transactional
+	void getUnitByName_ReturnsFailureWhenFoodNotExists() throws Exception {
+		String name = unitKg.getName();
+		unitRepository.delete(unitKg);
+
+		mockMvc.perform(get("/api/v1/unitByName/" + name)
+						.contentType("application/json"))
+				.andExpect(status().isNotFound());
+	}
+
+	@IntegrationTest
+	@Transactional
 	void getUnitReturnsArray() throws Exception {
 
 		mockMvc.perform(get("/api/v1/unit")
@@ -81,8 +107,10 @@ class UnitControllerTest {
 						.content("{\"name\":\"Meter\"}"))
 				.andExpect(status().isCreated());
 
-		assertEquals("Meter", unitRepository.findByName("Meter").get().getName());
-		assertNotNull(unitRepository.findByName("Meter").get().getId());
+		Optional<Unit> unitOptional = unitRepository.findByName("Meter");
+		assertThat(unitOptional.isPresent());
+		assertEquals("Meter", unitOptional.get().getName());
+		assertNotNull(unitOptional.get().getId());
 	}
 
 	@IntegrationTest

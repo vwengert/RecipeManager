@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 class FoodServiceImplTest {
 	private final FoodRepository foodRepository = mock(FoodRepository.class);
 	private final UnitRepository unitRepository = mock(UnitRepository.class);
-	private final FoodService foodService = new FoodServiceImpl(foodRepository, unitRepository, new ModelMapper());
+	private final FoodServiceImpl foodService = new FoodServiceImpl(foodRepository, unitRepository, new ModelMapper());
 
 	private List<Unit> unitList;
 	private List<Food> foodList;

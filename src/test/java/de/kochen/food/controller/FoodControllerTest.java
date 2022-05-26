@@ -1,5 +1,6 @@
 package de.kochen.food.controller;
 
+import de.kochen.food.FoodApplication;
 import de.kochen.food.model.Food;
 import de.kochen.food.model.Unit;
 import de.kochen.food.repository.FoodRepository;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = FoodApplication.class)
 @AutoConfigureMockMvc
 class FoodControllerTest {
 	@Autowired
@@ -101,7 +102,7 @@ class FoodControllerTest {
 						.content("{\"name\":\"Apfel\",\"unitName\":\"Stück\"}"))
 				.andExpect(status().isCreated());
 
-		assertEquals("Apfel", foodRepository.findByName("Apfel").get().getName());
+		assertEquals("Apfel", foodRepository.findByName("Apfel").orElse(new Food(null, "", new Unit(null, ""))).getName());
 	}
 
 	@IntegrationTest

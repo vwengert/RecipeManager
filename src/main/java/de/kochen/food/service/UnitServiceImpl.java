@@ -22,6 +22,13 @@ public class UnitServiceImpl implements UnitService {
 	}
 
 	@Override
+	public Unit getUnitByName(String unitName) throws NotFoundException {
+		return unitRepository.findByName(unitName).orElseThrow(
+				NotFoundException::new
+		);
+	}
+
+	@Override
 	public List<Unit> getUnit() {
 		return unitRepository.findAll();
 	}
@@ -32,4 +39,5 @@ public class UnitServiceImpl implements UnitService {
 			throw new FoundException();
 		return unitRepository.save(unit);
 	}
+
 }

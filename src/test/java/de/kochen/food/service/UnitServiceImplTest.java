@@ -31,11 +31,12 @@ class UnitServiceImplTest {
 	}
 
 	@UnitTest
-	public void getUnitByIdReturnsFood() throws NotFoundException {
-		when(unitRepository.findById(1L)).thenReturn(Optional.of(new Unit(1L, unitList.get(0).getName())));
+	public void getUnitByIdReturnsUnit() throws NotFoundException {
+		when(unitRepository.findById(1L)).thenReturn(Optional.of(unitList.get(0)));
 
 		Unit unit = unitService.getUnitById(1L);
 
+		assertNotNull(unit);
 		assertEquals(unitList.get(0).getName(), unit.getName());
 	}
 
@@ -44,6 +45,23 @@ class UnitServiceImplTest {
 		when(unitRepository.findById(3L)).thenReturn(Optional.empty());
 
 		assertThrows(NotFoundException.class, () -> unitService.getUnitById(3L));
+	}
+
+	@UnitTest
+	public void getUnitByNameThrowsWhenNotFound() {
+		when(unitRepository.findByName(any())).thenReturn(Optional.empty());
+
+		assertThrows(NotFoundException.class, () -> unitService.getUnitByName("nothing"));
+	}
+
+	@UnitTest
+	public void getUnitByNameReturnsUnit() throws NotFoundException {
+		when(unitRepository.findByName(any())).thenReturn(Optional.of(unitList.get(0)));
+
+		Unit unit = unitService.getUnitByName(unitList.get(0).getName());
+
+		assertNotNull(unit);
+		assertEquals(unitList.get(0).getName(), unit.getName());
 	}
 
 	@UnitTest

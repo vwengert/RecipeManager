@@ -25,4 +25,6 @@ public interface UnitService {
 	 * @return neu angelegte Unit
 	 */
 	Unit postUnit(Unit unit) throws FoundException;
+
+	Unit getUnitByName(String unitName) throws NotFoundException;
 }

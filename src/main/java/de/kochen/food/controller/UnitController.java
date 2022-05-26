@@ -23,6 +23,11 @@ public class UnitController {
 		return new ResponseEntity<>(unitService.getUnitById(unitId), HttpStatus.OK);
 	}
 
+	@GetMapping(path = "unitByName/{unitName}")
+	public ResponseEntity<Unit> getUnitByName(@PathVariable String unitName) throws NotFoundException {
+		return new ResponseEntity<>(unitService.getUnitByName(unitName), HttpStatus.OK);
+	}
+
 	@GetMapping(path = "unit")
 	public ResponseEntity<List<Unit>> getUnit() {
 		return new ResponseEntity<>(unitService.getUnit(), HttpStatus.OK);
