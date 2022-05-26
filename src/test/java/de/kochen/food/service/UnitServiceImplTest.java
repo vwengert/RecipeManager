@@ -2,10 +2,7 @@ package de.kochen.food.service;
 
 import de.kochen.food.model.Unit;
 import de.kochen.food.repository.UnitRepository;
-import de.kochen.food.util.FoundException;
-import de.kochen.food.util.NoContentException;
-import de.kochen.food.util.NotFoundException;
-import de.kochen.food.util.UnitTest;
+import de.kochen.food.util.*;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
@@ -77,7 +74,7 @@ class UnitServiceImplTest {
 	}
 
 	@UnitTest
-	public void postUnitReturnsUnitWhenCreated() throws FoundException {
+	public void postUnitReturnsUnitWhenCreated() throws FoundException, IdNotAllowedException {
 		when(unitRepository.existsByName(any())).thenReturn(false);
 		when(unitRepository.save(any())).thenReturn(unitList.get(0));
 

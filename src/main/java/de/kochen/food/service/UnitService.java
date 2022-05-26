@@ -2,6 +2,7 @@ package de.kochen.food.service;
 
 import de.kochen.food.model.Unit;
 import de.kochen.food.util.FoundException;
+import de.kochen.food.util.IdNotAllowedException;
 import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 
@@ -25,8 +26,9 @@ public interface UnitService {
 	 * @param unit new unit
 	 * @return saved unit
 	 * @throws FoundException when unit not new
+	 * @throws IdNotAllowedException id is not allowed on post
 	 */
-	Unit postUnit(Unit unit) throws FoundException;
+	Unit postUnit(Unit unit) throws FoundException, IdNotAllowedException;
 
 	Unit getUnitByName(String unitName) throws NotFoundException;
 

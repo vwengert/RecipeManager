@@ -56,4 +56,20 @@ public class FoodServiceImpl implements FoodService {
 		return modelMapper.map(savedFood, FoodDto.class);
 	}
 
+	@Override
+	public FoodDto putFood(FoodDto foodDto) throws NotFoundException {
+
+		Food food = foodRepository.findById(foodDto.getId()).orElseThrow(
+				NotFoundException::new
+		);
+		food.setName(foodDto.getName());
+		Unit unit = unitRepository.findByName(foodDto.getUnitName()).orElseThrow(
+				NotFoundException::new
+		);
+		food.setUnit(unit);
+		Food savedFood = foodRepository.save(food);
+
+		return modelMapper.map(savedFood, FoodDto.class);
+	}
+
 }

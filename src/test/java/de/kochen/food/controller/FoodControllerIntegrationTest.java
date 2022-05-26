@@ -16,13 +16,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = FoodApplication.class)
 @AutoConfigureMockMvc
-class FoodControllerTest {
+class FoodControllerIntegrationTest {
 	@Autowired
 	MockMvc mockMvc;
 	@Autowired
@@ -34,6 +33,9 @@ class FoodControllerTest {
 	Food foodKartoffeln;
 	Unit unitStueck;
 	Unit unitKg;
+	Unit changedUnit;
+	Unit unit;
+	Food food;
 
 	@BeforeEach
 	@Transactional
@@ -47,6 +49,10 @@ class FoodControllerTest {
 		foodKuchen = foodRepository.save(foodKuchen);
 		foodKartoffeln = new Food(null, "Kartoffeln", unitKg);
 		foodKartoffeln = foodRepository.save(foodKartoffeln);
+
+		unit = unitRepository.save(new Unit(null, "AnyUnit"));
+		food = foodRepository.save(new Food(null, "change me", unit));
+		changedUnit = unitRepository.save(new Unit(null, "ChangedUnit"));
 	}
 
 
@@ -113,6 +119,30 @@ class FoodControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"name\":\"Kuchen\",\"unitName\":\"Stück\"}"))
 				.andExpect(status().isOk());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void putFoodReturns200WhenChangedNameOfFood() throws Exception {
+
+		mockMvc.perform(put("/api/v1/food")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"id\":\"" + food.getId() + "\",\"name\":\"Käse\",\"unitName\":\"" + unit.getName() + "\"}"))
+				.andExpect(status().isOk());
+
+		assertEquals("Käse", foodRepository.findById(food.getId()).get().getName());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void putFoodReturns200WhenChangedUnitOfFood() throws Exception {
+
+		mockMvc.perform(put("/api/v1/food")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"id\":\"" + food.getId() + "\",\"name\":\"" + food.getName() + "\",\"unitName\":\"" + changedUnit.getName() + "\"}"))
+				.andExpect(status().isOk());
+
+		assertEquals(changedUnit.getName(), foodRepository.findById(food.getId()).get().getUnit().getName());
 	}
 
 }

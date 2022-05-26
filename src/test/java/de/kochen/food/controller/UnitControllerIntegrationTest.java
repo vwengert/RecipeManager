@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = FoodApplication.class)
 @AutoConfigureMockMvc
-class UnitControllerTest {
+class UnitControllerIntegrationTest {
 	@Autowired
 	MockMvc mockMvc;
 	@Autowired

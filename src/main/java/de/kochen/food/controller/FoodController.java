@@ -41,4 +41,11 @@ public class FoodController {
 		return new ResponseEntity<>(foodService.postFood(foodDto), HttpStatus.CREATED);
 	}
 
+	@PutMapping(path = "food",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FoodDto> putFood(@RequestBody FoodDto foodDto) throws NotFoundException {
+		return new ResponseEntity<>(foodService.putFood(foodDto), HttpStatus.OK);
+	}
+
 }
