@@ -13,8 +13,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class FoodDto implements Serializable {
-    private Long id;
-    private String name;
-    private Long unitId;
-    private String unitName;
+	private Long id;
+	private String name;
+	private Long unitId;
+	private String unitName;
 }

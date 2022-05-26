@@ -9,18 +9,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-@SpringBootTest
+@SpringBootTest(classes = FoodApplication.class)
 class FoodApplicationTests {
 
-    @Autowired
-    private UnitController unitController;
-    @Autowired
-    private FoodController foodController;
+	@Autowired
+	private UnitController unitController;
+	@Autowired
+	private FoodController foodController;
 
-    @IntegrationTest
-    void contextLoads() {
-        assertThat(unitController).isNotNull();
-        assertThat(foodController).isNotNull();
-    }
+	@IntegrationTest
+	void contextLoads() {
+		assertThat(unitController).isNotNull();
+		assertThat(foodController).isNotNull();
+	}
 
 }

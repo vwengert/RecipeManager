@@ -18,42 +18,42 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class FoodServiceImpl implements FoodService {
-    private final FoodRepository foodRepository;
-    private final UnitRepository unitRepository;
-    private final ModelMapper modelMapper;
+	private final FoodRepository foodRepository;
+	private final UnitRepository unitRepository;
+	private final ModelMapper modelMapper;
 
-    @Override
-    public FoodDto getFoodById(Long foodId) throws NotFoundException {
-        return modelMapper.map(foodRepository.findById(foodId).orElseThrow(NotFoundException::new), FoodDto.class);
-    }
+	@Override
+	public FoodDto getFoodById(Long foodId) throws NotFoundException {
+		return modelMapper.map(foodRepository.findById(foodId).orElseThrow(NotFoundException::new), FoodDto.class);
+	}
 
-    @Override
-    public List<FoodDto> getFood() {
-        List<Food> foodList = foodRepository.findAll();
-        return foodList
-                .stream()
-                .map(food -> modelMapper.map(food, FoodDto.class))
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<FoodDto> getFood() {
+		List<Food> foodList = foodRepository.findAll();
+		return foodList
+				.stream()
+				.map(food -> modelMapper.map(food, FoodDto.class))
+				.collect(Collectors.toList());
+	}
 
-    @Override
-    public FoodDto getFoodByName(String name) throws NotFoundException {
-        return modelMapper.map(foodRepository.findByName(name).orElseThrow(NotFoundException::new), FoodDto.class);
-    }
+	@Override
+	public FoodDto getFoodByName(String name) throws NotFoundException {
+		return modelMapper.map(foodRepository.findByName(name).orElseThrow(NotFoundException::new), FoodDto.class);
+	}
 
-    @Override
-    public FoodDto postFood(FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
-        if (foodDto.getId() != null || foodDto.getUnitId() != null)
-            throw new IdNotAllowedException();
-        if (foodRepository.findByName(foodDto.getName()).isPresent())
-            throw new FoundException();
-        Unit unit = unitRepository.findByName(foodDto.getUnitName()).orElseThrow(NotFoundException::new);
+	@Override
+	public FoodDto postFood(FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
+		if (foodDto.getId() != null || foodDto.getUnitId() != null)
+			throw new IdNotAllowedException();
+		if (foodRepository.findByName(foodDto.getName()).isPresent())
+			throw new FoundException();
+		Unit unit = unitRepository.findByName(foodDto.getUnitName()).orElseThrow(NotFoundException::new);
 
-        Food food = modelMapper.map(foodDto, Food.class);
-        food.setUnit(unit);
-        Food savedFood = foodRepository.save(food);
+		Food food = modelMapper.map(foodDto, Food.class);
+		food.setUnit(unit);
+		Food savedFood = foodRepository.save(food);
 
-        return modelMapper.map(savedFood, FoodDto.class);
-    }
+		return modelMapper.map(savedFood, FoodDto.class);
+	}
 
 }
