@@ -2,6 +2,7 @@ package de.kochen.food.service;
 
 import de.kochen.food.model.Unit;
 import de.kochen.food.util.FoundException;
+import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public interface UnitService {
 	/**
 	 * @param unit new unit
 	 * @return saved unit
+	 * @throws FoundException when unit not new
 	 */
 	Unit postUnit(Unit unit) throws FoundException;
 
@@ -31,6 +33,14 @@ public interface UnitService {
 	/**
 	 * @param unit changed unit with its id
 	 * @return new saved unit
+	 * @throws NotFoundException unit not found
 	 */
 	Unit putUnit(Unit unit) throws NotFoundException;
+
+	/**
+	 *
+	 * @param id of unit to delete
+	 * @throws NoContentException unit not found
+	 */
+	void delete(Long id) throws NoContentException;
 }

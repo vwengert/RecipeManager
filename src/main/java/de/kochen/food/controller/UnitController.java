@@ -3,6 +3,7 @@ package de.kochen.food.controller;
 import de.kochen.food.model.Unit;
 import de.kochen.food.service.UnitService;
 import de.kochen.food.util.FoundException;
+import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,12 @@ public class UnitController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Unit> putUnit(@RequestBody Unit unit) throws NotFoundException {
 		return new ResponseEntity<>(unitService.putUnit(unit), HttpStatus.OK);
+	}
+
+	@DeleteMapping(path = "unit/{unitId}")
+	public ResponseEntity<?> deleteUnit(@PathVariable Long unitId) throws NoContentException {
+		unitService.delete(unitId);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }

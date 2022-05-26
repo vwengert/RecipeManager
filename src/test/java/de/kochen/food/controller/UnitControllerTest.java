@@ -15,8 +15,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -142,6 +141,29 @@ class UnitControllerTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"id\":\"77\",\"name\":\"Käse\"}"))
 				.andExpect(status().isNotFound());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void deleteReturns200WhenUnitIsDeleted() throws Exception {
+		Unit unit = unitRepository.save(new Unit(null, "delete me"));
+
+		mockMvc.perform(delete("/api/v1/unit/" + unit.getId())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+		assertFalse(unitRepository.existsById(unit.getId()));
+	}
+
+	@IntegrationTest
+	@Transactional
+	void deleteTrowsNotFoundWhenUnitNotThere() throws Exception {
+		Unit unit = new Unit(9999L, "i don't exist");
+
+		mockMvc.perform(delete("/api/v1/unit/" + unit.getId())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNoContent());
+
 	}
 
 }

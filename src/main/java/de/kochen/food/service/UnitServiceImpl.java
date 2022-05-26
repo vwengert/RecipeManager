@@ -3,11 +3,13 @@ package de.kochen.food.service;
 import de.kochen.food.model.Unit;
 import de.kochen.food.repository.UnitRepository;
 import de.kochen.food.util.FoundException;
+import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -48,6 +50,14 @@ public class UnitServiceImpl implements UnitService {
 		searchedUnit.setName(unit.getName());
 
 		return unitRepository.save(searchedUnit);
+	}
+
+	@Override
+	public void delete(Long id) throws NoContentException {
+		Unit unit = unitRepository.findById(id).orElseThrow(
+				NoContentException::new
+		);
+		unitRepository.delete(unit);
 	}
 
 }
