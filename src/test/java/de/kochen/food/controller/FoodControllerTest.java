@@ -39,14 +39,14 @@ class FoodControllerTest {
 	@Transactional
 	void setUp() {
 		unitStueck = new Unit(null, "Stück");
-		unitStueck = unitRepository.saveAndFlush(unitStueck);
+		unitStueck = unitRepository.save(unitStueck);
 		unitKg = new Unit(null, "kg");
-		unitKg = unitRepository.saveAndFlush(unitKg);
+		unitKg = unitRepository.save(unitStueck);
 
 		foodKuchen = new Food(null, "Kuchen", unitStueck);
-		foodKuchen = foodRepository.saveAndFlush(foodKuchen);
+		foodKuchen = foodRepository.save(foodKuchen);
 		foodKartoffeln = new Food(null, "Kartoffeln", unitKg);
-		foodKartoffeln = foodRepository.saveAndFlush(foodKartoffeln);
+		foodKartoffeln = foodRepository.save(foodKartoffeln);
 	}
 
 

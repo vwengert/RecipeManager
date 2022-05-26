@@ -93,4 +93,23 @@ class UnitServiceImplTest {
 		assertThrows(FoundException.class, () -> unitService.postUnit(new Unit(null, unitList.get(0).getName())));
 	}
 
+	@UnitTest
+	public void putUnitReturnsChangedUnit() throws NotFoundException {
+		when(unitRepository.findById(any())).thenReturn(Optional.of(unitList.get(0)));
+		when(unitRepository.save(any())).thenReturn(new Unit(unitList.get(0).getId(), unitList.get(1).getName()));
+
+		Unit unit = unitService.putUnit(new Unit(unitList.get(0).getId(), unitList.get(1).getName()));
+
+		assertNotNull(unit);
+		assertEquals(unitList.get(0).getId(), unit.getId());
+		assertEquals(unitList.get(1).getName(), unit.getName());
+	}
+
+	@UnitTest
+	public void putUnitThrowsNotFoundWhenIdNotExist() {
+		when(unitRepository.findById(any())).thenReturn(Optional.empty());
+
+		assertThrows(NotFoundException.class, () -> unitService.putUnit(new Unit(77L, "please change")));
+	}
+
 }

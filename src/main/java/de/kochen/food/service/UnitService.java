@@ -9,22 +9,28 @@ import java.util.List;
 public interface UnitService {
 
 	/**
-	 * @param unitId Id to search for Unit
+	 * @param unitId Id to search unit
 	 * @return Unit
-	 * @throws NotFoundException Unit not found
+	 * @throws NotFoundException unit not found
 	 */
 	Unit getUnitById(Long unitId) throws NotFoundException;
 
 	/**
-	 * @return Array of Units
+	 * @return Array of units
 	 */
 	List<Unit> getUnit();
 
 	/**
-	 * @param unit neue anzulegende Unit
-	 * @return neu angelegte Unit
+	 * @param unit new unit
+	 * @return saved unit
 	 */
 	Unit postUnit(Unit unit) throws FoundException;
 
 	Unit getUnitByName(String unitName) throws NotFoundException;
+
+	/**
+	 * @param unit changed unit with its id
+	 * @return new saved unit
+	 */
+	Unit putUnit(Unit unit) throws NotFoundException;
 }

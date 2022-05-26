@@ -36,8 +36,15 @@ public class UnitController {
 	@PostMapping(path = "unit",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Unit> postFood(@RequestBody Unit unit) throws FoundException {
+	public ResponseEntity<Unit> postUnit(@RequestBody Unit unit) throws FoundException {
 		return new ResponseEntity<>(unitService.postUnit(unit), HttpStatus.CREATED);
+	}
+
+	@PutMapping(path = "unit",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Unit> putUnit(@RequestBody Unit unit) throws NotFoundException {
+		return new ResponseEntity<>(unitService.putUnit(unit), HttpStatus.OK);
 	}
 
 }

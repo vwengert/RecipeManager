@@ -88,4 +88,3 @@ task IntegrationTest(type: Test) {
     }
 }
 
-IntegrationTest.dependsOn jar
