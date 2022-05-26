@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = FoodApplication.class)
 @AutoConfigureMockMvc
-class UnitControllerTest {
+class UnitControllerIntegrationTest {
 	@Autowired
 	MockMvc mockMvc;
 	@Autowired
@@ -104,8 +104,8 @@ class UnitControllerTest {
 				.andExpect(status().isCreated());
 
 		Optional<Unit> unitOptional = unitRepository.findByName("Meter");
-		assertEquals("Meter", unitOptional.get().getName());
-		assertNotNull(unitOptional.get().getId());
+		assertEquals("Meter", unitOptional.orElse(new Unit(1L, "")).getName());
+		assertNotNull(unitOptional.orElse(new Unit(null, "")).getId());
 	}
 
 	@IntegrationTest
@@ -128,6 +128,7 @@ class UnitControllerTest {
 				.andExpect(status().isOk());
 
 		Unit unit = unitRepository.findById(unitStueck.getId()).orElse(null);
+
 		assertNotNull(unit);
 		assertEquals("Käse", unit.getName());
 	}
@@ -162,7 +163,6 @@ class UnitControllerTest {
 		mockMvc.perform(delete("/api/v1/unit/" + unit.getId())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
-
 	}
 
 }

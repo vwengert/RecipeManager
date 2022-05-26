@@ -6,13 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-
 /**
  * Repository to persist Units
  */
 @Repository
 public interface UnitRepository extends JpaRepository<Unit, Long> {
 	Optional<Unit> findByName(String name);
-
 	Boolean existsByName(String name);
 }

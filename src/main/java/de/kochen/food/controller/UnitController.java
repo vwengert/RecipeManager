@@ -3,6 +3,7 @@ package de.kochen.food.controller;
 import de.kochen.food.model.Unit;
 import de.kochen.food.service.UnitService;
 import de.kochen.food.util.FoundException;
+import de.kochen.food.util.IdNotAllowedException;
 import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class UnitController {
 	@PostMapping(path = "unit",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Unit> postUnit(@RequestBody Unit unit) throws FoundException {
+	public ResponseEntity<Unit> postUnit(@RequestBody Unit unit) throws FoundException, IdNotAllowedException {
 		return new ResponseEntity<>(unitService.postUnit(unit), HttpStatus.CREATED);
 	}
 
