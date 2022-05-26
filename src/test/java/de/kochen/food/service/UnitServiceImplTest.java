@@ -3,6 +3,7 @@ package de.kochen.food.service;
 import de.kochen.food.model.Unit;
 import de.kochen.food.repository.UnitRepository;
 import de.kochen.food.util.FoundException;
+import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 import de.kochen.food.util.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,6 +111,22 @@ class UnitServiceImplTest {
 		when(unitRepository.findById(any())).thenReturn(Optional.empty());
 
 		assertThrows(NotFoundException.class, () -> unitService.putUnit(new Unit(77L, "please change")));
+	}
+
+	@UnitTest
+	public void deleteUnitReturnsTrue() {
+		Long id = unitList.get(0).getId();
+		when(unitRepository.findById(id)).thenReturn(Optional.of(new Unit(id, "delete me")));
+
+		assertDoesNotThrow(() -> unitService.delete(id));
+	}
+
+	@UnitTest
+	public void deleteThrowsNotFoundWhenNothingToDelete() {
+		Long id = 9999L;
+		when(unitRepository.findById(id)).thenReturn(Optional.empty());
+
+		assertThrows(NoContentException.class, () -> unitService.delete(id));
 	}
 
 }
