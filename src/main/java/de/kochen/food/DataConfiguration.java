@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DataConfiguration {
 
-    /**
-     * Bean to map models
-     *
-     * @return new ModelMapper instance
-     */
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
+	/**
+	 * Bean to map models
+	 *
+	 * @return new ModelMapper instance
+	 */
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
+	}
 
 }

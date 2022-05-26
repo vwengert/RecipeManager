@@ -9,28 +9,28 @@ import java.util.List;
 
 public interface FoodService {
 
-    /**
-     * @param foodId Id to search for food
-     * @return Food with Baseunit
-     * @throws NotFoundException Food not found
-     */
-    FoodDto getFoodById(Long foodId) throws NotFoundException;
+	/**
+	 * @param foodId Id to search for food
+	 * @return Food with Baseunit
+	 * @throws NotFoundException Food not found
+	 */
+	FoodDto getFoodById(Long foodId) throws NotFoundException;
 
-    /**
-     * @return Array of Food
-     */
-    List<FoodDto> getFood();
+	/**
+	 * @return Array of Food
+	 */
+	List<FoodDto> getFood();
 
-    /**
-     * @param name of Food to search
-     * @return Food if found
-     * @throws NotFoundException Food not found
-     */
-    FoodDto getFoodByName(String name) throws NotFoundException;
+	/**
+	 * @param name of Food to search
+	 * @return Food if found
+	 * @throws NotFoundException Food not found
+	 */
+	FoodDto getFoodByName(String name) throws NotFoundException;
 
-    /**
-     * @param foodDto neues anzulegendes Food
-     * @return neu angelegtes Food
-     */
-    FoodDto postFood(FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException;
+	/**
+	 * @param foodDto neues anzulegendes Food
+	 * @return neu angelegtes Food
+	 */
+	FoodDto postFood(FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException;
 }

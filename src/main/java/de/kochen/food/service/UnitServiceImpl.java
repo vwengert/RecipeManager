@@ -12,24 +12,24 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class UnitServiceImpl implements UnitService {
-    private final UnitRepository unitRepository;
+	private final UnitRepository unitRepository;
 
-    @Override
-    public Unit getUnitById(Long unitId) throws NotFoundException {
-        return unitRepository.findById(unitId).orElseThrow(
-                NotFoundException::new
-        );
-    }
+	@Override
+	public Unit getUnitById(Long unitId) throws NotFoundException {
+		return unitRepository.findById(unitId).orElseThrow(
+				NotFoundException::new
+		);
+	}
 
-    @Override
-    public List<Unit> getUnit() {
-        return unitRepository.findAll();
-    }
+	@Override
+	public List<Unit> getUnit() {
+		return unitRepository.findAll();
+	}
 
-    @Override
-    public Unit postUnit(Unit unit) throws FoundException {
-        if (unitRepository.existsByName(unit.getName()))
-            throw new FoundException();
-        return unitRepository.save(unit);
-    }
+	@Override
+	public Unit postUnit(Unit unit) throws FoundException {
+		if (unitRepository.existsByName(unit.getName()))
+			throw new FoundException();
+		return unitRepository.save(unit);
+	}
 }

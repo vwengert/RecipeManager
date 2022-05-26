@@ -12,15 +12,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest
 class FoodApplicationTests {
 
-    @Autowired
-    private UnitController unitController;
-    @Autowired
-    private FoodController foodController;
+	@Autowired
+	private UnitController unitController;
+	@Autowired
+	private FoodController foodController;
 
-    @IntegrationTest
-    void contextLoads() {
-        assertThat(unitController).isNotNull();
-        assertThat(foodController).isNotNull();
-    }
+	@IntegrationTest
+	void contextLoads() {
+		assertThat(unitController).isNotNull();
+		assertThat(foodController).isNotNull();
+	}
 
 }

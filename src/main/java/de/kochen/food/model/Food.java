@@ -13,12 +13,12 @@ import java.io.Serializable;
 @Entity
 @Table
 public class Food implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unitId")
-    private Unit unit;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "unitId")
+	private Unit unit;
 }

@@ -17,28 +17,28 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/")
 public class FoodController {
-    private final FoodService foodService;
+	private final FoodService foodService;
 
-    @GetMapping(path = "foodById/{foodId}")
-    public ResponseEntity<FoodDto> getFoodById(@PathVariable Long foodId) throws NotFoundException {
-        return new ResponseEntity<>(foodService.getFoodById(foodId), HttpStatus.OK);
-    }
+	@GetMapping(path = "foodById/{foodId}")
+	public ResponseEntity<FoodDto> getFoodById(@PathVariable Long foodId) throws NotFoundException {
+		return new ResponseEntity<>(foodService.getFoodById(foodId), HttpStatus.OK);
+	}
 
-    @GetMapping(path = "food")
-    public ResponseEntity<List<FoodDto>> getFood() {
-        return new ResponseEntity<>(foodService.getFood(), HttpStatus.OK);
-    }
+	@GetMapping(path = "food")
+	public ResponseEntity<List<FoodDto>> getFood() {
+		return new ResponseEntity<>(foodService.getFood(), HttpStatus.OK);
+	}
 
-    @GetMapping(path = "foodByName/{name}")
-    public ResponseEntity<FoodDto> getFoodByName(@PathVariable String name) throws NotFoundException {
-        return new ResponseEntity<>(foodService.getFoodByName(name), HttpStatus.OK);
-    }
+	@GetMapping(path = "foodByName/{name}")
+	public ResponseEntity<FoodDto> getFoodByName(@PathVariable String name) throws NotFoundException {
+		return new ResponseEntity<>(foodService.getFoodByName(name), HttpStatus.OK);
+	}
 
-    @PostMapping(path = "food",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<FoodDto> postFood(@RequestBody FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
-        return new ResponseEntity<>(foodService.postFood(foodDto), HttpStatus.CREATED);
-    }
+	@PostMapping(path = "food",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FoodDto> postFood(@RequestBody FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
+		return new ResponseEntity<>(foodService.postFood(foodDto), HttpStatus.CREATED);
+	}
 
 }
