@@ -126,11 +126,11 @@ class FoodControllerIntegrationTest {
 	void putFoodReturns200WhenChangedNameOfFood() throws Exception {
 
 		mockMvc.perform(put("/api/v1/food")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"id\":\"" + food.getId() + "\",\"name\":\"Käse\",\"unitName\":\"" + unit.getName() + "\"}"))
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"id\":\"" + food.getId() + "\",\"name\":\"Käse\",\"unitName\":\"" + unit.getName() + "\"}"))
 				.andExpect(status().isOk());
 
-		assertEquals("Käse", foodRepository.findById(food.getId()).get().getName());
+		assertEquals("Käse", foodRepository.findById(food.getId()).orElse(new Food(1L, "", new Unit(1L, ""))).getName());
 	}
 
 	@IntegrationTest
@@ -142,7 +142,7 @@ class FoodControllerIntegrationTest {
 						.content("{\"id\":\"" + food.getId() + "\",\"name\":\"" + food.getName() + "\",\"unitName\":\"" + changedUnit.getName() + "\"}"))
 				.andExpect(status().isOk());
 
-		assertEquals(changedUnit.getName(), foodRepository.findById(food.getId()).get().getUnit().getName());
+		assertEquals(changedUnit.getName(), foodRepository.findById(food.getId()).orElse(new Food(1L, "", new Unit(1L, ""))).getUnit().getName());
 	}
 
 }

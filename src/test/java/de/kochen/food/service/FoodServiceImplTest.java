@@ -138,7 +138,7 @@ class FoodServiceImplTest {
 		foodDtoToChange.setName("changed");
 		when(foodRepository.save(any()))
 				.thenReturn(new Food(foodDtoToChange.getId(), foodDtoToChange.getName(),
-							new Unit(foodDtoToChange.getUnitId(), foodDtoToChange.getUnitName())));
+						new Unit(foodDtoToChange.getUnitId(), foodDtoToChange.getUnitName())));
 
 		FoodDto foodDto = foodService.putFood(foodDtoToChange);
 		assertEquals(foodDtoList.get(0).getName(), foodDto.getName());
@@ -155,6 +155,7 @@ class FoodServiceImplTest {
 						new Unit(foodDtoToChange.getUnitId(), foodDtoToChange.getUnitName())));
 
 		FoodDto foodDto = foodService.putFood(foodDtoToChange);
+
 		assertEquals(foodDtoList.get(0).getUnitName(), foodDto.getUnitName());
 	}
 

@@ -25,11 +25,17 @@ public interface UnitService {
 	/**
 	 * @param unit new unit
 	 * @return saved unit
-	 * @throws FoundException when unit not new
+	 * @throws FoundException        when unit not new
 	 * @throws IdNotAllowedException id is not allowed on post
 	 */
 	Unit postUnit(Unit unit) throws FoundException, IdNotAllowedException;
 
+	/**
+	 *
+	 * @param unitName unit Name to search for
+	 * @return unit which was searched
+	 * @throws NotFoundException unit not found
+	 */
 	Unit getUnitByName(String unitName) throws NotFoundException;
 
 	/**

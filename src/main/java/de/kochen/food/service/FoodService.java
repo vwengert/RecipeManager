@@ -32,10 +32,16 @@ public interface FoodService {
 	 * @param foodDto neues anzulegendes Food
 	 * @return neu angelegtes Food
 	 * @throws IdNotAllowedException id is not allowed
-	 * @throws NotFoundException unit is not found
-	 * @throws FoundException food already exists
+	 * @throws NotFoundException     unit is not found
+	 * @throws FoundException        food already exists
 	 */
 	FoodDto postFood(FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException;
 
+	/**
+	 *
+	 * @param foodDto food Dto to change
+	 * @return changed food Dto
+	 * @throws NotFoundException data not found
+	 */
 	FoodDto putFood(FoodDto foodDto) throws NotFoundException;
 }

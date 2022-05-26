@@ -104,8 +104,8 @@ class UnitControllerIntegrationTest {
 				.andExpect(status().isCreated());
 
 		Optional<Unit> unitOptional = unitRepository.findByName("Meter");
-		assertEquals("Meter", unitOptional.get().getName());
-		assertNotNull(unitOptional.get().getId());
+		assertEquals("Meter", unitOptional.orElse(new Unit(1L, "")).getName());
+		assertNotNull(unitOptional.orElse(new Unit(null, "")).getId());
 	}
 
 	@IntegrationTest
@@ -128,6 +128,7 @@ class UnitControllerIntegrationTest {
 				.andExpect(status().isOk());
 
 		Unit unit = unitRepository.findById(unitStueck.getId()).orElse(null);
+
 		assertNotNull(unit);
 		assertEquals("Käse", unit.getName());
 	}
@@ -162,7 +163,6 @@ class UnitControllerIntegrationTest {
 		mockMvc.perform(delete("/api/v1/unit/" + unit.getId())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
-
 	}
 
 }
