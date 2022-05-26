@@ -31,7 +31,6 @@ public interface UnitService {
 	Unit postUnit(Unit unit) throws FoundException, IdNotAllowedException;
 
 	/**
-	 *
 	 * @param unitName unit Name to search for
 	 * @return unit which was searched
 	 * @throws NotFoundException unit not found

@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -143,6 +143,32 @@ class FoodControllerIntegrationTest {
 				.andExpect(status().isOk());
 
 		assertEquals(changedUnit.getName(), foodRepository.findById(food.getId()).orElse(new Food(1L, "", new Unit(1L, ""))).getUnit().getName());
+	}
+
+
+	@IntegrationTest
+	@Transactional
+	void deleteReturns200WhenFoodIsDeleted() throws Exception {
+		Unit unit = unitRepository.save(new Unit(null, "unit not deleting!"));
+		Food food = foodRepository.save(new Food(null, "delete me", unit));
+
+		mockMvc.perform(delete("/api/v1/food/" + unit.getId())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+		assertTrue(unitRepository.existsById(unit.getId()));
+		assertFalse(foodRepository.existsById(food.getId()));
+	}
+
+	@IntegrationTest
+	@Transactional
+	void deleteTrowsNotFoundWhenFoodNotThere() throws Exception {
+		Unit unit = new Unit(9999L, "i don't exist");
+		Food food = new Food(9999L, "i don't exist", unit);
+
+		mockMvc.perform(delete("/api/v1/food/" + unit.getId())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNoContent());
 	}
 
 }
