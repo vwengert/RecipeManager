@@ -24,17 +24,17 @@ public class FoodController {
 
 	@GetMapping(path = "foodById/{foodId}")
 	public ResponseEntity<FoodDto> getFoodById(@PathVariable Long foodId) throws NotFoundException {
-		return new ResponseEntity<>(foodGetService.getFoodById(foodId), HttpStatus.OK);
+		return new ResponseEntity<>(FoodDto.getFoodDto(foodGetService.getFoodById(foodId)), HttpStatus.OK);
 	}
 
 	@GetMapping(path = "food")
 	public ResponseEntity<List<FoodDto>> getFood() {
-		return new ResponseEntity<>(foodGetService.getFood(), HttpStatus.OK);
+		return new ResponseEntity<>(FoodDto.getFoodDtoList(foodGetService.getFood()), HttpStatus.OK);
 	}
 
 	@GetMapping(path = "foodByName/{name}")
 	public ResponseEntity<FoodDto> getFoodByName(@PathVariable String name) throws NotFoundException {
-		return new ResponseEntity<>(foodGetService.getFoodByName(name), HttpStatus.OK);
+		return new ResponseEntity<>(FoodDto.getFoodDto(foodGetService.getFoodByName(name)), HttpStatus.OK);
 	}
 
 	@PostMapping(path = "food",

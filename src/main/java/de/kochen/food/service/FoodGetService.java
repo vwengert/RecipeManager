@@ -1,6 +1,7 @@
 package de.kochen.food.service;
 
 import de.kochen.food.dto.FoodDto;
+import de.kochen.food.model.Food;
 import de.kochen.food.util.NotFoundException;
 
 import java.util.List;
@@ -11,17 +12,17 @@ public interface FoodGetService {
 	 * @return Food with base unit
 	 * @throws NotFoundException Food not found
 	 */
-	FoodDto getFoodById(Long foodId) throws NotFoundException;
+	Food getFoodById(Long foodId) throws NotFoundException;
 
 	/**
 	 * @return Array of Food
 	 */
-	List<FoodDto> getFood();
+	List<Food> getFood();
 
 	/**
 	 * @param name of Food to search
 	 * @return Food if found
 	 * @throws NotFoundException Food not found
 	 */
-	FoodDto getFoodByName(String name) throws NotFoundException;
+	Food getFoodByName(String name) throws NotFoundException;
 }

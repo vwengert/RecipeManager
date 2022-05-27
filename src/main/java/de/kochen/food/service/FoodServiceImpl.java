@@ -21,19 +21,18 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 	private final UnitRepository unitRepository;
 
 	@Override
-	public FoodDto getFoodById(Long foodId) throws NotFoundException {
-		return FoodDto.getFoodDto(foodRepository.findById(foodId).orElseThrow(NotFoundException::new));
+	public Food getFoodById(Long foodId) throws NotFoundException {
+		return foodRepository.findById(foodId).orElseThrow(NotFoundException::new);
 	}
 
 	@Override
-	public List<FoodDto> getFood() {
-		List<Food> foodList = foodRepository.findAll();
-		return FoodDto.getFoodDtoList(foodList);
+	public List<Food> getFood() {
+		return foodRepository.findAll();
 	}
 
 	@Override
-	public FoodDto getFoodByName(String name) throws NotFoundException {
-		return FoodDto.getFoodDto(foodRepository.findByName(name).orElseThrow(NotFoundException::new));
+	public Food getFoodByName(String name) throws NotFoundException {
+		return foodRepository.findByName(name).orElseThrow(NotFoundException::new);
 	}
 
 	@Override

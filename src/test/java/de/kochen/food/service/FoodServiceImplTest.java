@@ -45,11 +45,11 @@ class FoodServiceImplTest {
 	public void getUnitByIdReturnsFood() throws NotFoundException {
 		when(foodRepository.findById(1L)).thenReturn(Optional.of(foodList.get(0)));
 
-		FoodDto foodDto = foodService.getFoodById(1L);
+		Food food = foodService.getFoodById(1L);
 
-		assertNotNull(foodDto);
-		assertEquals("cake", foodDto.getName());
-		assertEquals("piece", foodDto.getUnitName());
+		assertNotNull(food);
+		assertEquals("cake", food.getName());
+		assertEquals("piece", food.getUnit().getName());
 	}
 
 	@UnitTest
@@ -63,24 +63,24 @@ class FoodServiceImplTest {
 	public void getFoodList() {
 		when(foodRepository.findAll()).thenReturn(foodList);
 
-		List<FoodDto> foodDtoList = foodService.getFood();
+		List<Food> foodList = foodService.getFood();
 
-		assertNotNull(foodDtoList);
-		assertEquals("cake", foodDtoList.get(0).getName());
-		assertEquals("piece", foodDtoList.get(0).getUnitName());
-		assertEquals("potato", foodDtoList.get(1).getName());
-		assertEquals("kg", foodDtoList.get(1).getUnitName());
+		assertNotNull(foodList);
+		assertEquals("cake", foodList.get(0).getName());
+		assertEquals("piece", foodList.get(0).getUnit().getName());
+		assertEquals("potato", foodList.get(1).getName());
+		assertEquals("kg", foodList.get(1).getUnit().getName());
 	}
 
 	@UnitTest
 	public void getFoodByNameReturnsFood() throws NotFoundException {
 		when(foodRepository.findByName("cake")).thenReturn(Optional.of(foodList.get(0)));
 
-		FoodDto foodDto = foodService.getFoodByName("cake");
+		Food food = foodService.getFoodByName("cake");
 
-		assertNotNull(foodDto);
-		assertEquals("cake", foodDto.getName());
-		assertEquals("piece", foodDto.getUnitName());
+		assertNotNull(food);
+		assertEquals("cake", food.getName());
+		assertEquals("piece", food.getUnit().getName());
 	}
 
 	@UnitTest
