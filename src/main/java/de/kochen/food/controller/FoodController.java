@@ -1,6 +1,7 @@
 package de.kochen.food.controller;
 
 import de.kochen.food.dto.FoodDto;
+import de.kochen.food.service.FoodGetService;
 import de.kochen.food.service.FoodService;
 import de.kochen.food.util.FoundException;
 import de.kochen.food.util.IdNotAllowedException;
@@ -18,21 +19,22 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/")
 public class FoodController {
+	private final FoodGetService foodGetService;
 	private final FoodService foodService;
 
 	@GetMapping(path = "foodById/{foodId}")
 	public ResponseEntity<FoodDto> getFoodById(@PathVariable Long foodId) throws NotFoundException {
-		return new ResponseEntity<>(foodService.getFoodById(foodId), HttpStatus.OK);
+		return new ResponseEntity<>(foodGetService.getFoodById(foodId), HttpStatus.OK);
 	}
 
 	@GetMapping(path = "food")
 	public ResponseEntity<List<FoodDto>> getFood() {
-		return new ResponseEntity<>(foodService.getFood(), HttpStatus.OK);
+		return new ResponseEntity<>(foodGetService.getFood(), HttpStatus.OK);
 	}
 
 	@GetMapping(path = "foodByName/{name}")
 	public ResponseEntity<FoodDto> getFoodByName(@PathVariable String name) throws NotFoundException {
-		return new ResponseEntity<>(foodService.getFoodByName(name), HttpStatus.OK);
+		return new ResponseEntity<>(foodGetService.getFoodByName(name), HttpStatus.OK);
 	}
 
 	@PostMapping(path = "food",

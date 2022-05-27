@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class FoodServiceImpl implements FoodService {
+public class FoodServiceImpl implements FoodService, FoodGetService {
 	private final FoodRepository foodRepository;
 	private final UnitRepository unitRepository;
 	private final ModelMapper modelMapper;
