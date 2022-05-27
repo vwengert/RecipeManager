@@ -7,7 +7,6 @@ import de.kochen.food.repository.FoodRepository;
 import de.kochen.food.repository.UnitRepository;
 import de.kochen.food.util.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.when;
 class FoodServiceImplTest {
 	private final FoodRepository foodRepository = mock(FoodRepository.class);
 	private final UnitRepository unitRepository = mock(UnitRepository.class);
-	private final FoodServiceImpl foodService = new FoodServiceImpl(foodRepository, unitRepository, new ModelMapper());
+	private final FoodServiceImpl foodService = new FoodServiceImpl(foodRepository, unitRepository);
 
 	private List<Unit> unitList;
 	private List<Food> foodList;

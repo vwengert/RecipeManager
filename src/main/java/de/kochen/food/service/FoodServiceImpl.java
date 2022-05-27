@@ -10,36 +10,30 @@ import de.kochen.food.util.IdNotAllowedException;
 import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class FoodServiceImpl implements FoodService, FoodGetService {
 	private final FoodRepository foodRepository;
 	private final UnitRepository unitRepository;
-	private final ModelMapper modelMapper;
 
 	@Override
 	public FoodDto getFoodById(Long foodId) throws NotFoundException {
-		return modelMapper.map(foodRepository.findById(foodId).orElseThrow(NotFoundException::new), FoodDto.class);
+		return FoodDto.getFoodDto(foodRepository.findById(foodId).orElseThrow(NotFoundException::new));
 	}
 
 	@Override
 	public List<FoodDto> getFood() {
 		List<Food> foodList = foodRepository.findAll();
-		return foodList
-				.stream()
-				.map(food -> modelMapper.map(food, FoodDto.class))
-				.collect(Collectors.toList());
+		return FoodDto.getFoodDtoList(foodList);
 	}
 
 	@Override
 	public FoodDto getFoodByName(String name) throws NotFoundException {
-		return modelMapper.map(foodRepository.findByName(name).orElseThrow(NotFoundException::new), FoodDto.class);
+		return FoodDto.getFoodDto(foodRepository.findByName(name).orElseThrow(NotFoundException::new));
 	}
 
 	@Override
@@ -48,18 +42,16 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 			throw new IdNotAllowedException();
 		if (foodRepository.findByName(foodDto.getName()).isPresent())
 			throw new FoundException();
+
 		Unit unit = unitRepository.findByName(foodDto.getUnitName()).orElseThrow(NotFoundException::new);
-
-		Food food = modelMapper.map(foodDto, Food.class);
+		Food food = foodDto.getFood();
 		food.setUnit(unit);
-		Food savedFood = foodRepository.save(food);
 
-		return modelMapper.map(savedFood, FoodDto.class);
+		return FoodDto.getFoodDto(foodRepository.save(food));
 	}
 
 	@Override
 	public FoodDto putFood(FoodDto foodDto) throws NotFoundException {
-
 		Food food = foodRepository.findById(foodDto.getId()).orElseThrow(
 				NotFoundException::new
 		);
@@ -68,9 +60,8 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 				NotFoundException::new
 		);
 		food.setUnit(unit);
-		Food savedFood = foodRepository.save(food);
 
-		return modelMapper.map(savedFood, FoodDto.class);
+		return FoodDto.getFoodDto(foodRepository.save(food));
 	}
 
 	@Override

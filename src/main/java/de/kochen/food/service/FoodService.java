@@ -6,8 +6,6 @@ import de.kochen.food.util.IdNotAllowedException;
 import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 
-import java.util.List;
-
 public interface FoodService {
 
 	/**
