@@ -1,6 +1,5 @@
 package de.kochen.food.service;
 
-import de.kochen.food.dto.FoodDto;
 import de.kochen.food.model.Food;
 import de.kochen.food.model.Unit;
 import de.kochen.food.repository.FoodRepository;
@@ -36,31 +35,30 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 	}
 
 	@Override
-	public FoodDto postFood(FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
-		if (foodDto.getId() != null || foodDto.getUnitId() != null)
+	public Food postFood(Food food) throws IdNotAllowedException, NotFoundException, FoundException {
+		if (food.getId() != null || food.getUnit().getId() != null)
 			throw new IdNotAllowedException();
-		if (foodRepository.findByName(foodDto.getName()).isPresent())
+		if (foodRepository.findByName(food.getName()).isPresent())
 			throw new FoundException();
 
-		Unit unit = unitRepository.findByName(foodDto.getUnitName()).orElseThrow(NotFoundException::new);
-		Food food = foodDto.getFood();
+		Unit unit = unitRepository.findByName(food.getUnit().getName()).orElseThrow(NotFoundException::new);
 		food.setUnit(unit);
 
-		return FoodDto.getFoodDto(foodRepository.save(food));
+		return foodRepository.save(food);
 	}
 
 	@Override
-	public FoodDto putFood(FoodDto foodDto) throws NotFoundException {
-		Food food = foodRepository.findById(foodDto.getId()).orElseThrow(
+	public Food putFood(Food foodRequest) throws NotFoundException {
+		Food food = foodRepository.findById(foodRequest.getId()).orElseThrow(
 				NotFoundException::new
 		);
-		food.setName(foodDto.getName());
-		Unit unit = unitRepository.findByName(foodDto.getUnitName()).orElseThrow(
+		food.setName(foodRequest.getName());
+		Unit unit = unitRepository.findByName(foodRequest.getUnit().getName()).orElseThrow(
 				NotFoundException::new
 		);
 		food.setUnit(unit);
 
-		return FoodDto.getFoodDto(foodRepository.save(food));
+		return foodRepository.save(food);
 	}
 
 	@Override

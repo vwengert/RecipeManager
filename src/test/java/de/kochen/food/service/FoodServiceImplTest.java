@@ -96,23 +96,23 @@ class FoodServiceImplTest {
 		foodDtoList.get(2).setId(1L);
 		foodDtoList.get(2).setUnitId(1L);
 
-		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(0)));
-		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(1)));
-		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(2)));
+		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
+		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(1).getFood()));
+		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(2).getFood()));
 	}
 
 	@UnitTest
 	public void postFoodThrowsNotFoundExceptionWhenUnitNameNotExists() {
 		when(unitRepository.findByName("piece")).thenReturn(Optional.empty());
 
-		assertThrows(NotFoundException.class, () -> foodService.postFood(foodDtoList.get(0)));
+		assertThrows(NotFoundException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
 	}
 
 	@UnitTest
 	public void postFoodThrowsReturns200WhenFoodNameIsUsed() {
 		when(foodRepository.findByName("cake")).thenReturn(Optional.of(foodList.get(0)));
 
-		assertThrows(FoundException.class, () -> foodService.postFood(foodDtoList.get(0)));
+		assertThrows(FoundException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
 	}
 
 	@UnitTest
@@ -121,7 +121,7 @@ class FoodServiceImplTest {
 		when(foodRepository.findByName("apple")).thenReturn(Optional.empty());
 		when(foodRepository.save(any())).thenReturn(new Food(3L, "apple", new Unit(1L, "piece")));
 
-		FoodDto foodDto = foodService.postFood(foodDtoList.get(2));
+		FoodDto foodDto = FoodDto.getFoodDto(foodService.postFood(foodDtoList.get(2).getFood()));
 		assertEquals("apple", foodDto.getName());
 		assertEquals("piece", foodDto.getUnitName());
 	}
@@ -136,7 +136,7 @@ class FoodServiceImplTest {
 				.thenReturn(new Food(foodDtoToChange.getId(), foodDtoToChange.getName(),
 						new Unit(foodDtoToChange.getUnitId(), foodDtoToChange.getUnitName())));
 
-		FoodDto foodDto = foodService.putFood(foodDtoToChange);
+		FoodDto foodDto = FoodDto.getFoodDto(foodService.putFood(foodDtoToChange.getFood()));
 		assertEquals(foodDtoList.get(0).getName(), foodDto.getName());
 	}
 
@@ -150,7 +150,7 @@ class FoodServiceImplTest {
 				.thenReturn(new Food(foodDtoToChange.getId(), foodDtoToChange.getName(),
 						new Unit(foodDtoToChange.getUnitId(), foodDtoToChange.getUnitName())));
 
-		FoodDto foodDto = foodService.putFood(foodDtoToChange);
+		FoodDto foodDto = FoodDto.getFoodDto(foodService.putFood(foodDtoToChange.getFood()));
 
 		assertEquals(foodDtoList.get(0).getUnitName(), foodDto.getUnitName());
 	}

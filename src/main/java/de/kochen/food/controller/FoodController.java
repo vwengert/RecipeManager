@@ -41,14 +41,14 @@ public class FoodController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<FoodDto> postFood(@RequestBody FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
-		return new ResponseEntity<>(foodService.postFood(foodDto), HttpStatus.CREATED);
+		return new ResponseEntity<>(FoodDto.getFoodDto(foodService.postFood(foodDto.getFood())), HttpStatus.CREATED);
 	}
 
 	@PutMapping(path = "food",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<FoodDto> putFood(@RequestBody FoodDto foodDto) throws NotFoundException {
-		return new ResponseEntity<>(foodService.putFood(foodDto), HttpStatus.OK);
+		return new ResponseEntity<>(FoodDto.getFoodDto(foodService.putFood(foodDto.getFood())), HttpStatus.OK);
 	}
 
 	@DeleteMapping(path = "food/{foodId}")

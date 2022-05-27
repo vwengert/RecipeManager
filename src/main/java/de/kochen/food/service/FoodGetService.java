@@ -1,6 +1,5 @@
 package de.kochen.food.service;
 
-import de.kochen.food.dto.FoodDto;
 import de.kochen.food.model.Food;
 import de.kochen.food.util.NotFoundException;
 
