@@ -38,6 +38,7 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 	public Food postFood(Food food) throws IdNotAllowedException, NotFoundException, FoundException {
 		if (food.getId() != null || food.getUnit().getId() != null)
 			throw new IdNotAllowedException();
+
 		if (foodRepository.findByName(food.getName()).isPresent())
 			throw new FoundException();
 
@@ -50,12 +51,12 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 	@Override
 	public Food putFood(Food foodRequest) throws NotFoundException {
 		Food food = foodRepository.findById(foodRequest.getId()).orElseThrow(
-				NotFoundException::new
-		);
+				NotFoundException::new);
+
 		food.setName(foodRequest.getName());
 		Unit unit = unitRepository.findByName(foodRequest.getUnit().getName()).orElseThrow(
-				NotFoundException::new
-		);
+				NotFoundException::new);
+
 		food.setUnit(unit);
 
 		return foodRepository.save(food);
@@ -64,8 +65,8 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 	@Override
 	public void deleteFood(Long foodId) throws NoContentException {
 		Food food = foodRepository.findById(foodId).orElseThrow(
-				NoContentException::new
-		);
+				NoContentException::new);
+
 		foodRepository.delete(food);
 	}
 
