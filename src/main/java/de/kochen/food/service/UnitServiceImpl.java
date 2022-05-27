@@ -19,15 +19,13 @@ public class UnitServiceImpl implements UnitService {
 	@Override
 	public Unit getUnitById(Long unitId) throws NotFoundException {
 		return unitRepository.findById(unitId).orElseThrow(
-				NotFoundException::new
-		);
+				NotFoundException::new);
 	}
 
 	@Override
 	public Unit getUnitByName(String unitName) throws NotFoundException {
 		return unitRepository.findByName(unitName).orElseThrow(
-				NotFoundException::new
-		);
+				NotFoundException::new);
 	}
 
 	@Override
@@ -47,8 +45,8 @@ public class UnitServiceImpl implements UnitService {
 	@Override
 	public Unit putUnit(Unit unit) throws NotFoundException {
 		Unit searchedUnit = unitRepository.findById(unit.getId()).orElseThrow(
-				NotFoundException::new
-		);
+				NotFoundException::new);
+
 		searchedUnit.setName(unit.getName());
 
 		return unitRepository.save(searchedUnit);
@@ -57,8 +55,8 @@ public class UnitServiceImpl implements UnitService {
 	@Override
 	public void delete(Long id) throws NoContentException {
 		Unit unit = unitRepository.findById(id).orElseThrow(
-				NoContentException::new
-		);
+				NoContentException::new);
+
 		unitRepository.delete(unit);
 	}
 

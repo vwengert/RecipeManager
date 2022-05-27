@@ -1,49 +1,28 @@
 package de.kochen.food.service;
 
-import de.kochen.food.dto.FoodDto;
+import de.kochen.food.model.Food;
 import de.kochen.food.util.FoundException;
 import de.kochen.food.util.IdNotAllowedException;
 import de.kochen.food.util.NoContentException;
 import de.kochen.food.util.NotFoundException;
 
-import java.util.List;
-
 public interface FoodService {
 
 	/**
-	 * @param foodId id to search for food
-	 * @return Food with base unit
-	 * @throws NotFoundException Food not found
-	 */
-	FoodDto getFoodById(Long foodId) throws NotFoundException;
-
-	/**
-	 * @return Array of Food
-	 */
-	List<FoodDto> getFood();
-
-	/**
-	 * @param name of Food to search
-	 * @return Food if found
-	 * @throws NotFoundException Food not found
-	 */
-	FoodDto getFoodByName(String name) throws NotFoundException;
-
-	/**
-	 * @param foodDto neues anzulegendes Food
+	 * @param food neues anzulegendes Food
 	 * @return neu angelegtes Food
 	 * @throws IdNotAllowedException id is not allowed
 	 * @throws NotFoundException     unit is not found
 	 * @throws FoundException        food already exists
 	 */
-	FoodDto postFood(FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException;
+	Food postFood(Food food) throws IdNotAllowedException, NotFoundException, FoundException;
 
 	/**
-	 * @param foodDto food Dto to change
+	 * @param food food Dto to change
 	 * @return changed food Dto
 	 * @throws NotFoundException data not found
 	 */
-	FoodDto putFood(FoodDto foodDto) throws NotFoundException;
+	Food putFood(Food food) throws NotFoundException;
 
 	/**
 	 * @param foodId food to delete

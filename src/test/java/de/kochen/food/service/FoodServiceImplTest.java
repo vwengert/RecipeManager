@@ -7,7 +7,6 @@ import de.kochen.food.repository.FoodRepository;
 import de.kochen.food.repository.UnitRepository;
 import de.kochen.food.util.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.when;
 class FoodServiceImplTest {
 	private final FoodRepository foodRepository = mock(FoodRepository.class);
 	private final UnitRepository unitRepository = mock(UnitRepository.class);
-	private final FoodServiceImpl foodService = new FoodServiceImpl(foodRepository, unitRepository, new ModelMapper());
+	private final FoodServiceImpl foodService = new FoodServiceImpl(foodRepository, unitRepository);
 
 	private List<Unit> unitList;
 	private List<Food> foodList;
@@ -46,11 +45,11 @@ class FoodServiceImplTest {
 	public void getUnitByIdReturnsFood() throws NotFoundException {
 		when(foodRepository.findById(1L)).thenReturn(Optional.of(foodList.get(0)));
 
-		FoodDto foodDto = foodService.getFoodById(1L);
+		Food food = foodService.getFoodById(1L);
 
-		assertNotNull(foodDto);
-		assertEquals("cake", foodDto.getName());
-		assertEquals("piece", foodDto.getUnitName());
+		assertNotNull(food);
+		assertEquals("cake", food.getName());
+		assertEquals("piece", food.getUnit().getName());
 	}
 
 	@UnitTest
@@ -64,24 +63,24 @@ class FoodServiceImplTest {
 	public void getFoodList() {
 		when(foodRepository.findAll()).thenReturn(foodList);
 
-		List<FoodDto> foodDtoList = foodService.getFood();
+		List<Food> foodList = foodService.getFood();
 
-		assertNotNull(foodDtoList);
-		assertEquals("cake", foodDtoList.get(0).getName());
-		assertEquals("piece", foodDtoList.get(0).getUnitName());
-		assertEquals("potato", foodDtoList.get(1).getName());
-		assertEquals("kg", foodDtoList.get(1).getUnitName());
+		assertNotNull(foodList);
+		assertEquals("cake", foodList.get(0).getName());
+		assertEquals("piece", foodList.get(0).getUnit().getName());
+		assertEquals("potato", foodList.get(1).getName());
+		assertEquals("kg", foodList.get(1).getUnit().getName());
 	}
 
 	@UnitTest
 	public void getFoodByNameReturnsFood() throws NotFoundException {
 		when(foodRepository.findByName("cake")).thenReturn(Optional.of(foodList.get(0)));
 
-		FoodDto foodDto = foodService.getFoodByName("cake");
+		Food food = foodService.getFoodByName("cake");
 
-		assertNotNull(foodDto);
-		assertEquals("cake", foodDto.getName());
-		assertEquals("piece", foodDto.getUnitName());
+		assertNotNull(food);
+		assertEquals("cake", food.getName());
+		assertEquals("piece", food.getUnit().getName());
 	}
 
 	@UnitTest
@@ -97,23 +96,23 @@ class FoodServiceImplTest {
 		foodDtoList.get(2).setId(1L);
 		foodDtoList.get(2).setUnitId(1L);
 
-		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(0)));
-		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(1)));
-		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(2)));
+		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
+		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(1).getFood()));
+		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(2).getFood()));
 	}
 
 	@UnitTest
 	public void postFoodThrowsNotFoundExceptionWhenUnitNameNotExists() {
 		when(unitRepository.findByName("piece")).thenReturn(Optional.empty());
 
-		assertThrows(NotFoundException.class, () -> foodService.postFood(foodDtoList.get(0)));
+		assertThrows(NotFoundException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
 	}
 
 	@UnitTest
 	public void postFoodThrowsReturns200WhenFoodNameIsUsed() {
 		when(foodRepository.findByName("cake")).thenReturn(Optional.of(foodList.get(0)));
 
-		assertThrows(FoundException.class, () -> foodService.postFood(foodDtoList.get(0)));
+		assertThrows(FoundException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
 	}
 
 	@UnitTest
@@ -122,7 +121,7 @@ class FoodServiceImplTest {
 		when(foodRepository.findByName("apple")).thenReturn(Optional.empty());
 		when(foodRepository.save(any())).thenReturn(new Food(3L, "apple", new Unit(1L, "piece")));
 
-		FoodDto foodDto = foodService.postFood(foodDtoList.get(2));
+		FoodDto foodDto = FoodDto.getFoodDto(foodService.postFood(foodDtoList.get(2).getFood()));
 		assertEquals("apple", foodDto.getName());
 		assertEquals("piece", foodDto.getUnitName());
 	}
@@ -137,7 +136,7 @@ class FoodServiceImplTest {
 				.thenReturn(new Food(foodDtoToChange.getId(), foodDtoToChange.getName(),
 						new Unit(foodDtoToChange.getUnitId(), foodDtoToChange.getUnitName())));
 
-		FoodDto foodDto = foodService.putFood(foodDtoToChange);
+		FoodDto foodDto = FoodDto.getFoodDto(foodService.putFood(foodDtoToChange.getFood()));
 		assertEquals(foodDtoList.get(0).getName(), foodDto.getName());
 	}
 
@@ -151,7 +150,7 @@ class FoodServiceImplTest {
 				.thenReturn(new Food(foodDtoToChange.getId(), foodDtoToChange.getName(),
 						new Unit(foodDtoToChange.getUnitId(), foodDtoToChange.getUnitName())));
 
-		FoodDto foodDto = foodService.putFood(foodDtoToChange);
+		FoodDto foodDto = FoodDto.getFoodDto(foodService.putFood(foodDtoToChange.getFood()));
 
 		assertEquals(foodDtoList.get(0).getUnitName(), foodDto.getUnitName());
 	}
