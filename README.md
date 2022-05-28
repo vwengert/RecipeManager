@@ -2,9 +2,9 @@
 
 recipe manager service
 
-[![Build Status](http://bertolux.dynv6.net:8153/buildStatus/icon?job=Foodservice)](http://bertolux.dynv6.net:8153/job/Foodservice/)
+[![Build Status](http://bertolux.dynv6.net:8153/buildStatus/icon?job=RecipeManagerService)](http://bertolux.dynv6.net:8153/job/RecipeManagerService/)
 
-[![License](https://img.shields.io/github/license/vwengert/food)](https://github.com/vwengert/Translation/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/vwengert/RecipeManager)](https://github.com/vwengert/RecipeManager/blob/main/LICENSE)
 
 # Description
 
