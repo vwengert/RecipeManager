@@ -1,7 +1,7 @@
 package com.recipemanager.service;
 
 import com.recipemanager.model.Food;
-import com.recipemanager.util.NotFoundException;
+import com.recipemanager.util.exceptions.NotFoundException;
 
 import java.util.List;
 

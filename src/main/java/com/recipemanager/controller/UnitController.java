@@ -2,10 +2,10 @@ package com.recipemanager.controller;
 
 import com.recipemanager.model.Unit;
 import com.recipemanager.service.UnitService;
-import com.recipemanager.util.FoundException;
-import com.recipemanager.util.IdNotAllowedException;
-import com.recipemanager.util.NoContentException;
-import com.recipemanager.util.NotFoundException;
+import com.recipemanager.util.exceptions.FoundException;
+import com.recipemanager.util.exceptions.IdNotAllowedException;
+import com.recipemanager.util.exceptions.NoContentException;
+import com.recipemanager.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

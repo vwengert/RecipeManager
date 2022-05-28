@@ -1,11 +1,11 @@
-package com.recipemanager;
+package com.recipemanager.util;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DataConfiguration {
+public class ModelMapperConfiguration {
 
 	/**
 	 * Bean to map models
