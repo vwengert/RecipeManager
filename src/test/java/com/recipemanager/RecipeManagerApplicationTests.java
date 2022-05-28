@@ -2,7 +2,7 @@ package com.recipemanager;
 
 import com.recipemanager.controller.FoodController;
 import com.recipemanager.controller.UnitController;
-import com.recipemanager.util.IntegrationTest;
+import com.recipemanager.util.annotations.IntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

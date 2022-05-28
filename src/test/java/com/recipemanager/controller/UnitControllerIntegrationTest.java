@@ -3,7 +3,7 @@ package com.recipemanager.controller;
 import com.recipemanager.RecipeManagerApplication;
 import com.recipemanager.model.Unit;
 import com.recipemanager.repository.UnitRepository;
-import com.recipemanager.util.IntegrationTest;
+import com.recipemanager.util.annotations.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
