@@ -41,4 +41,11 @@ public class RecipeController {
 		return new ResponseEntity<>(recipeService.postRecipe(recipe), HttpStatus.CREATED);
 	}
 
+	@PutMapping(path = "recipe",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Recipe> putRecipe(@RequestBody Recipe recipe) throws NotFoundException {
+		return new ResponseEntity<>(recipeService.putRecipe(recipe), HttpStatus.OK);
+	}
+
 }

@@ -27,5 +27,14 @@ public interface RecipeService {
 	 */
 	Recipe getRecipeByName(String recipeName) throws NotFoundException;
 
+	/**
+	 * @param recipe changed recipe
+	 * @return recipe
+	 * @throws IdNotAllowedException changing id isn't allowed
+	 * @throws FoundException        recipe already found
+	 */
 	Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, FoundException;
+
+	Recipe putRecipe(Recipe recipe) throws NotFoundException;
+
 }

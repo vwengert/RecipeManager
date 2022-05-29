@@ -34,10 +34,22 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Override
 	public Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, FoundException {
-		if (recipe.getRecipeId() != null)
+		if (recipe.getId() != null)
 			throw new IdNotAllowedException();
 		if (recipeRepository.existsByName(recipe.getName()))
 			throw new FoundException();
 		return recipeRepository.save(recipe);
+	}
+
+	@Override
+	public Recipe putRecipe(Recipe recipe) throws NotFoundException {
+		Recipe oldRecipe = recipeRepository.findById(recipe.getId()).orElseThrow(
+				NotFoundException::new
+		);
+		oldRecipe.setName(recipe.getName());
+		oldRecipe.setDescription(recipe.getDescription());
+		oldRecipe.setPortions(recipe.getPortions());
+
+		return recipeRepository.save(oldRecipe);
 	}
 }

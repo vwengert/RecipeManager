@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Recipe {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long recipeId;
+	private Long id;
 
 	private String name;
 	private String description;

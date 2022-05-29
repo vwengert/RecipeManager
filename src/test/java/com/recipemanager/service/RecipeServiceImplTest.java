@@ -59,7 +59,7 @@ class RecipeServiceImplTest {
 		assertNotNull(recipeList);
 		assertEquals(recipeSuppe.getName(), recipeList.get(0).getName());
 		assertEquals(recipeSuppe.getPortions(), recipeList.get(0).getPortions());
-		assertEquals(secondRecipe.getRecipeId(), recipeList.get(1).getRecipeId());
+		assertEquals(secondRecipe.getId(), recipeList.get(1).getId());
 		assertEquals(secondRecipe.getPortions(), recipeList.get(1).getPortions());
 	}
 
@@ -83,7 +83,7 @@ class RecipeServiceImplTest {
 
 	@UnitTest
 	public void postRecipeThrowsIdNotAllowedWhenRequestSendsIds() {
-		notSavedRecipe.setRecipeId(1L);
+		notSavedRecipe.setId(1L);
 
 		assertThrows(IdNotAllowedException.class, () -> recipeService.postRecipe(notSavedRecipe));
 	}
@@ -91,7 +91,7 @@ class RecipeServiceImplTest {
 	@UnitTest
 	public void postRecipeThrowsReturns200WhenRecipeNameIsUsed() {
 		when(recipeRepository.existsByName(recipeSuppe.getName())).thenReturn(true);
-		recipeSuppe.setRecipeId(null);
+		recipeSuppe.setId(null);
 
 		assertThrows(FoundException.class, () -> recipeService.postRecipe(recipeSuppe));
 	}
@@ -102,42 +102,33 @@ class RecipeServiceImplTest {
 		when(recipeRepository.findByName(any())).thenReturn(Optional.empty());
 		when(recipeRepository.save(any())).thenReturn(secondRecipe);
 
-		secondRecipe.setRecipeId(null);
+		secondRecipe.setId(null);
 		Recipe recipe = recipeService.postRecipe(secondRecipe);
 		assertEquals(secondRecipe.getName(), recipe.getName());
 		assertEquals(secondRecipe.getDescription(), recipe.getDescription());
 		assertEquals(secondRecipe.getPortions(), recipe.getPortions());
 	}
 
-//	@UnitTest
-//	public void putFoodSavesChangedFoodWhenIdExists() throws NotFoundException {
-//		when(foodRepository.findById(any())).thenReturn(Optional.of(foodList.get(0)));
-//		when(unitRepository.findByName(any())).thenReturn(Optional.of(foodList.get(0).getUnit()));
-//		FoodDto foodDtoToChange = foodDtoList.get(0);
-//		foodDtoToChange.setName("changed");
-//		when(foodRepository.save(any()))
-//				.thenReturn(new Food(foodDtoToChange.getId(), foodDtoToChange.getName(),
-//						new Unit(foodDtoToChange.getUnitId(), foodDtoToChange.getUnitName())));
-//
-//		FoodDto foodDto = FoodDto.getFoodDto(foodService.putFood(foodDtoToChange.getFood()));
-//		assertEquals(foodDtoList.get(0).getName(), foodDto.getName());
-//	}
-//
-//	@UnitTest
-//	public void putFoodSavesChangedUnitWhenIdExists() throws NotFoundException {
-//		when(foodRepository.findById(any())).thenReturn(Optional.of(foodList.get(0)));
-//		when(unitRepository.findByName(any())).thenReturn(Optional.of(foodList.get(0).getUnit()));
-//		FoodDto foodDtoToChange = foodDtoList.get(0);
-//		foodDtoToChange.setUnitName("changed");
-//		when(foodRepository.save(any()))
-//				.thenReturn(new Food(foodDtoToChange.getId(), foodDtoToChange.getName(),
-//						new Unit(foodDtoToChange.getUnitId(), foodDtoToChange.getUnitName())));
-//
-//		FoodDto foodDto = FoodDto.getFoodDto(foodService.putFood(foodDtoToChange.getFood()));
-//
-//		assertEquals(foodDtoList.get(0).getUnitName(), foodDto.getUnitName());
-//	}
-//
+	@UnitTest
+	public void putRecipeSavesChangedRecipeWhenIdExists() throws NotFoundException {
+		Recipe recipeChanged = new Recipe(recipeSuppe.getId(), "changed", recipeSuppe.getDescription(), recipeSuppe.getPortions());
+		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipeSuppe));
+		when(recipeRepository.save(any())).thenReturn(recipeChanged);
+
+		Recipe recipe = recipeService.putRecipe(recipeSuppe);
+		assertEquals(recipeSuppe.getId(), recipeChanged.getId());
+		assertEquals(recipeChanged.getName(), recipe.getName());
+		assertEquals(recipeChanged.getId(), recipe.getId());
+	}
+
+	@UnitTest
+	public void putRecipeThrowsNotFoundWhenRecipeNotExists() throws NotFoundException {
+		Recipe recipeChanged = new Recipe(recipeNotFoundId, "changed", recipeSuppe.getDescription(), recipeSuppe.getPortions());
+		when(recipeRepository.findById(recipeChanged.getId())).thenReturn(Optional.empty());
+
+		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipeSuppe));
+	}
+
 //	@UnitTest
 //	public void deleteThrowsNotFoundWhenFoodNotExists() {
 //		when(foodRepository.findById(any())).thenReturn(Optional.empty());
