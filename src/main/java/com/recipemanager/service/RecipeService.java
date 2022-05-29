@@ -17,4 +17,6 @@ public interface RecipeService {
 	 * @return get a list of recipes
 	 */
 	List<Recipe> getRecipe();
+
+	Recipe getRecipeByName(String recipeName) throws NotFoundException;
 }

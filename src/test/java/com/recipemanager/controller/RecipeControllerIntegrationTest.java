@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = RecipeManagerApplication.class)
 @AutoConfigureMockMvc
@@ -24,6 +23,8 @@ class RecipeControllerIntegrationTest {
 	@Autowired
 	RecipeRepository recipeRepository;
 
+	private final long recipeNotFound = 9999L;
+	private final String noRecipeToFind = "NoRecipeToFind";
 	Recipe recipe, secondRecipe;
 
 
@@ -51,7 +52,7 @@ class RecipeControllerIntegrationTest {
 	@Transactional
 	void getRecipeById_ReturnsFailureWhenRecipeNotExists() throws Exception {
 
-		mockMvc.perform(get("/api/v1/recipeById/9999")
+		mockMvc.perform(get("/api/v1/recipeById/" + recipeNotFound)
 						.contentType("application/json"))
 				.andExpect(status().isNotFound());
 	}
@@ -67,16 +68,25 @@ class RecipeControllerIntegrationTest {
 				.andExpect(jsonPath("$[1].name").value(secondRecipe.getName()));
 	}
 
-//	@IntegrationTest
-//	@Transactional
-//	void getFoodByName_ReturnsFood() throws Exception {
-//
-//		mockMvc.perform(get("/api/v1/foodByName/Kuchen")
-//						.contentType("application/json"))
-//				.andExpect(status().isOk())
-//				.andExpect(content().json("{'name':'Kuchen'}"));
-//	}
-//
+	@IntegrationTest
+	@Transactional
+	void getRecipeByName_ReturnsRecipe() throws Exception {
+
+		mockMvc.perform(get("/api/v1/recipeByName/" + recipe.getName())
+						.contentType("application/json"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("{'name':'" + recipe.getName() + "'}"));
+	}
+
+	@IntegrationTest
+	@Transactional
+	void getRecipeByName_ThrowsWhenNoRecipeFound() throws Exception {
+
+		mockMvc.perform(get("/api/v1/recipeByName/" + noRecipeToFind)
+						.contentType("application/json"))
+				.andExpect(status().isNotFound());
+	}
+
 //	@IntegrationTest
 //	@Transactional
 //	void postFoodReturns201() throws Exception {

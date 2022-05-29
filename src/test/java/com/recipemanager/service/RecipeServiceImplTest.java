@@ -1,5 +1,6 @@
 package com.recipemanager.service;
 
+import com.recipemanager.model.Food;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.repository.RecipeRepository;
 import com.recipemanager.util.annotations.UnitTest;
@@ -59,23 +60,24 @@ class RecipeServiceImplTest {
 		assertEquals(secondRecipe.getPortions(), recipeList.get(1).getPortions());
 	}
 
-//	@UnitTest
-//	public void getFoodByNameReturnsFood() throws NotFoundException {
-//		when(foodRepository.findByName("cake")).thenReturn(Optional.of(foodList.get(0)));
-//
-//		Food food = foodService.getFoodByName("cake");
-//
-//		assertNotNull(food);
-//		assertEquals("cake", food.getName());
-//		assertEquals("piece", food.getUnit().getName());
-//	}
-//
-//	@UnitTest
-//	public void getFoodByNameThrowsWhenNameNotFound() {
-//
-//		assertThrows(NotFoundException.class, () -> foodService.getFoodByName("apple"));
-//	}
-//
+	@UnitTest
+	public void getRecipeByNameReturnsRecipe() throws NotFoundException {
+		when(recipeRepository.findByName(recipeSuppe.getName())).thenReturn(Optional.of(recipeSuppe));
+
+		Recipe result = recipeService.getRecipeByName(recipeSuppe.getName());
+
+		assertNotNull(result);
+		assertEquals(recipeSuppe.getName(), result.getName());
+		assertEquals(recipeSuppe.getDescription(), result.getDescription());
+		assertEquals(recipeSuppe.getPortions(), result.getPortions());
+	}
+
+	@UnitTest
+	public void getRecipeByNameThrowsWhenNameNotFound() {
+
+		assertThrows(NotFoundException.class, () -> recipeService.getRecipeByName("noneAvailable!"));
+	}
+
 //	@UnitTest
 //	public void postFoodThrowsIdNotAllowedWhenRequestSendsIds() {
 //		foodDtoList.get(0).setId(1L);

@@ -23,4 +23,10 @@ public class RecipeServiceImpl implements RecipeService {
 	public List<Recipe> getRecipe() {
 		return recipeRepository.findAll();
 	}
+
+	@Override
+	public Recipe getRecipeByName(String recipeName) throws NotFoundException {
+		return recipeRepository.findByName(recipeName).orElseThrow(
+				NotFoundException::new);
+	}
 }
