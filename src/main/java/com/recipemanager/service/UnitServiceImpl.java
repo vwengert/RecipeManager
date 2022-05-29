@@ -48,7 +48,6 @@ public class UnitServiceImpl implements UnitService {
 				NotFoundException::new);
 
 		searchedUnit.setName(unit.getName());
-
 		return unitRepository.save(searchedUnit);
 	}
 
