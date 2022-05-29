@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -109,29 +110,25 @@ class RecipeControllerIntegrationTest {
 		mockMvc.perform(put("/api/v1/recipe").contentType(MediaType.APPLICATION_JSON).content("{\"id\":\"" + notSavedRecipe.getId() + "\",\"name\":\"" + notSavedRecipe.getName() + "change" + "\",\"description\":\"" + notSavedRecipe.getDescription() + "change" + "\",\"portions\":\"" + notSavedRecipe.getPortions() + "\"}")).andExpect(status().isNotFound());
 	}
 
-//	@IntegrationTest
-//	@Transactional
-//	void deleteReturns200WhenFoodIsDeleted() throws Exception {
-//		Unit unit = unitRepository.save(new Unit(null, "unit not deleting!"));
-//		Food food = foodRepository.save(new Food(null, "delete me", unit));
-//
-//		mockMvc.perform(delete("/api/v1/food/" + unit.getId())
-//						.contentType(MediaType.APPLICATION_JSON))
-//				.andExpect(status().isOk());
-//
-//		assertTrue(unitRepository.existsById(unit.getId()));
-//		assertFalse(foodRepository.existsById(food.getId()));
-//	}
-//
-//	@IntegrationTest
-//	@Transactional
-//	void deleteTrowsNotFoundWhenFoodNotThere() throws Exception {
-//		Unit unit = new Unit(9999L, "i don't exist");
-//		Food food = new Food(9999L, "i don't exist", unit);
-//
-//		mockMvc.perform(delete("/api/v1/food/" + unit.getId())
-//						.contentType(MediaType.APPLICATION_JSON))
-//				.andExpect(status().isNoContent());
-//	}
+	@IntegrationTest
+	@Transactional
+	void deleteReturns200WhenRecipeIsDeleted() throws Exception {
+
+		mockMvc.perform(delete("/api/v1/recipe/" + recipe.getId())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+		assertFalse(recipeRepository.existsById(recipe.getId()));
+	}
+
+	@IntegrationTest
+	@Transactional
+	void deleteTrowsNotFoundWhenRecipeNotThere() throws Exception {
+		notSavedRecipe.setId(999L);
+
+		mockMvc.perform(delete("/api/v1/recipe/" + notSavedRecipe.getId())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNoContent());
+	}
 
 }

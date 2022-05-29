@@ -3,6 +3,7 @@ package com.recipemanager.service;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.util.exceptions.FoundException;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
+import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 
 import java.util.List;
@@ -28,13 +29,19 @@ public interface RecipeService {
 	Recipe getRecipeByName(String recipeName) throws NotFoundException;
 
 	/**
-	 * @param recipe changed recipe
+	 * @param recipe recipe to create
 	 * @return recipe
-	 * @throws IdNotAllowedException changing id isn't allowed
+	 * @throws IdNotAllowedException id isn't allowed
 	 * @throws FoundException        recipe already found
 	 */
 	Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, FoundException;
 
+	/**
+	 * @param recipe recipe to change
+	 * @return recipe
+	 * @throws NotFoundException no recipe to change found
+	 */
 	Recipe putRecipe(Recipe recipe) throws NotFoundException;
 
+	void deleteRecipe(Long recipeId) throws NoContentException;
 }

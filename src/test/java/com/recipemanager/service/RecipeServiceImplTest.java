@@ -5,6 +5,7 @@ import com.recipemanager.repository.RecipeRepository;
 import com.recipemanager.util.annotations.UnitTest;
 import com.recipemanager.util.exceptions.FoundException;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
+import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -129,20 +130,18 @@ class RecipeServiceImplTest {
 		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipeSuppe));
 	}
 
-//	@UnitTest
-//	public void deleteThrowsNotFoundWhenFoodNotExists() {
-//		when(foodRepository.findById(any())).thenReturn(Optional.empty());
-//
-//		assertThrows(NoContentException.class, () -> foodService.deleteFood(8888L));
-//	}
-//
-//	@UnitTest
-//	public void deleteOnlyDeletesFoodButNotUnit() {
-//		Unit unit = new Unit(13L, "don't delete me");
-//		Food food = new Food(13L, "delete me", unit);
-//		when(foodRepository.findById(any())).thenReturn(Optional.of(food));
-//
-//		assertDoesNotThrow(() -> foodService.deleteFood(food.getId()));
-//	}
+	@UnitTest
+	public void deleteThrowsNotFoundWhenRecipeNotExists() {
+		when(recipeRepository.findById(any())).thenReturn(Optional.empty());
+
+		assertThrows(NoContentException.class, () -> recipeService.deleteRecipe(recipeNotFoundId));
+	}
+
+	@UnitTest
+	public void deleteOnlyDeletesFoodButNotUnit() {
+		when(recipeRepository.findById(recipeSuppe.getId())).thenReturn(Optional.of(recipeSuppe));
+
+		assertDoesNotThrow(() -> recipeService.deleteRecipe(recipeSuppe.getId()));
+	}
 
 }

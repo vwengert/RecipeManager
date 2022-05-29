@@ -4,6 +4,7 @@ import com.recipemanager.model.Recipe;
 import com.recipemanager.service.RecipeService;
 import com.recipemanager.util.exceptions.FoundException;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
+import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,12 @@ public class RecipeController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Recipe> putRecipe(@RequestBody Recipe recipe) throws NotFoundException {
 		return new ResponseEntity<>(recipeService.putRecipe(recipe), HttpStatus.OK);
+	}
+
+	@DeleteMapping(path = "recipe/{recipeId}")
+	public ResponseEntity<?> deleteRecipe(@PathVariable Long recipeId) throws NoContentException {
+		recipeService.deleteRecipe(recipeId);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
