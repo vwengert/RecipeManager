@@ -8,31 +8,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = RecipeManagerApplication.class)
 @AutoConfigureMockMvc
 class RecipeControllerIntegrationTest {
+	private final long recipeNotFound = 9999L;
+	private final String noRecipeToFind = "NoRecipeToFind";
 	@Autowired
 	MockMvc mockMvc;
 	@Autowired
 	RecipeRepository recipeRepository;
-
-	private final long recipeNotFound = 9999L;
-	private final String noRecipeToFind = "NoRecipeToFind";
-	Recipe recipe, secondRecipe;
-
+	Recipe recipe, secondRecipe, notSavedRecipe;
 
 	@BeforeEach
 	@Transactional
 	void setUp() {
 		recipe = recipeRepository.save(new Recipe(null, "Suppe", "kochen", 2));
 		secondRecipe = recipeRepository.save(new Recipe(null, "Salate", "anmachen", 4));
+		notSavedRecipe = new Recipe(null, "Cremesuppe", "cremig kochen", 33);
 	}
 
 
@@ -87,28 +89,37 @@ class RecipeControllerIntegrationTest {
 				.andExpect(status().isNotFound());
 	}
 
-//	@IntegrationTest
-//	@Transactional
-//	void postFoodReturns201() throws Exception {
-//
-//		mockMvc.perform(post("/api/v1/food")
-//						.contentType(MediaType.APPLICATION_JSON)
-//						.content("{\"name\":\"Apfel\",\"unitName\":\"Stück\"}"))
-//				.andExpect(status().isCreated());
-//
-//		assertEquals("Apfel", foodRepository.findByName("Apfel").orElse(new Food(null, "", new Unit(null, ""))).getName());
-//	}
-//
-//	@IntegrationTest
-//	@Transactional
-//	void postFoodReturns200IfFoodAlreadyExists() throws Exception {
-//
-//		mockMvc.perform(post("/api/v1/food")
-//						.contentType(MediaType.APPLICATION_JSON)
-//						.content("{\"name\":\"Kuchen\",\"unitName\":\"Stück\"}"))
-//				.andExpect(status().isOk());
-//	}
-//
+	@IntegrationTest
+	@Transactional
+	void postRecipeReturns201() throws Exception {
+
+		mockMvc.perform(post("/api/v1/recipe")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"name\":\"" + notSavedRecipe.getName() +
+								"\",\"description\":\"" + notSavedRecipe.getDescription() +
+								"\",\"portions\":\"" + notSavedRecipe.getPortions() + "\"}"))
+				.andExpect(status().isCreated());
+
+		assertEquals(notSavedRecipe.getName(), recipeRepository.findByName(notSavedRecipe.getName())
+				.orElse(new Recipe(null, "", "", 0))
+				.getName());
+		assertEquals(notSavedRecipe.getDescription(), recipeRepository.findByName(notSavedRecipe.getName())
+				.orElse(new Recipe(null, "", "", 0))
+				.getDescription());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void postFoodReturns200IfFoodAlreadyExists() throws Exception {
+
+		mockMvc.perform(post("/api/v1/recipe")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"name\":\"" + recipe.getName() +
+								"\",\"description\":\"" + recipe.getDescription() +
+								"\",\"portions\":\"" + recipe.getPortions() + "\"}"))
+				.andExpect(status().isOk());
+	}
+
 //	@IntegrationTest
 //	@Transactional
 //	void putFoodReturns200WhenChangedNameOfFood() throws Exception {

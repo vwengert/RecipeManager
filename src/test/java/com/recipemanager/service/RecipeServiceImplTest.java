@@ -1,9 +1,10 @@
 package com.recipemanager.service;
 
-import com.recipemanager.model.Food;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.repository.RecipeRepository;
 import com.recipemanager.util.annotations.UnitTest;
+import com.recipemanager.util.exceptions.FoundException;
+import com.recipemanager.util.exceptions.IdNotAllowedException;
 import com.recipemanager.util.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,11 +20,12 @@ class RecipeServiceImplTest {
 	private final long recipeId = 1L;
 	private final int portions = 2;
 	private final long recipeNotFoundId = 999L;
-	RecipeRepository recipeRepository = mock(RecipeRepository.class);
-	RecipeService recipeService = new RecipeServiceImpl(recipeRepository);
 	private final Recipe recipeSuppe = new Recipe(recipeId, "Suppe", "kochen", portions);
 	private final Recipe secondRecipe = new Recipe(recipeId, "Salat", "anmachen", portions + portions);
 	private final List<Recipe> recipes = List.of(recipeSuppe, secondRecipe);
+	private final Recipe notSavedRecipe = new Recipe(null, "Cremesuppe", "cremig kochen", portions + portions + portions);
+	RecipeRepository recipeRepository = mock(RecipeRepository.class);
+	RecipeService recipeService = new RecipeServiceImpl(recipeRepository);
 
 	@BeforeEach
 	public void setUp() {
@@ -75,46 +78,37 @@ class RecipeServiceImplTest {
 	@UnitTest
 	public void getRecipeByNameThrowsWhenNameNotFound() {
 
-		assertThrows(NotFoundException.class, () -> recipeService.getRecipeByName("noneAvailable!"));
+		assertThrows(NotFoundException.class, () -> recipeService.getRecipeByName(notSavedRecipe.getName()));
 	}
 
-//	@UnitTest
-//	public void postFoodThrowsIdNotAllowedWhenRequestSendsIds() {
-//		foodDtoList.get(0).setId(1L);
-//		foodDtoList.get(1).setUnitId(1L);
-//		foodDtoList.get(2).setId(1L);
-//		foodDtoList.get(2).setUnitId(1L);
-//
-//		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
-//		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(1).getFood()));
-//		assertThrows(IdNotAllowedException.class, () -> foodService.postFood(foodDtoList.get(2).getFood()));
-//	}
-//
-//	@UnitTest
-//	public void postFoodThrowsNotFoundExceptionWhenUnitNameNotExists() {
-//		when(unitRepository.findByName("piece")).thenReturn(Optional.empty());
-//
-//		assertThrows(NotFoundException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
-//	}
-//
-//	@UnitTest
-//	public void postFoodThrowsReturns200WhenFoodNameIsUsed() {
-//		when(foodRepository.findByName("cake")).thenReturn(Optional.of(foodList.get(0)));
-//
-//		assertThrows(FoundException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
-//	}
-//
-//	@UnitTest
-//	public void postFoodSavesAndReturnsFoodWhenNameIsNewAndUnitExists() throws FoundException, NotFoundException, IdNotAllowedException {
-//		when(unitRepository.findByName("piece")).thenReturn(Optional.of(unitList.get(0)));
-//		when(foodRepository.findByName("apple")).thenReturn(Optional.empty());
-//		when(foodRepository.save(any())).thenReturn(new Food(3L, "apple", new Unit(1L, "piece")));
-//
-//		FoodDto foodDto = FoodDto.getFoodDto(foodService.postFood(foodDtoList.get(2).getFood()));
-//		assertEquals("apple", foodDto.getName());
-//		assertEquals("piece", foodDto.getUnitName());
-//	}
-//
+	@UnitTest
+	public void postRecipeThrowsIdNotAllowedWhenRequestSendsIds() {
+		notSavedRecipe.setRecipeId(1L);
+
+		assertThrows(IdNotAllowedException.class, () -> recipeService.postRecipe(notSavedRecipe));
+	}
+
+	@UnitTest
+	public void postRecipeThrowsReturns200WhenRecipeNameIsUsed() {
+		when(recipeRepository.existsByName(recipeSuppe.getName())).thenReturn(true);
+		recipeSuppe.setRecipeId(null);
+
+		assertThrows(FoundException.class, () -> recipeService.postRecipe(recipeSuppe));
+	}
+
+	@UnitTest
+	public void postRecipeSavesAndReturnsRecipeWhenNameIsNew() throws FoundException, IdNotAllowedException {
+		when(recipeRepository.existsByName(any())).thenReturn(false);
+		when(recipeRepository.findByName(any())).thenReturn(Optional.empty());
+		when(recipeRepository.save(any())).thenReturn(secondRecipe);
+
+		secondRecipe.setRecipeId(null);
+		Recipe recipe = recipeService.postRecipe(secondRecipe);
+		assertEquals(secondRecipe.getName(), recipe.getName());
+		assertEquals(secondRecipe.getDescription(), recipe.getDescription());
+		assertEquals(secondRecipe.getPortions(), recipe.getPortions());
+	}
+
 //	@UnitTest
 //	public void putFoodSavesChangedFoodWhenIdExists() throws NotFoundException {
 //		when(foodRepository.findById(any())).thenReturn(Optional.of(foodList.get(0)));
