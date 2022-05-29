@@ -114,7 +114,7 @@ class FoodServiceImplTest {
 
 	@UnitTest
 	public void postFoodThrowsReturns200WhenFoodNameIsUsed() {
-		when(foodRepository.findByName("cake")).thenReturn(Optional.of(foodList.get(0)));
+		when(foodRepository.existsByName("cake")).thenReturn(true);
 
 		assertThrows(FoundException.class, () -> foodService.postFood(foodDtoList.get(0).getFood()));
 	}

@@ -39,8 +39,7 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 		if (food.getId() != null || food.getUnit().getId() != null)
 			throw new IdNotAllowedException();
 
-		// TODO: change findByName to existByName
-		if (foodRepository.findByName(food.getName()).isPresent())
+		if (foodRepository.existsByName(food.getName()))
 			throw new FoundException();
 
 		Unit unit = unitRepository.findByName(food.getUnit().getName()).orElseThrow(NotFoundException::new);

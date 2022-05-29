@@ -43,5 +43,9 @@ public interface RecipeService {
 	 */
 	Recipe putRecipe(Recipe recipe) throws NotFoundException;
 
+	/**
+	 * @param recipeId recipt do delete
+	 * @throws NoContentException no content to delete
+	 */
 	void deleteRecipe(Long recipeId) throws NoContentException;
 }
