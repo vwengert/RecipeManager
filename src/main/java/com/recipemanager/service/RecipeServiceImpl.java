@@ -6,6 +6,8 @@ import com.recipemanager.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -14,6 +16,11 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public Recipe getRecipeById(Long recipeId) throws NotFoundException {
 		return recipeRepository.findById(recipeId).orElseThrow(
-				NotFoundException::new );
+				NotFoundException::new);
+	}
+
+	@Override
+	public List<Recipe> getRecipe() {
+		return recipeRepository.findAll();
 	}
 }

@@ -11,12 +11,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/v1/")
 public class RecipeController {
 	final private RecipeService recipeService;
 
+
+	@GetMapping(path = "recipe")
+	public ResponseEntity<List<Recipe>> getRecipe() {
+		return new ResponseEntity<>(recipeService.getRecipe(), HttpStatus.OK);
+	}
 
 	@GetMapping(path = "recipeById/{recipeId}")
 	public ResponseEntity<Recipe> getRecipeById(@PathVariable Long recipeId) throws NotFoundException {

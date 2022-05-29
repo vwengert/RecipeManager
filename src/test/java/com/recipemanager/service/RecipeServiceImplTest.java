@@ -1,16 +1,8 @@
 package com.recipemanager.service;
 
-import com.recipemanager.dto.FoodDto;
-import com.recipemanager.model.Food;
 import com.recipemanager.model.Recipe;
-import com.recipemanager.model.Unit;
-import com.recipemanager.repository.FoodRepository;
 import com.recipemanager.repository.RecipeRepository;
-import com.recipemanager.repository.UnitRepository;
 import com.recipemanager.util.annotations.UnitTest;
-import com.recipemanager.util.exceptions.FoundException;
-import com.recipemanager.util.exceptions.IdNotAllowedException;
-import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -18,18 +10,18 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class RecipeServiceImplTest {
-	RecipeRepository recipeRepository = mock(RecipeRepository.class);
-	RecipeService recipeService= new RecipeServiceImpl(recipeRepository);
-
 	private final long recipeId = 1L;
 	private final int portions = 2;
-	private final Recipe recipeSuppe = new Recipe(recipeId, "Suppe", "kochen", portions);
 	private final long recipeNotFoundId = 999L;
+	RecipeRepository recipeRepository = mock(RecipeRepository.class);
+	RecipeService recipeService = new RecipeServiceImpl(recipeRepository);
+	private final Recipe recipeSuppe = new Recipe(recipeId, "Suppe", "kochen", portions);
+	private final Recipe secondRecipe = new Recipe(recipeId, "Salat", "anmachen", portions + portions);
+	private final List<Recipe> recipes = List.of(recipeSuppe, secondRecipe);
 
 	@BeforeEach
 	public void setUp() {
@@ -54,19 +46,19 @@ class RecipeServiceImplTest {
 		assertThrows(NotFoundException.class, () -> recipeService.getRecipeById(recipeNotFoundId));
 	}
 
-//	@UnitTest
-//	public void getFoodList() {
-//		when(foodRepository.findAll()).thenReturn(foodList);
-//
-//		List<Food> foodList = foodService.getFood();
-//
-//		assertNotNull(foodList);
-//		assertEquals("cake", foodList.get(0).getName());
-//		assertEquals("piece", foodList.get(0).getUnit().getName());
-//		assertEquals("potato", foodList.get(1).getName());
-//		assertEquals("kg", foodList.get(1).getUnit().getName());
-//	}
-//
+	@UnitTest
+	public void getRecipeList() {
+		when(recipeRepository.findAll()).thenReturn(recipes);
+
+		List<Recipe> recipeList = recipeService.getRecipe();
+
+		assertNotNull(recipeList);
+		assertEquals(recipeSuppe.getName(), recipeList.get(0).getName());
+		assertEquals(recipeSuppe.getPortions(), recipeList.get(0).getPortions());
+		assertEquals(secondRecipe.getRecipeId(), recipeList.get(1).getRecipeId());
+		assertEquals(secondRecipe.getPortions(), recipeList.get(1).getPortions());
+	}
+
 //	@UnitTest
 //	public void getFoodByNameReturnsFood() throws NotFoundException {
 //		when(foodRepository.findByName("cake")).thenReturn(Optional.of(foodList.get(0)));

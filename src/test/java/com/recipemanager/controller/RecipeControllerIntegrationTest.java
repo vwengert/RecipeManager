@@ -24,13 +24,14 @@ class RecipeControllerIntegrationTest {
 	@Autowired
 	RecipeRepository recipeRepository;
 
-	Recipe recipe;
+	Recipe recipe, secondRecipe;
 
 
 	@BeforeEach
 	@Transactional
 	void setUp() {
 		recipe = recipeRepository.save(new Recipe(null, "Suppe", "kochen", 2));
+		secondRecipe = recipeRepository.save(new Recipe(null, "Salate", "anmachen", 4));
 	}
 
 
@@ -48,24 +49,24 @@ class RecipeControllerIntegrationTest {
 
 	@IntegrationTest
 	@Transactional
-	void getFoodById_ReturnsFailureWhenFoodNotExists() throws Exception {
+	void getRecipeById_ReturnsFailureWhenRecipeNotExists() throws Exception {
 
 		mockMvc.perform(get("/api/v1/recipeById/9999")
 						.contentType("application/json"))
 				.andExpect(status().isNotFound());
 	}
 
-//	@IntegrationTest
-//	@Transactional
-//	void getFoodReturnsArray() throws Exception {
-//
-//		mockMvc.perform(get("/api/v1/food")
-//						.contentType("application/json"))
-//				.andExpect(status().isOk())
-//				.andExpect(jsonPath("$[0].name").value("Kuchen"))
-//				.andExpect(jsonPath("$[1].name").value("Kartoffeln"));
-//	}
-//
+	@IntegrationTest
+	@Transactional
+	void getRecipeReturnsArray() throws Exception {
+
+		mockMvc.perform(get("/api/v1/recipe")
+						.contentType("application/json"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].name").value(recipe.getName()))
+				.andExpect(jsonPath("$[1].name").value(secondRecipe.getName()));
+	}
+
 //	@IntegrationTest
 //	@Transactional
 //	void getFoodByName_ReturnsFood() throws Exception {
