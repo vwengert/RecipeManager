@@ -29,25 +29,30 @@ class FoodControllerIntegrationTest {
 	@Autowired
 	UnitRepository unitRepository;
 
-	Food foodKuchen;
-	Food foodKartoffeln;
-	Unit unitStueck;
-	Unit unitKg;
-	Unit changedUnit;
-	Unit unit;
-	Food food;
+	private final String piece = "piece";
+	private final String cake = "cake";
+	private final String potato = "potato";
+	private final String kg = "kg";
+	private final String apple = "apple";
+	private Food foodKuchen;
+	private Food foodKartoffeln;
+	private Unit unitPiece;
+	private Unit unitKg;
+	private Unit changedUnit;
+	private Unit unit;
+	private Food food;
 
 	@BeforeEach
 	@Transactional
 	void setUp() {
-		unitStueck = new Unit(null, "Stück");
-		unitStueck = unitRepository.save(unitStueck);
-		unitKg = new Unit(null, "kg");
-		unitKg = unitRepository.save(unitStueck);
+		unitPiece = new Unit(null, piece);
+		unitPiece = unitRepository.save(unitPiece);
+		unitKg = new Unit(null, kg);
+		unitKg = unitRepository.save(unitPiece);
 
-		foodKuchen = new Food(null, "Kuchen", unitStueck);
+		foodKuchen = new Food(null, cake, unitPiece);
 		foodKuchen = foodRepository.save(foodKuchen);
-		foodKartoffeln = new Food(null, "Kartoffeln", unitKg);
+		foodKartoffeln = new Food(null, potato, unitKg);
 		foodKartoffeln = foodRepository.save(foodKartoffeln);
 
 		unit = unitRepository.save(new Unit(null, "AnyUnit"));
@@ -63,8 +68,8 @@ class FoodControllerIntegrationTest {
 		mockMvc.perform(get("/api/v1/foodById/" + foodKuchen.getId())
 						.contentType("application/json"))
 				.andExpect(status().isOk())
-				.andExpect(content().json("{'name':'Kuchen'}"))
-				.andExpect(jsonPath("$.unitName").value("Stück"));
+				.andExpect(content().json("{'name':'" + cake + "'}"))
+				.andExpect(jsonPath("$.unitName").value(piece));
 	}
 
 	@IntegrationTest
@@ -85,18 +90,18 @@ class FoodControllerIntegrationTest {
 		mockMvc.perform(get("/api/v1/food")
 						.contentType("application/json"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].name").value("Kuchen"))
-				.andExpect(jsonPath("$[1].name").value("Kartoffeln"));
+				.andExpect(jsonPath("$[0].name").value(cake))
+				.andExpect(jsonPath("$[1].name").value(potato));
 	}
 
 	@IntegrationTest
 	@Transactional
 	void getFoodByName_ReturnsFood() throws Exception {
 
-		mockMvc.perform(get("/api/v1/foodByName/Kuchen")
+		mockMvc.perform(get("/api/v1/foodByName/" + cake)
 						.contentType("application/json"))
 				.andExpect(status().isOk())
-				.andExpect(content().json("{'name':'Kuchen'}"));
+				.andExpect(content().json("{'name':'" +  cake + "'}"));
 	}
 
 	@IntegrationTest
@@ -105,10 +110,10 @@ class FoodControllerIntegrationTest {
 
 		mockMvc.perform(post("/api/v1/food")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"name\":\"Apfel\",\"unitName\":\"Stück\"}"))
+						.content("{\"name\":\"" + apple + "\",\"unitName\":\"" + piece + "\"}"))
 				.andExpect(status().isCreated());
 
-		assertEquals("Apfel", foodRepository.findByName("Apfel").orElse(new Food(null, "", new Unit(null, ""))).getName());
+		assertEquals(apple, foodRepository.findByName(apple).orElse(new Food(null, "", new Unit(null, ""))).getName());
 	}
 
 	@IntegrationTest
@@ -117,7 +122,7 @@ class FoodControllerIntegrationTest {
 
 		mockMvc.perform(post("/api/v1/food")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"name\":\"Kuchen\",\"unitName\":\"Stück\"}"))
+						.content("{\"name\":\"" + cake + "\",\"unitName\":\"" + piece + "\"}"))
 				.andExpect(status().isOk());
 	}
 
@@ -127,10 +132,10 @@ class FoodControllerIntegrationTest {
 
 		mockMvc.perform(put("/api/v1/food")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"id\":\"" + food.getId() + "\",\"name\":\"Käse\",\"unitName\":\"" + unit.getName() + "\"}"))
+						.content("{\"id\":\"" + food.getId() + "\",\"name\":\"" + apple + "\",\"unitName\":\"" + unit.getName() + "\"}"))
 				.andExpect(status().isOk());
 
-		assertEquals("Käse", foodRepository.findById(food.getId()).orElse(new Food(1L, "", new Unit(1L, ""))).getName());
+		assertEquals(apple, foodRepository.findById(food.getId()).orElse(new Food(1L, "", new Unit(1L, ""))).getName());
 	}
 
 	@IntegrationTest
