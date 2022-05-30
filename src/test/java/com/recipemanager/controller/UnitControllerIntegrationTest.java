@@ -21,21 +21,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = RecipeManagerApplication.class)
 @AutoConfigureMockMvc
 class UnitControllerIntegrationTest {
+	private final String cheese = "Käse";
 	@Autowired
 	MockMvc mockMvc;
 	@Autowired
 	UnitRepository unitRepository;
 
-
-	Unit unitStueck;
-	Unit unitKg;
+	private final String piece = "piece";
+	private final String kg = "kg";
+	private final String meter = "meter";
+	private Unit unitPiece;
+	private Unit unitKg;
 
 	@BeforeEach
 	@Transactional
 	void setUp() {
-		unitStueck = new Unit(null, "Stück");
-		unitStueck = unitRepository.save(unitStueck);
-		unitKg = new Unit(null, "kg");
+		unitPiece = new Unit(null, piece);
+		unitPiece = unitRepository.save(unitPiece);
+		unitKg = new Unit(null, kg);
 		unitKg = unitRepository.save(unitKg);
 	}
 
@@ -43,10 +46,10 @@ class UnitControllerIntegrationTest {
 	@Transactional
 	void getUnitById_Returns200() throws Exception {
 
-		mockMvc.perform(get("/api/v1/unitById/" + unitStueck.getId())
+		mockMvc.perform(get("/api/v1/unitById/" + unitPiece.getId())
 						.contentType("application/json"))
 				.andExpect(status().isOk())
-				.andExpect(content().json("{'name':'Stück'}"));
+				.andExpect(content().json("{'name':'" + piece + "'}"));
 
 	}
 
@@ -65,10 +68,10 @@ class UnitControllerIntegrationTest {
 	@Transactional
 	void getUnitByName_Returns200() throws Exception {
 
-		mockMvc.perform(get("/api/v1/unitByName/" + unitStueck.getName())
+		mockMvc.perform(get("/api/v1/unitByName/" + unitPiece.getName())
 						.contentType("application/json"))
 				.andExpect(status().isOk())
-				.andExpect(content().json("{'name':'Stück'}"));
+				.andExpect(content().json("{'name':'" + piece + "'}"));
 
 	}
 
@@ -90,21 +93,20 @@ class UnitControllerIntegrationTest {
 		mockMvc.perform(get("/api/v1/unit")
 						.contentType("application/json"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].name").value("Stück"))
-				.andExpect(jsonPath("$[1].name").value("kg"));
+				.andExpect(jsonPath("$[0].name").value(piece))
+				.andExpect(jsonPath("$[1].name").value(kg));
 	}
 
 	@IntegrationTest
 	@Transactional
 	void postUnitReturns201() throws Exception {
-
 		mockMvc.perform(post("/api/v1/unit")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"name\":\"Meter\"}"))
+						.content("{\"name\":\"" + meter + "\"}"))
 				.andExpect(status().isCreated());
 
-		Optional<Unit> unitOptional = unitRepository.findByName("Meter");
-		assertEquals("Meter", unitOptional.orElse(new Unit(1L, "")).getName());
+		Optional<Unit> unitOptional = unitRepository.findByName(meter);
+		assertEquals(meter, unitOptional.orElse(new Unit(1L, "")).getName());
 		assertNotNull(unitOptional.orElse(new Unit(null, "")).getId());
 	}
 
@@ -114,7 +116,7 @@ class UnitControllerIntegrationTest {
 
 		mockMvc.perform(post("/api/v1/unit")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"name\":\"Stück\"}"))
+						.content("{\"name\":\"" + piece + "\"}"))
 				.andExpect(status().isOk());
 	}
 
@@ -124,13 +126,13 @@ class UnitControllerIntegrationTest {
 
 		mockMvc.perform(put("/api/v1/unit")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"id\":\"" + unitStueck.getId() + "\",\"name\":\"Käse\"}"))
+						.content("{\"id\":\"" + unitPiece.getId() + "\",\"name\":\"" + cheese + "\"}"))
 				.andExpect(status().isOk());
 
-		Unit unit = unitRepository.findById(unitStueck.getId()).orElse(null);
+		Unit unit = unitRepository.findById(unitPiece.getId()).orElse(null);
 
 		assertNotNull(unit);
-		assertEquals("Käse", unit.getName());
+		assertEquals(cheese, unit.getName());
 	}
 
 	@IntegrationTest
@@ -139,7 +141,7 @@ class UnitControllerIntegrationTest {
 
 		mockMvc.perform(put("/api/v1/unit")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"id\":\"77\",\"name\":\"Käse\"}"))
+						.content("{\"id\":\"7777\",\"name\":\"" + cheese + "\"}"))
 				.andExpect(status().isNotFound());
 	}
 
