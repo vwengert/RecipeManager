@@ -32,9 +32,9 @@ class RecipeControllerIntegrationTest {
 	@BeforeEach
 	@Transactional
 	void setUp() {
-		recipe = recipeRepository.save(new Recipe(null, "Suppe", "kochen", 2));
-		secondRecipe = recipeRepository.save(new Recipe(null, "Salate", "anmachen", 4));
-		notSavedRecipe = new Recipe(null, "Cremesuppe", "cremig kochen", 33);
+		recipe = recipeRepository.save(new Recipe(null, "soup", "cook long", 2));
+		secondRecipe = recipeRepository.save(new Recipe(null, "salad", "turn on", 4));
+		notSavedRecipe = new Recipe(null, "ravioli", "cook", 33);
 	}
 
 
