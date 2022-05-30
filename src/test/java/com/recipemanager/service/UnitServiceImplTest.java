@@ -22,13 +22,15 @@ class UnitServiceImplTest {
 	UnitRepository unitRepository = mock(UnitRepository.class);
 	UnitServiceImpl unitService = new UnitServiceImpl(unitRepository);
 
+	private final String piece = "piece";
+	private final String kg = "kg";
 	private List<Unit> unitList;
 
 	@BeforeEach
 	public void setUp() {
 		unitList = List.of(
-				Unit.builder().id(1L).name("piece").build(),
-				Unit.builder().id(2L).name("kg").build()
+				Unit.builder().id(1L).name(piece).build(),
+				Unit.builder().id(2L).name(kg).build()
 		);
 	}
 
@@ -73,8 +75,8 @@ class UnitServiceImplTest {
 		List<Unit> units = unitService.getUnit();
 
 		assertNotNull(units);
-		assertEquals("piece", units.get(0).getName());
-		assertEquals("kg", units.get(1).getName());
+		assertEquals(piece, units.get(0).getName());
+		assertEquals(kg, units.get(1).getName());
 	}
 
 	@UnitTest

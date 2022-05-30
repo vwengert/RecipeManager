@@ -21,10 +21,10 @@ class RecipeServiceImplTest {
 	private final long recipeId = 1L;
 	private final int portions = 2;
 	private final long recipeNotFoundId = 999L;
-	private final Recipe recipeSuppe = new Recipe(recipeId, "Suppe", "kochen", portions);
-	private final Recipe secondRecipe = new Recipe(recipeId, "Salat", "anmachen", portions + portions);
+	private final Recipe recipeSuppe = new Recipe(recipeId, "soup", "cook long", portions);
+	private final Recipe secondRecipe = new Recipe(recipeId, "salad", "turn on", portions + portions);
 	private final List<Recipe> recipes = List.of(recipeSuppe, secondRecipe);
-	private final Recipe notSavedRecipe = new Recipe(null, "Cremesuppe", "cremig kochen", portions + portions + portions);
+	private final Recipe notSavedRecipe = new Recipe(null, "ravioli", "cook", portions + portions + portions);
 	RecipeRepository recipeRepository = mock(RecipeRepository.class);
 	RecipeService recipeService = new RecipeServiceImpl(recipeRepository);
 
