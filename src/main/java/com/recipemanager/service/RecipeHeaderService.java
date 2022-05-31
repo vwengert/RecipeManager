@@ -1,6 +1,6 @@
 package com.recipemanager.service;
 
-import com.recipemanager.model.Recipe;
+import com.recipemanager.model.RecipeHeader;
 import com.recipemanager.util.exceptions.FoundException;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
 import com.recipemanager.util.exceptions.NoContentException;
@@ -8,44 +8,44 @@ import com.recipemanager.util.exceptions.NotFoundException;
 
 import java.util.List;
 
-public interface RecipeService {
+public interface RecipeHeaderService {
 	/**
 	 * @param recipeId id of recipe to get
 	 * @return recipe
 	 * @throws NotFoundException no recipe found
 	 */
-	Recipe getRecipeById(Long recipeId) throws NotFoundException;
+	RecipeHeader getRecipeHeaderById(Long recipeId) throws NotFoundException;
 
 	/**
 	 * @return get a list of recipes
 	 */
-	List<Recipe> getRecipe();
+	List<RecipeHeader> getRecipeHeader();
 
 	/**
 	 * @param recipeName recipe name to get
 	 * @return recipe
 	 * @throws NotFoundException no recipe found
 	 */
-	Recipe getRecipeByName(String recipeName) throws NotFoundException;
+	RecipeHeader getRecipeHeaderByName(String recipeName) throws NotFoundException;
 
 	/**
-	 * @param recipe recipe to create
+	 * @param recipeHeader recipe to create
 	 * @return recipe
 	 * @throws IdNotAllowedException id isn't allowed
 	 * @throws FoundException        recipe already found
 	 */
-	Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, FoundException;
+	RecipeHeader postRecipeHeader(RecipeHeader recipeHeader) throws IdNotAllowedException, FoundException;
 
 	/**
-	 * @param recipe recipe to change
+	 * @param recipeHeader recipe to change
 	 * @return recipe
 	 * @throws NotFoundException no recipe to change found
 	 */
-	Recipe putRecipe(Recipe recipe) throws NotFoundException;
+	RecipeHeader putRecipeHeader(RecipeHeader recipeHeader) throws NotFoundException;
 
 	/**
 	 * @param recipeId recipt do delete
 	 * @throws NoContentException no content to delete
 	 */
-	void deleteRecipe(Long recipeId) throws NoContentException;
+	void deleteRecipeHeader(Long recipeId) throws NoContentException;
 }

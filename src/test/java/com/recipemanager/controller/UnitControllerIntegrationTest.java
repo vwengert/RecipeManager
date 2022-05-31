@@ -22,14 +22,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class UnitControllerIntegrationTest {
 	private final String cheese = "Käse";
+	private final String piece = "piece";
+	private final String kg = "kg";
+	private final String meter = "meter";
 	@Autowired
 	MockMvc mockMvc;
 	@Autowired
 	UnitRepository unitRepository;
-
-	private final String piece = "piece";
-	private final String kg = "kg";
-	private final String meter = "meter";
 	private Unit unitPiece;
 	private Unit unitKg;
 

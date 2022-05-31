@@ -22,18 +22,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = RecipeManagerApplication.class)
 @AutoConfigureMockMvc
 class FoodControllerIntegrationTest {
+	private final String piece = "piece";
+	private final String cake = "cake";
+	private final String potato = "potato";
+	private final String kg = "kg";
+	private final String apple = "apple";
 	@Autowired
 	MockMvc mockMvc;
 	@Autowired
 	FoodRepository foodRepository;
 	@Autowired
 	UnitRepository unitRepository;
-
-	private final String piece = "piece";
-	private final String cake = "cake";
-	private final String potato = "potato";
-	private final String kg = "kg";
-	private final String apple = "apple";
 	private Food foodKuchen;
 	private Food foodKartoffeln;
 	private Unit unitPiece;
@@ -101,7 +100,7 @@ class FoodControllerIntegrationTest {
 		mockMvc.perform(get("/api/v1/foodByName/" + cake)
 						.contentType("application/json"))
 				.andExpect(status().isOk())
-				.andExpect(content().json("{'name':'" +  cake + "'}"));
+				.andExpect(content().json("{'name':'" + cake + "'}"));
 	}
 
 	@IntegrationTest

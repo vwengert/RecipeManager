@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table
-public class Recipe {
+public class RecipeHeader {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

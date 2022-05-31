@@ -1,6 +1,6 @@
 package com.recipemanager.repository;
 
-import com.recipemanager.model.Recipe;
+import com.recipemanager.model.RecipeHeader;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +10,8 @@ import java.util.Optional;
  * Repository to persist Recipes
  */
 @Repository
-public interface RecipeRepository extends JpaRepository<Recipe, Long> {
-	Optional<Recipe> findByName(String name);
+public interface RecipeRepository extends JpaRepository<RecipeHeader, Long> {
+	Optional<RecipeHeader> findByName(String name);
 
 	boolean existsByName(String name);
 }

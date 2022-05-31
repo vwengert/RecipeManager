@@ -1,6 +1,7 @@
 package com.recipemanager;
 
 import com.recipemanager.controller.FoodController;
+import com.recipemanager.controller.RecipeHeaderController;
 import com.recipemanager.controller.UnitController;
 import com.recipemanager.util.annotations.IntegrationTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,14 @@ class RecipeManagerApplicationTests {
 	private UnitController unitController;
 	@Autowired
 	private FoodController foodController;
+	@Autowired
+	private RecipeHeaderController recipeHeaderController;
 
 	@IntegrationTest
 	void contextLoads() {
 		assertThat(unitController).isNotNull();
 		assertThat(foodController).isNotNull();
+		assertThat(recipeHeaderController).isNotNull();
 	}
 
 }

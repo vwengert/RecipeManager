@@ -19,11 +19,10 @@ import static org.mockito.Mockito.when;
 
 
 class UnitServiceImplTest {
-	UnitRepository unitRepository = mock(UnitRepository.class);
-	UnitServiceImpl unitService = new UnitServiceImpl(unitRepository);
-
 	private final String piece = "piece";
 	private final String kg = "kg";
+	UnitRepository unitRepository = mock(UnitRepository.class);
+	UnitServiceImpl unitService = new UnitServiceImpl(unitRepository);
 	private List<Unit> unitList;
 
 	@BeforeEach
