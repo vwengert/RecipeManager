@@ -1,5 +1,6 @@
 package com.recipemanager.controller;
 
+import com.recipemanager.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/api/v1/")
 public class RecipeController {
+	final private RecipeService recipeService;
 
 	@GetMapping(path = "recipeById/{recipeId}")
 	public ResponseEntity<String> getRecipe(@PathVariable Long recipeId) {
