@@ -2,7 +2,7 @@ package com.recipemanager.controller;
 
 import com.recipemanager.RecipeManagerApplication;
 import com.recipemanager.model.RecipeHeader;
-import com.recipemanager.repository.RecipeRepository;
+import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.util.annotations.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,85 +26,85 @@ class RecipeHeaderControllerIntegrationTest {
 	@Autowired
 	MockMvc mockMvc;
 	@Autowired
-	RecipeRepository recipeRepository;
+	RecipeHeaderRepository recipeHEaderRepository;
 	RecipeHeader recipeHeader, secondRecipeHeader, notSavedRecipeHeader;
 
 	@BeforeEach
 	@Transactional
 	void setUp() {
-		recipeHeader = recipeRepository.save(new RecipeHeader(null, "soup", "cook long", 2));
-		secondRecipeHeader = recipeRepository.save(new RecipeHeader(null, "salad", "turn on", 4));
+		recipeHeader = recipeHEaderRepository.save(new RecipeHeader(null, "soup", "cook long", 2));
+		secondRecipeHeader = recipeHEaderRepository.save(new RecipeHeader(null, "salad", "turn on", 4));
 		notSavedRecipeHeader = new RecipeHeader(null, "ravioli", "cook", 33);
 	}
 
 
 	@IntegrationTest
 	@Transactional
-	void getRecipeById_Returns200() throws Exception {
+	void getRecipeHeaderById_Returns200() throws Exception {
 
 		mockMvc.perform(get("/api/v1/recipeHeaderById/" + recipeHeader.getId()).contentType("application/json")).andExpect(status().isOk()).andExpect(jsonPath("$.name").value(recipeHeader.getName())).andExpect(jsonPath("$.description").value(recipeHeader.getDescription())).andExpect(jsonPath("$.portions").value(recipeHeader.getPortions()));
 	}
 
 	@IntegrationTest
 	@Transactional
-	void getRecipeById_ReturnsFailureWhenRecipeNotExists() throws Exception {
+	void getRecipeHeaderById_ReturnsFailureWhenRecipeNotExists() throws Exception {
 
 		mockMvc.perform(get("/api/v1/recipeHeaderById/" + recipeNotFound).contentType("application/json")).andExpect(status().isNotFound());
 	}
 
 	@IntegrationTest
 	@Transactional
-	void getRecipeReturnsArray() throws Exception {
+	void getRecipeHeaderReturnsArray() throws Exception {
 
 		mockMvc.perform(get("/api/v1/recipeHeader").contentType("application/json")).andExpect(status().isOk()).andExpect(jsonPath("$[0].name").value(recipeHeader.getName())).andExpect(jsonPath("$[1].name").value(secondRecipeHeader.getName()));
 	}
 
 	@IntegrationTest
 	@Transactional
-	void getRecipeByName_ReturnsRecipe() throws Exception {
+	void getRecipeHeaderByName_ReturnsRecipe() throws Exception {
 
 		mockMvc.perform(get("/api/v1/recipeHeaderByName/" + recipeHeader.getName()).contentType("application/json")).andExpect(status().isOk()).andExpect(content().json("{'name':'" + recipeHeader.getName() + "'}"));
 	}
 
 	@IntegrationTest
 	@Transactional
-	void getRecipeByName_ThrowsWhenNoRecipeFound() throws Exception {
+	void getRecipeHeaderByName_ThrowsWhenNoRecipeFound() throws Exception {
 
 		mockMvc.perform(get("/api/v1/recipeHeaderByName/" + noRecipeToFind).contentType("application/json")).andExpect(status().isNotFound());
 	}
 
 	@IntegrationTest
 	@Transactional
-	void postRecipeReturns201() throws Exception {
+	void postRecipeHeaderReturns201() throws Exception {
 
 		mockMvc.perform(post("/api/v1/recipeHeader").contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"" + notSavedRecipeHeader.getName() + "\",\"description\":\"" + notSavedRecipeHeader.getDescription() + "\",\"portions\":\"" + notSavedRecipeHeader.getPortions() + "\"}")).andExpect(status().isCreated());
 
-		assertEquals(notSavedRecipeHeader.getName(), recipeRepository.findByName(notSavedRecipeHeader.getName()).orElse(new RecipeHeader(null, "", "", 0)).getName());
-		assertEquals(notSavedRecipeHeader.getDescription(), recipeRepository.findByName(notSavedRecipeHeader.getName()).orElse(new RecipeHeader(null, "", "", 0)).getDescription());
+		assertEquals(notSavedRecipeHeader.getName(), recipeHEaderRepository.findByName(notSavedRecipeHeader.getName()).orElse(new RecipeHeader(null, "", "", 0)).getName());
+		assertEquals(notSavedRecipeHeader.getDescription(), recipeHEaderRepository.findByName(notSavedRecipeHeader.getName()).orElse(new RecipeHeader(null, "", "", 0)).getDescription());
 	}
 
 	@IntegrationTest
 	@Transactional
-	void postFoodReturns200IfFoodAlreadyExists() throws Exception {
+	void postRecipeHeaderReturns200IfFoodAlreadyExists() throws Exception {
 
 		mockMvc.perform(post("/api/v1/recipeHeader").contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"" + recipeHeader.getName() + "\",\"description\":\"" + recipeHeader.getDescription() + "\",\"portions\":\"" + recipeHeader.getPortions() + "\"}")).andExpect(status().isOk());
 	}
 
 	@IntegrationTest
 	@Transactional
-	void putRecipeReturns200WhenAnyChangeOfRecipeIsDone() throws Exception {
+	void putRecipeHeaderReturns200WhenAnyChangeOfRecipeIsDone() throws Exception {
 		recipeHeader.setName("change");
 		recipeHeader.setDescription("changed description");
 		recipeHeader.setPortions(33);
 
 		mockMvc.perform(put("/api/v1/recipeHeader").contentType(MediaType.APPLICATION_JSON).content("{\"id\":\"" + recipeHeader.getId() + "\",\"name\":\"" + recipeHeader.getName() + "\",\"description\":\"" + recipeHeader.getDescription() + "\",\"portions\":\"" + recipeHeader.getPortions() + recipeHeader.getPortions() + "\"}")).andExpect(status().isOk());
 
-		assertEquals(recipeHeader.getName(), recipeRepository.findById(recipeHeader.getId()).orElse(new RecipeHeader(1L, "", "", 0)).getName());
+		assertEquals(recipeHeader.getName(), recipeHEaderRepository.findById(recipeHeader.getId()).orElse(new RecipeHeader(1L, "", "", 0)).getName());
 	}
 
 	@IntegrationTest
 	@Transactional
-	void putRecipeThrowsNotFoundWhenIdOfRecipeIsNotThere() throws Exception {
+	void putRecipeHeaderThrowsNotFoundWhenIdOfRecipeIsNotThere() throws Exception {
 		notSavedRecipeHeader.setId(recipeNotFound);
 
 		mockMvc.perform(put("/api/v1/recipeHeader").contentType(MediaType.APPLICATION_JSON).content("{\"id\":\"" + notSavedRecipeHeader.getId() + "\",\"name\":\"" + notSavedRecipeHeader.getName() + "change" + "\",\"description\":\"" + notSavedRecipeHeader.getDescription() + "change" + "\",\"portions\":\"" + notSavedRecipeHeader.getPortions() + "\"}")).andExpect(status().isNotFound());
@@ -112,18 +112,18 @@ class RecipeHeaderControllerIntegrationTest {
 
 	@IntegrationTest
 	@Transactional
-	void deleteReturns200WhenRecipeIsDeleted() throws Exception {
+	void deleteReturns200WhenRecipeHeaderIsDeleted() throws Exception {
 
 		mockMvc.perform(delete("/api/v1/recipeHeader/" + recipeHeader.getId())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 
-		assertFalse(recipeRepository.existsById(recipeHeader.getId()));
+		assertFalse(recipeHEaderRepository.existsById(recipeHeader.getId()));
 	}
 
 	@IntegrationTest
 	@Transactional
-	void deleteTrowsNotFoundWhenRecipeNotThere() throws Exception {
+	void deleteTrowsNotFoundWhenRecipeHeaderNotThere() throws Exception {
 		notSavedRecipeHeader.setId(999L);
 
 		mockMvc.perform(delete("/api/v1/recipeHeader/" + notSavedRecipeHeader.getId())

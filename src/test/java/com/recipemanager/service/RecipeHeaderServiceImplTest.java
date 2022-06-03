@@ -1,7 +1,7 @@
 package com.recipemanager.service;
 
 import com.recipemanager.model.RecipeHeader;
-import com.recipemanager.repository.RecipeRepository;
+import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.util.annotations.UnitTest;
 import com.recipemanager.util.exceptions.FoundException;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
@@ -25,8 +25,8 @@ class RecipeHeaderServiceImplTest {
 	private final RecipeHeader secondRecipeHeader = new RecipeHeader(recipeId, "salad", "turn on", portions + portions);
 	private final List<RecipeHeader> recipeHeaders = List.of(recipeHeaderSuppe, secondRecipeHeader);
 	private final RecipeHeader notSavedRecipeHeader = new RecipeHeader(null, "ravioli", "cook", portions + portions + portions);
-	RecipeRepository recipeRepository = mock(RecipeRepository.class);
-	RecipeHeaderService recipeHeaderService = new RecipeHeaderServiceImpl(recipeRepository);
+	RecipeHeaderRepository recipeHEaderRepository = mock(RecipeHeaderRepository.class);
+	RecipeHeaderService recipeHeaderService = new RecipeHeaderServiceImpl(recipeHEaderRepository);
 
 	@BeforeEach
 	public void setUp() {
@@ -34,7 +34,7 @@ class RecipeHeaderServiceImplTest {
 
 	@UnitTest
 	public void getRecipeByIdReturnsFood() throws NotFoundException {
-		when(recipeRepository.findById(recipeId)).thenReturn(Optional.of(recipeHeaderSuppe));
+		when(recipeHEaderRepository.findById(recipeId)).thenReturn(Optional.of(recipeHeaderSuppe));
 
 		RecipeHeader recipeHeader = recipeHeaderService.getRecipeHeaderById(recipeId);
 
@@ -46,14 +46,14 @@ class RecipeHeaderServiceImplTest {
 
 	@UnitTest
 	public void getRecipeByIdThrowsWhenNotFound() {
-		when(recipeRepository.findById(recipeNotFoundId)).thenReturn(Optional.empty());
+		when(recipeHEaderRepository.findById(recipeNotFoundId)).thenReturn(Optional.empty());
 
 		assertThrows(NotFoundException.class, () -> recipeHeaderService.getRecipeHeaderById(recipeNotFoundId));
 	}
 
 	@UnitTest
 	public void getRecipeList() {
-		when(recipeRepository.findAll()).thenReturn(recipeHeaders);
+		when(recipeHEaderRepository.findAll()).thenReturn(recipeHeaders);
 
 		List<RecipeHeader> recipeHeaderList = recipeHeaderService.getRecipeHeader();
 
@@ -66,7 +66,7 @@ class RecipeHeaderServiceImplTest {
 
 	@UnitTest
 	public void getRecipeByNameReturnsRecipe() throws NotFoundException {
-		when(recipeRepository.findByName(recipeHeaderSuppe.getName())).thenReturn(Optional.of(recipeHeaderSuppe));
+		when(recipeHEaderRepository.findByName(recipeHeaderSuppe.getName())).thenReturn(Optional.of(recipeHeaderSuppe));
 
 		RecipeHeader result = recipeHeaderService.getRecipeHeaderByName(recipeHeaderSuppe.getName());
 
@@ -91,7 +91,7 @@ class RecipeHeaderServiceImplTest {
 
 	@UnitTest
 	public void postRecipeThrowsReturns200WhenRecipeNameIsUsed() {
-		when(recipeRepository.existsByName(recipeHeaderSuppe.getName())).thenReturn(true);
+		when(recipeHEaderRepository.existsByName(recipeHeaderSuppe.getName())).thenReturn(true);
 		recipeHeaderSuppe.setId(null);
 
 		assertThrows(FoundException.class, () -> recipeHeaderService.postRecipeHeader(recipeHeaderSuppe));
@@ -99,9 +99,9 @@ class RecipeHeaderServiceImplTest {
 
 	@UnitTest
 	public void postRecipeSavesAndReturnsRecipeWhenNameIsNew() throws FoundException, IdNotAllowedException {
-		when(recipeRepository.existsByName(any())).thenReturn(false);
-		when(recipeRepository.findByName(any())).thenReturn(Optional.empty());
-		when(recipeRepository.save(any())).thenReturn(secondRecipeHeader);
+		when(recipeHEaderRepository.existsByName(any())).thenReturn(false);
+		when(recipeHEaderRepository.findByName(any())).thenReturn(Optional.empty());
+		when(recipeHEaderRepository.save(any())).thenReturn(secondRecipeHeader);
 
 		secondRecipeHeader.setId(null);
 		RecipeHeader recipeHeader = recipeHeaderService.postRecipeHeader(secondRecipeHeader);
@@ -113,8 +113,8 @@ class RecipeHeaderServiceImplTest {
 	@UnitTest
 	public void putRecipeSavesChangedRecipeWhenIdExists() throws NotFoundException {
 		RecipeHeader recipeHeaderChanged = new RecipeHeader(recipeHeaderSuppe.getId(), "changed", recipeHeaderSuppe.getDescription(), recipeHeaderSuppe.getPortions());
-		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipeHeaderSuppe));
-		when(recipeRepository.save(any())).thenReturn(recipeHeaderChanged);
+		when(recipeHEaderRepository.findById(any())).thenReturn(Optional.of(recipeHeaderSuppe));
+		when(recipeHEaderRepository.save(any())).thenReturn(recipeHeaderChanged);
 
 		RecipeHeader recipeHeader = recipeHeaderService.putRecipeHeader(recipeHeaderSuppe);
 		assertEquals(recipeHeaderSuppe.getId(), recipeHeaderChanged.getId());
@@ -125,21 +125,21 @@ class RecipeHeaderServiceImplTest {
 	@UnitTest
 	public void putRecipeThrowsNotFoundWhenRecipeNotExists() {
 		RecipeHeader recipeHeaderChanged = new RecipeHeader(recipeNotFoundId, "changed", recipeHeaderSuppe.getDescription(), recipeHeaderSuppe.getPortions());
-		when(recipeRepository.findById(recipeHeaderChanged.getId())).thenReturn(Optional.empty());
+		when(recipeHEaderRepository.findById(recipeHeaderChanged.getId())).thenReturn(Optional.empty());
 
 		assertThrows(NotFoundException.class, () -> recipeHeaderService.putRecipeHeader(recipeHeaderSuppe));
 	}
 
 	@UnitTest
 	public void deleteThrowsNotFoundWhenRecipeNotExists() {
-		when(recipeRepository.findById(any())).thenReturn(Optional.empty());
+		when(recipeHEaderRepository.findById(any())).thenReturn(Optional.empty());
 
 		assertThrows(NoContentException.class, () -> recipeHeaderService.deleteRecipeHeader(recipeNotFoundId));
 	}
 
 	@UnitTest
 	public void deleteOnlyDeletesFoodButNotUnit() {
-		when(recipeRepository.findById(recipeHeaderSuppe.getId())).thenReturn(Optional.of(recipeHeaderSuppe));
+		when(recipeHEaderRepository.findById(recipeHeaderSuppe.getId())).thenReturn(Optional.of(recipeHeaderSuppe));
 
 		assertDoesNotThrow(() -> recipeHeaderService.deleteRecipeHeader(recipeHeaderSuppe.getId()));
 	}

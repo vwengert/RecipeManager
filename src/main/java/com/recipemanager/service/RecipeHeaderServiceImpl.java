@@ -1,7 +1,7 @@
 package com.recipemanager.service;
 
 import com.recipemanager.model.RecipeHeader;
-import com.recipemanager.repository.RecipeRepository;
+import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.util.exceptions.FoundException;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
 import com.recipemanager.util.exceptions.NoContentException;
@@ -14,22 +14,22 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class RecipeHeaderServiceImpl implements RecipeHeaderService {
-	private final RecipeRepository recipeRepository;
+	private final RecipeHeaderRepository recipeHEaderRepository;
 
 	@Override
 	public RecipeHeader getRecipeHeaderById(Long recipeId) throws NotFoundException {
-		return recipeRepository.findById(recipeId).orElseThrow(
+		return recipeHEaderRepository.findById(recipeId).orElseThrow(
 				NotFoundException::new);
 	}
 
 	@Override
 	public List<RecipeHeader> getRecipeHeader() {
-		return recipeRepository.findAll();
+		return recipeHEaderRepository.findAll();
 	}
 
 	@Override
 	public RecipeHeader getRecipeHeaderByName(String recipeName) throws NotFoundException {
-		return recipeRepository.findByName(recipeName).orElseThrow(
+		return recipeHEaderRepository.findByName(recipeName).orElseThrow(
 				NotFoundException::new);
 	}
 
@@ -37,27 +37,27 @@ public class RecipeHeaderServiceImpl implements RecipeHeaderService {
 	public RecipeHeader postRecipeHeader(RecipeHeader recipeHeader) throws IdNotAllowedException, FoundException {
 		if (recipeHeader.getId() != null)
 			throw new IdNotAllowedException();
-		if (recipeRepository.existsByName(recipeHeader.getName()))
+		if (recipeHEaderRepository.existsByName(recipeHeader.getName()))
 			throw new FoundException();
-		return recipeRepository.save(recipeHeader);
+		return recipeHEaderRepository.save(recipeHeader);
 	}
 
 	@Override
 	public RecipeHeader putRecipeHeader(RecipeHeader recipeHeader) throws NotFoundException {
-		RecipeHeader oldRecipeHeader = recipeRepository.findById(recipeHeader.getId()).orElseThrow(
+		RecipeHeader oldRecipeHeader = recipeHEaderRepository.findById(recipeHeader.getId()).orElseThrow(
 				NotFoundException::new
 		);
 		oldRecipeHeader.setName(recipeHeader.getName());
 		oldRecipeHeader.setDescription(recipeHeader.getDescription());
 		oldRecipeHeader.setPortions(recipeHeader.getPortions());
 
-		return recipeRepository.save(oldRecipeHeader);
+		return recipeHEaderRepository.save(oldRecipeHeader);
 	}
 
 	@Override
 	public void deleteRecipeHeader(Long recipeId) throws NoContentException {
-		RecipeHeader recipeHeaderToDelete = recipeRepository.findById(recipeId).orElseThrow(
+		RecipeHeader recipeHeaderToDelete = recipeHEaderRepository.findById(recipeId).orElseThrow(
 				NoContentException::new);
-		recipeRepository.delete(recipeHeaderToDelete);
+		recipeHEaderRepository.delete(recipeHeaderToDelete);
 	}
 }

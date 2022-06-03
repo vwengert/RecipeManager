@@ -10,7 +10,7 @@ import java.util.Optional;
  * Repository to persist Recipes
  */
 @Repository
-public interface RecipeRepository extends JpaRepository<RecipeHeader, Long> {
+public interface RecipeHeaderRepository extends JpaRepository<RecipeHeader, Long> {
 	Optional<RecipeHeader> findByName(String name);
 
 	boolean existsByName(String name);
