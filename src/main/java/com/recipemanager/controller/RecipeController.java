@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecipeController {
 	final private RecipeService recipeService;
 
-	@GetMapping(path = "recipeById/{recipeId}")
+	@GetMapping(path = "recipeByRecipeHeaderId/{recipeId}")
 	public ResponseEntity<String> getRecipe(@PathVariable Long recipeId) {
 		return new ResponseEntity<>("[{\"recipeHeaderName\":\"Suppe\"," +
 				"\"foodName\":\"Kartoffel\"," +

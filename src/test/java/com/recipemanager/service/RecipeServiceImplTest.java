@@ -2,7 +2,6 @@ package com.recipemanager.service;
 
 import com.recipemanager.util.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
-import org.springframework.stereotype.Service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,5 +13,10 @@ class RecipeServiceImplTest {
 	void getRecipeByIdThrowsWhenNothingFound() {
 
 		assertThrows(NotFoundException.class, () -> recipeService.getRecipeById(999L));
+	}
+
+	@Test
+	void getRecipeByIdReturnsAListOfFoods() {
+
 	}
 }
