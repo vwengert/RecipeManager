@@ -1,17 +1,26 @@
 package com.recipemanager.service;
 
 import com.recipemanager.model.Recipe;
+import com.recipemanager.repository.RecipeRepository;
 import com.recipemanager.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class RecipeServiceImpl implements RecipeService {
+	private final RecipeRepository recipeRepository;
 
 	@Override
-	public Recipe getRecipeById(Long recipeId) throws NotFoundException {
-		throw new NotFoundException();
+	public List<Recipe> getRecipeByRecipeHeaderId(Long recipeHeaderId) throws NotFoundException {
+		List<Recipe> recipeList = recipeRepository.findByRecipeHeaderId(recipeHeaderId);
+		if (recipeList.isEmpty()) {
+			System.out.println("no chance i am here");
+			throw new NotFoundException();
+		}
+		return recipeList;
 	}
 
 }

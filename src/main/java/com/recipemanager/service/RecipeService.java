@@ -3,6 +3,8 @@ package com.recipemanager.service;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.util.exceptions.NotFoundException;
 
+import java.util.List;
+
 public interface RecipeService {
-	Recipe getRecipeById(Long recipeId) throws NotFoundException;
+	List<Recipe> getRecipeByRecipeHeaderId(Long recipeId) throws NotFoundException;
 }
