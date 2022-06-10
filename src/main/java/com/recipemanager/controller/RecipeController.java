@@ -1,5 +1,6 @@
 package com.recipemanager.controller;
 
+import com.recipemanager.dto.RecipeDto;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.service.RecipeService;
 import com.recipemanager.util.exceptions.NotFoundException;
@@ -20,8 +21,11 @@ public class RecipeController {
 	final private RecipeService recipeService;
 
 	@GetMapping(path = "recipeByRecipeHeaderId/{recipeHeaderId}")
-	public ResponseEntity<List<Recipe>> getRecipe(@PathVariable Long recipeHeaderId) throws NotFoundException {
-		return new ResponseEntity<>(recipeService.getRecipeByRecipeHeaderId(recipeHeaderId), HttpStatus.OK);
+	public ResponseEntity<List<RecipeDto>> getRecipe(@PathVariable Long recipeHeaderId) throws NotFoundException {
+		List<Recipe> recipeByRecipeHeaderIdList = recipeService.getRecipeByRecipeHeaderId(recipeHeaderId);
+		List<RecipeDto> recipeDtoList = RecipeDto.getRecipeDtoList(recipeByRecipeHeaderIdList);
+		Recipe recipe = recipeDtoList.get(0).getRecipe();
+		return new ResponseEntity<>(recipeDtoList, HttpStatus.OK);
 	}
 
 }

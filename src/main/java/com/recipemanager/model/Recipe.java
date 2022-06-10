@@ -3,6 +3,7 @@ package com.recipemanager.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -11,16 +12,16 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table
-public class Recipe {
+public class Recipe implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "recipe_header_id")
+	@JoinColumn(name = "recipeHeaderId")
 	private RecipeHeader recipeHeader;
 	@ManyToOne
-	@JoinColumn(name = "food_id")
+	@JoinColumn(name = "foodId")
 	private Food food;
 	private Double quantity;
 

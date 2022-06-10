@@ -49,10 +49,13 @@ class RecipeControllerIntegrationTest {
 	@Transactional
 	void setUp() {
 		stk = unitRepository.save(stk);
+
 		kartoffel = foodRepository.save(kartoffel);
 		kaese = foodRepository.save(kaese);
+
 		suppe = recipeHeaderRepository.save(suppe);
 		brot = recipeHeaderRepository.save(brot);
+
 		recipeSuppe = recipeRepository.save(recipeSuppe);
 		recipeBrot = recipeRepository.save(recipeBrot);
 	}
@@ -68,25 +71,23 @@ class RecipeControllerIntegrationTest {
 
 	@IntegrationTest
 	@Transactional
-	void getRecipeById_Returns200() throws Exception {
+	void getRecipeByRecipeHeaderId_Returns200() throws Exception {
 
 		// TODO: vernünftige Tests, sobald das Layout der JSON geklärt ist
-		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + recipeSuppe.getRecipeHeader().getId()).contentType("application/json"))
-				.andExpect(status().isOk());
-
-		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + recipeBrot.getRecipeHeader().getId()).contentType("application/json"))
+		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + recipeSuppe.getRecipeHeader().getId())
+						.contentType("application/json"))
 				.andExpect(status().isOk());
 
 	}
-
-	@IntegrationTest
-	@Transactional
-	void returnNotFoundWhenIdOfRecipeHeaderIsWrong() throws Exception {
-
-		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + 333L ).contentType("application/json"))
-				.andExpect(status().isNotFound());
-
-	}
-
+//
+//	@IntegrationTest
+//	@Transactional
+//	void returnNotFoundWhenIdOfRecipeHeaderIsWrong() throws Exception {
+//
+//		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + 333L )
+//						.contentType("application/json"))
+//				.andExpect(status().isNotFound());
+//
+//	}
 
 }

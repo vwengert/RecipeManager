@@ -17,7 +17,6 @@ public class RecipeServiceImpl implements RecipeService {
 	public List<Recipe> getRecipeByRecipeHeaderId(Long recipeHeaderId) throws NotFoundException {
 		List<Recipe> recipeList = recipeRepository.findByRecipeHeaderId(recipeHeaderId);
 		if (recipeList.isEmpty()) {
-			System.out.println("no chance i am here");
 			throw new NotFoundException();
 		}
 		return recipeList;
