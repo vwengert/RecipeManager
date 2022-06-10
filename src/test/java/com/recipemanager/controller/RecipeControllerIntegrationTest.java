@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = RecipeManagerApplication.class)
@@ -73,25 +74,24 @@ class RecipeControllerIntegrationTest {
 	@Transactional
 	void getRecipeByRecipeHeaderId_Returns200() throws Exception {
 
-		// TODO: vernünftige Tests, sobald das Layout der JSON geklärt ist
 		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + recipeSuppe.getRecipeHeader().getId())
 						.contentType("application/json"))
 				.andExpect(status().isOk())
-//				.andExpectAll(
-//						jsonPath("$.recipeHeaderName").value("Suppe"),
-//						jsonPath("$.recipeUnitName").value("Stück"))
+				.andExpectAll(
+						jsonPath("$[0].recipeHeaderName").value("Suppe"),
+						jsonPath("$[0].foodUnitName").value("Stück"))
 				.andDo(MockMvcResultHandlers.print());
 
 	}
-//
-//	@IntegrationTest
-//	@Transactional
-//	void returnNotFoundWhenIdOfRecipeHeaderIsWrong() throws Exception {
-//
-//		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + 333L )
-//						.contentType("application/json"))
-//				.andExpect(status().isNotFound());
-//
-//	}
+
+	@IntegrationTest
+	@Transactional
+	void returnNotFoundWhenIdOfRecipeHeaderIsWrong() throws Exception {
+
+		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + 333L )
+						.contentType("application/json"))
+				.andExpect(status().isNotFound());
+
+	}
 
 }
