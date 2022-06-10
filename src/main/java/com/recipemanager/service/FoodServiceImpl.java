@@ -36,7 +36,7 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 
 	@Override
 	public Food postFood(Food food) throws IdNotAllowedException, NotFoundException, FoundException {
-		if (food.getId() != null || food.getUnit().getId() != null)
+		if (food.getId() != null)
 			throw new IdNotAllowedException();
 
 		if (foodRepository.existsByName(food.getName()))
