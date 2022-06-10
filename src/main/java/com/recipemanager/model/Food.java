@@ -18,7 +18,7 @@ public class Food implements Serializable {
 	private Long id;
 	private String name;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "unitId")
 	private Unit unit;
 }

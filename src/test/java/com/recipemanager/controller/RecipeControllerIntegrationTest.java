@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import javax.transaction.Transactional;
 
@@ -75,7 +76,11 @@ class RecipeControllerIntegrationTest {
 		// TODO: vernünftige Tests, sobald das Layout der JSON geklärt ist
 		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + recipeSuppe.getRecipeHeader().getId())
 						.contentType("application/json"))
-				.andExpect(status().isOk());
+				.andExpect(status().isOk())
+//				.andExpectAll(
+//						jsonPath("$.recipeHeaderName").value("Suppe"),
+//						jsonPath("$.recipeUnitName").value("Stück"))
+				.andDo(MockMvcResultHandlers.print());
 
 	}
 //
