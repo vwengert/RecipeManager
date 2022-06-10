@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.convention.MatchingStrategies;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,9 +30,41 @@ public class RecipeDto implements Serializable {
 	private String FoodUnitName;
 	private Double quantity;
 
+	{
+		PropertyMap<Recipe, RecipeDto> recipeDtoPropertyMap = new PropertyMap<>() {
+			@Override
+			protected void configure() {
+				map().setRecipeHeaderId(source.getRecipeHeader().getId());
+				map().setRecipeHeaderName(source.getRecipeHeader().getName());
+				map().setRecipeHeaderDescription(source.getRecipeHeader().getDescription());
+				map().setRecipeHeaderPortions(source.getRecipeHeader().getPortions());
+				map().setFoodId(source.getFood().getId());
+				map().setFoodName(source.getFood().getName());
+				map().setFoodUnitId(source.getFood().getUnit().getId());
+				map().setFoodUnitName(source.getFood().getUnit().getName());
+			}
+		};
+		PropertyMap<RecipeDto, Recipe> dtoRecipePropertyMap = new PropertyMap<>() {
+			@Override
+			protected void configure() {
+				map().getRecipeHeader().setId(source.getRecipeHeaderId());
+				map().getRecipeHeader().setName(source.getRecipeHeaderName());
+				map().getRecipeHeader().setDescription(source.getRecipeHeaderDescription());
+				map().getRecipeHeader().setPortions(source.getRecipeHeaderPortions());
+				map().getFood().setId(source.getFoodId());
+				map().getFood().setName(source.getFoodName());
+				map().getFood().getUnit().setId(source.getFoodUnitId());
+				map().getFood().getUnit().setName(source.getFoodUnitName());
+			}
+		};
+		modelMapper.getConfiguration()
+				.setMatchingStrategy(MatchingStrategies.STRICT);
+		modelMapper.addMappings(recipeDtoPropertyMap);
+		modelMapper.addMappings(dtoRecipePropertyMap);
+	}
+
 	public static RecipeDto getRecipeDto(Recipe recipe) {
-		RecipeDto recipeDto = modelMapper.map(recipe, RecipeDto.class);
-		return recipeDto;
+		return modelMapper.map(recipe, RecipeDto.class);
 	}
 
 	public static List<RecipeDto> getRecipeDtoList(List<Recipe> recipeList) {

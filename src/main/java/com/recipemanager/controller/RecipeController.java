@@ -24,7 +24,6 @@ public class RecipeController {
 	public ResponseEntity<List<RecipeDto>> getRecipe(@PathVariable Long recipeHeaderId) throws NotFoundException {
 		List<Recipe> recipeByRecipeHeaderIdList = recipeService.getRecipeByRecipeHeaderId(recipeHeaderId);
 		List<RecipeDto> recipeDtoList = RecipeDto.getRecipeDtoList(recipeByRecipeHeaderIdList);
-		Recipe recipe = recipeDtoList.get(0).getRecipe();
 		return new ResponseEntity<>(recipeDtoList, HttpStatus.OK);
 	}
 
