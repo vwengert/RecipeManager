@@ -9,5 +9,7 @@ import java.util.List;
 public interface RecipeService {
 	List<Recipe> getRecipeByRecipeHeaderId(Long recipeId) throws NotFoundException;
 
-	Recipe putRecipe(Recipe recipe) throws IdNotAllowedException, NotFoundException;
+	Recipe putRecipe(Recipe recipe);
+
+	Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, NotFoundException;
 }

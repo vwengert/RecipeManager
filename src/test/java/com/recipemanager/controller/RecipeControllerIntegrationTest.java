@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,9 +98,9 @@ class RecipeControllerIntegrationTest {
 
 	@IntegrationTest
 	@Transactional
-	void putReturnIdNotAllowedWhenIdIsUsed() throws Exception {
+	void postReturnIdNotAllowedWhenIdIsUsed() throws Exception {
 
-		mockMvc.perform(put("/api/v1/recipe/")
+		mockMvc.perform(post("/api/v1/recipe/")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"id\":" + recipeSuppe.getId() + "," +
 								"\"recipeHeaderId\":" + recipeSuppe.getRecipeHeader().getId() + "," +
@@ -117,9 +117,9 @@ class RecipeControllerIntegrationTest {
 
 	@IntegrationTest
 	@Transactional
-	void putReturnNotFoundWhenRecipeNotExists() throws Exception {
+	void postReturnNotFoundWhenRecipeNotExists() throws Exception {
 
-		mockMvc.perform(put("/api/v1/recipe/")
+		mockMvc.perform(post("/api/v1/recipe/")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"recipeHeaderId\":" + recipeSuppe.getRecipeHeader().getId() + 333 + "," +
 								"\"recipeHeaderName\":\"" + recipeSuppe.getRecipeHeader().getName() + "\"," +
@@ -135,9 +135,9 @@ class RecipeControllerIntegrationTest {
 
 	@IntegrationTest
 	@Transactional
-	void putReturnNotFoundWhenFoodNotExists() throws Exception {
+	void postReturnNotFoundWhenFoodNotExists() throws Exception {
 
-		mockMvc.perform(put("/api/v1/recipe/")
+		mockMvc.perform(post("/api/v1/recipe/")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"recipeHeaderId\":" + recipeSuppe.getRecipeHeader().getId() + "," +
 								"\"recipeHeaderName\":\"" + recipeSuppe.getRecipeHeader().getName() + "\"," +
@@ -153,9 +153,9 @@ class RecipeControllerIntegrationTest {
 
 	@IntegrationTest
 	@Transactional
-	void putReturn201AndNewRecipe() throws Exception {
+	void postReturn201AndNewRecipe() throws Exception {
 
-		mockMvc.perform(put("/api/v1/recipe/")
+		mockMvc.perform(post("/api/v1/recipe/")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("{\"recipeHeaderId\":" + recipeSuppe.getRecipeHeader().getId() + "," +
 								"\"recipeHeaderName\":\"" + recipeSuppe.getRecipeHeader().getName() + "\"," +

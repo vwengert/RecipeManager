@@ -61,7 +61,7 @@ class RecipeServiceImplTest {
 	@Test
 	void putRecipeThrowsWhenUsingId() {
 
-		assertThrows(IdNotAllowedException.class, () -> recipeService.putRecipe(recipe));
+		assertThrows(IdNotAllowedException.class, () -> recipeService.postRecipe(recipe));
 	}
 
 	@Test
@@ -70,7 +70,7 @@ class RecipeServiceImplTest {
 		when(recipeHeaderRepository.existsById(recipe.getRecipeHeader().getId())).thenReturn(false);
 		when(foodRepository.existsById(any())).thenReturn(true);
 
-		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipe));
+		assertThrows(NotFoundException.class, () -> recipeService.postRecipe(recipe));
 	}
 
 	@Test
@@ -79,7 +79,7 @@ class RecipeServiceImplTest {
 		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
 		when(foodRepository.existsById(recipe.getRecipeHeader().getId())).thenReturn(false);
 
-		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipe));
+		assertThrows(NotFoundException.class, () -> recipeService.postRecipe(recipe));
 	}
 
 	@Test
@@ -91,7 +91,7 @@ class RecipeServiceImplTest {
 		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
 		when(foodRepository.existsById(any())).thenReturn(true);
 
-		Recipe result = recipeService.putRecipe(recipe);
+		Recipe result = recipeService.postRecipe(recipe);
 
 		assertEquals(newId, result.getId());
 		assertEquals(recipe.getRecipeHeader().getName(), result.getRecipeHeader().getName());

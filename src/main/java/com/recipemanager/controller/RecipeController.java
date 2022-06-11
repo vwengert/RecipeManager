@@ -22,12 +22,12 @@ public class RecipeController {
 		return recipeService.getRecipeByRecipeHeaderId(recipeHeaderId);
 	}
 
-	@PutMapping(path = "recipe",
+	@PostMapping(path = "recipe",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public Recipe putRecipe(@RequestBody Recipe recipe) throws NotFoundException, IdNotAllowedException {
-		return recipeService.putRecipe(recipe);
+	public Recipe postRecipe(@RequestBody Recipe recipe) throws NotFoundException, IdNotAllowedException {
+		return recipeService.postRecipe(recipe);
 	}
 
 }
