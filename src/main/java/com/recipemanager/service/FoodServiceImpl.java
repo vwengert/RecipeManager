@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class FoodServiceImpl implements FoodService, FoodGetService {
+public class FoodServiceImpl implements FoodService {
 	private final FoodRepository foodRepository;
 	private final UnitRepository unitRepository;
 
@@ -36,7 +36,7 @@ public class FoodServiceImpl implements FoodService, FoodGetService {
 
 	@Override
 	public Food postFood(Food food) throws IdNotAllowedException, NotFoundException, FoundException {
-		if (food.getId() != null || food.getUnit().getId() != null)
+		if (food.getId() != null)
 			throw new IdNotAllowedException();
 
 		if (foodRepository.existsByName(food.getName()))

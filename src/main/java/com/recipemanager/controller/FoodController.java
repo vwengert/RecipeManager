@@ -1,7 +1,6 @@
 package com.recipemanager.controller;
 
-import com.recipemanager.dto.FoodDto;
-import com.recipemanager.service.FoodGetService;
+import com.recipemanager.model.Food;
 import com.recipemanager.service.FoodService;
 import com.recipemanager.util.exceptions.FoundException;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
@@ -19,36 +18,36 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/")
 public class FoodController {
-	private final FoodGetService foodGetService;
 	private final FoodService foodService;
 
 	@GetMapping(path = "foodById/{foodId}")
-	public ResponseEntity<FoodDto> getFoodById(@PathVariable Long foodId) throws NotFoundException {
-		return new ResponseEntity<>(FoodDto.getFoodDto(foodGetService.getFoodById(foodId)), HttpStatus.OK);
+	public Food getFoodById(@PathVariable Long foodId) throws NotFoundException {
+		return foodService.getFoodById(foodId);
 	}
 
 	@GetMapping(path = "food")
-	public ResponseEntity<List<FoodDto>> getFood() {
-		return new ResponseEntity<>(FoodDto.getFoodDtoList(foodGetService.getFood()), HttpStatus.OK);
+	public List<Food> getFood() {
+		return foodService.getFood();
 	}
 
 	@GetMapping(path = "foodByName/{name}")
-	public ResponseEntity<FoodDto> getFoodByName(@PathVariable String name) throws NotFoundException {
-		return new ResponseEntity<>(FoodDto.getFoodDto(foodGetService.getFoodByName(name)), HttpStatus.OK);
+	public Food getFoodByName(@PathVariable String name) throws NotFoundException {
+		return foodService.getFoodByName(name);
 	}
 
 	@PostMapping(path = "food",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FoodDto> postFood(@RequestBody FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
-		return new ResponseEntity<>(FoodDto.getFoodDto(foodService.postFood(foodDto.getFood())), HttpStatus.CREATED);
+	@ResponseStatus(HttpStatus.CREATED)
+	public Food postFood(@RequestBody Food food) throws IdNotAllowedException, NotFoundException, FoundException {
+		return foodService.postFood(food);
 	}
 
 	@PutMapping(path = "food",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FoodDto> putFood(@RequestBody FoodDto foodDto) throws NotFoundException {
-		return new ResponseEntity<>(FoodDto.getFoodDto(foodService.putFood(foodDto.getFood())), HttpStatus.OK);
+	public Food putFood(@RequestBody Food food) throws NotFoundException {
+		return foodService.putFood(food);
 	}
 
 	@DeleteMapping(path = "food/{foodId}")

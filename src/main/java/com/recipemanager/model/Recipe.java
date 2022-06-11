@@ -12,13 +12,17 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table
-public class Food implements Serializable {
+public class Recipe implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
 
 	@ManyToOne
-	@JoinColumn(name = "unitId")
-	private Unit unit;
+	@JoinColumn(name = "recipeHeaderId")
+	private RecipeHeader recipeHeader;
+	@ManyToOne
+	@JoinColumn(name = "foodId")
+	private Food food;
+	private Double quantity;
+
 }
