@@ -88,7 +88,7 @@ class RecipeControllerIntegrationTest {
 	@Transactional
 	void returnNotFoundWhenIdOfRecipeHeaderIsWrong() throws Exception {
 
-		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + 333L )
+		mockMvc.perform(get("/api/v1/recipeByRecipeHeaderId/" + 333L)
 						.contentType("application/json"))
 				.andExpect(status().isNotFound());
 

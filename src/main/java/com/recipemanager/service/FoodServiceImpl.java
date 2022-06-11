@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class FoodServiceImpl implements FoodService, FoodGetService {
+public class FoodServiceImpl implements FoodService {
 	private final FoodRepository foodRepository;
 	private final UnitRepository unitRepository;
 

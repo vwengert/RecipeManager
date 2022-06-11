@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 class FoodServiceImplTest {
 	private final FoodRepository foodRepository = mock(FoodRepository.class);
 	private final UnitRepository unitRepository = mock(UnitRepository.class);
-	private final FoodServiceImpl foodService = new FoodServiceImpl(foodRepository, unitRepository);
+	private final FoodService foodService = new FoodServiceImpl(foodRepository, unitRepository);
 
 	private final String cake = "cake";
 	private final String piece = "piece";

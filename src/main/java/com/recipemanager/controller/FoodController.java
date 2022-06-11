@@ -1,7 +1,6 @@
 package com.recipemanager.controller;
 
 import com.recipemanager.model.Food;
-import com.recipemanager.service.FoodGetService;
 import com.recipemanager.service.FoodService;
 import com.recipemanager.util.exceptions.FoundException;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
@@ -19,22 +18,21 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/")
 public class FoodController {
-	private final FoodGetService foodGetService;
 	private final FoodService foodService;
 
 	@GetMapping(path = "foodById/{foodId}")
 	public Food getFoodById(@PathVariable Long foodId) throws NotFoundException {
-		return foodGetService.getFoodById(foodId);
+		return foodService.getFoodById(foodId);
 	}
 
 	@GetMapping(path = "food")
 	public List<Food> getFood() {
-		return foodGetService.getFood();
+		return foodService.getFood();
 	}
 
 	@GetMapping(path = "foodByName/{name}")
 	public Food getFoodByName(@PathVariable String name) throws NotFoundException {
-		return foodGetService.getFoodByName(name);
+		return foodService.getFoodByName(name);
 	}
 
 	@PostMapping(path = "food",
