@@ -28,4 +28,6 @@ public interface RecipeService {
 	 * @throws NotFoundException     id of recipe header, food or unit not found
 	 */
 	Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, NotFoundException;
+
+	void delete(Long id) throws NotFoundException;
 }

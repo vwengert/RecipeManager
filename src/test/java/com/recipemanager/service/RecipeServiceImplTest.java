@@ -142,4 +142,18 @@ class RecipeServiceImplTest {
 		assertEquals(recipe.getFood().getUnit().getName(), savedRecipe.getFood().getUnit().getName());
 	}
 
+	@Test
+	void deleteThrowsWhenRecipeIsNotInRepository() {
+		when(recipeRepository.existsById(any())).thenReturn(false);
+
+		assertThrows(NotFoundException.class, () -> recipeService.delete(recipe.getId()));
+	}
+
+	@Test
+	void deleteDontThrowsWhenRecipeIsDeleted() {
+		when(recipeRepository.existsById(any())).thenReturn(true);
+
+		assertDoesNotThrow(() -> recipeService.delete(recipe.getId()));
+	}
+
 }

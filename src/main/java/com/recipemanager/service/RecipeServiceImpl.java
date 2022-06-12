@@ -53,4 +53,12 @@ public class RecipeServiceImpl implements RecipeService {
 		return recipeRepository.save(recipe);
 	}
 
+	@Override
+	public void delete(Long id) throws NotFoundException {
+		if (!recipeRepository.existsById(id))
+			throw new NotFoundException();
+
+		recipeRepository.deleteById(id);
+	}
+
 }
