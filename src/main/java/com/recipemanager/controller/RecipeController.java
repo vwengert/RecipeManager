@@ -37,4 +37,11 @@ public class RecipeController {
 		return modelMapper.map(recipeService.postRecipe(modelMapper.map(recipeDto, Recipe.class)), RecipeDto.class);
 	}
 
+	@PutMapping(path = "recipe",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public RecipeDto putRecipe(@RequestBody RecipeDto recipeDto) throws NotFoundException {
+		return modelMapper.map(recipeService.putRecipe(modelMapper.map(recipeDto, Recipe.class)), RecipeDto.class);
+	}
 }

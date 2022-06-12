@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -97,6 +98,48 @@ class RecipeServiceImplTest {
 		assertEquals(recipe.getRecipeHeader().getName(), result.getRecipeHeader().getName());
 		assertEquals(recipe.getFood().getName(), result.getFood().getName());
 		assertEquals(recipe.getQuantity(), result.getQuantity());
+	}
+
+	@Test
+	void putRecipeThrowsWhenRecipeIdNotExists() {
+		Long wrongId = 999L;
+		recipe.setId(wrongId);
+		when(recipeRepository.findById(wrongId)).thenReturn(Optional.empty());
+
+		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipe));
+	}
+
+	@Test
+	void putRecipeThrowsWhenRecipeHeaderIdNotExists() {
+		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
+		when(recipeHeaderRepository.existsById(any())).thenReturn(false);
+		when(foodRepository.existsById(any())).thenReturn(true);
+
+		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipe));
+	}
+
+	@Test
+	void putRecipeThrowsWhenFoodIdNotExists() {
+		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
+		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
+		when(foodRepository.existsById(any())).thenReturn(false);
+
+		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipe));
+	}
+
+	@Test
+	void putRecipeReturnsRecipeWhenSaved() throws NotFoundException {
+		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
+		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
+		when(foodRepository.existsById(any())).thenReturn(true);
+		when(recipeRepository.save(recipe)).thenReturn(recipe);
+
+		Recipe savedRecipe = recipeService.putRecipe(recipe);
+
+		assertEquals(recipe.getQuantity(), savedRecipe.getQuantity());
+		assertEquals(recipe.getRecipeHeader().getName(), savedRecipe.getRecipeHeader().getName());
+		assertEquals(recipe.getFood().getName(), savedRecipe.getFood().getName());
+		assertEquals(recipe.getFood().getUnit().getName(), savedRecipe.getFood().getUnit().getName());
 	}
 
 }
