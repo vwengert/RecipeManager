@@ -15,8 +15,9 @@ public interface RecipeService {
 	List<Recipe> getRecipeByRecipeHeaderId(Long recipeId) throws NotFoundException;
 
 	/**
-	 * @param recipe Recipe item to change
-	 * @return saved Recipe item
+	 * @param recipe item to change
+	 * @return changed recipe item
+	 * @throws NotFoundException recipe id not found
 	 */
 	Recipe putRecipe(Recipe recipe) throws NotFoundException;
 
