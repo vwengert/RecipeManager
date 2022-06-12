@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import javax.transaction.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -223,6 +224,52 @@ class RecipeControllerIntegrationTest {
 								"\"foodUnitName\":\"" + recipeSuppe.getFood().getUnit().getName() + "\"," +
 								"\"quantity\":" + recipeSuppe.getQuantity() + "}"))
 				.andExpect(status().isNotFound());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void putReturns200AndChangedToNewRecipeHeader() throws Exception {
+
+		mockMvc.perform(put("/api/v1/recipe/")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"id\":" + recipeSuppe.getId() + "," +
+								"\"recipeHeaderId\":" + brot.getId() + "," +
+								"\"recipeHeaderName\":\"" + brot.getName() + "\"," +
+								"\"recipeHeaderDescription\":\"" + brot.getDescription() + "\"," +
+								"\"recipeHeaderPortions\":" + brot.getPortions() + "," +
+								"\"foodId\":" + recipeSuppe.getFood().getId() + "," +
+								"\"foodName\":\"" + recipeSuppe.getFood().getName() + "\"," +
+								"\"foodUnitId\":" + recipeSuppe.getFood().getUnit().getId() + "," +
+								"\"foodUnitName\":\"" + recipeSuppe.getFood().getUnit().getName() + "\"," +
+								"\"quantity\":" + recipeSuppe.getQuantity() + "}"))
+				.andExpect(status().isOk());
+
+		recipeRepository.flush();
+		Recipe newRecipe = recipeRepository.findById(recipeSuppe.getId()).orElse(new Recipe());
+		assertEquals(brot.getName(), newRecipe.getRecipeHeader().getName());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void putReturns200AndChangedToNewFood() throws Exception {
+
+		mockMvc.perform(put("/api/v1/recipe/")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"id\":" + recipeSuppe.getId() + "," +
+								"\"recipeHeaderId\":" + recipeSuppe.getRecipeHeader().getId() + "," +
+								"\"recipeHeaderName\":\"" + recipeSuppe.getRecipeHeader().getName() + "\"," +
+								"\"recipeHeaderDescription\":\"" + recipeSuppe.getRecipeHeader().getDescription() + "\"," +
+								"\"recipeHeaderPortions\":" + recipeSuppe.getRecipeHeader().getPortions() + "," +
+								"\"foodId\":" + kaese.getId() + "," +
+								"\"foodName\":\"" + kaese.getName() + "\"," +
+								"\"foodUnitId\":" + kaese.getUnit().getId() + "," +
+								"\"foodUnitName\":\"" + kaese.getUnit().getName() + "\"," +
+								"\"quantity\":" + recipeSuppe.getQuantity() + "}"))
+				.andExpect(status().isOk());
+
+		recipeRepository.flush();
+		Recipe newRecipe = recipeRepository.findById(recipeSuppe.getId()).orElse(new Recipe());
+		assertEquals(kaese.getName(), newRecipe.getFood().getName());
 	}
 
 }
