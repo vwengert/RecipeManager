@@ -149,7 +149,6 @@ class FoodControllerIntegrationTest {
 		assertEquals(changedUnit.getName(), foodRepository.findById(food.getId()).orElse(new Food(1L, "", new Unit(1L, ""))).getUnit().getName());
 	}
 
-
 	@IntegrationTest
 	@Transactional
 	void deleteReturns200WhenFoodIsDeleted() throws Exception {

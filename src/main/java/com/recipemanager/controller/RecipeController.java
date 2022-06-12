@@ -4,12 +4,14 @@ import com.recipemanager.dto.RecipeDto;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.service.RecipeService;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
+import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,4 +46,11 @@ public class RecipeController {
 	public RecipeDto putRecipe(@RequestBody RecipeDto recipeDto) throws NotFoundException {
 		return modelMapper.map(recipeService.putRecipe(modelMapper.map(recipeDto, Recipe.class)), RecipeDto.class);
 	}
+
+	@DeleteMapping(path = "recipe/{recipeId}")
+	public ResponseEntity<?> deleteRecipe(@PathVariable Long recipeId) throws NoContentException {
+		recipeService.delete(recipeId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
 }

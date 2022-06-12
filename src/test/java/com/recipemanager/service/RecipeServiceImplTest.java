@@ -8,6 +8,7 @@ import com.recipemanager.repository.FoodRepository;
 import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.repository.RecipeRepository;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
+import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -146,7 +147,7 @@ class RecipeServiceImplTest {
 	void deleteThrowsWhenRecipeIsNotInRepository() {
 		when(recipeRepository.existsById(any())).thenReturn(false);
 
-		assertThrows(NotFoundException.class, () -> recipeService.delete(recipe.getId()));
+		assertThrows(NoContentException.class, () -> recipeService.delete(recipe.getId()));
 	}
 
 	@Test
