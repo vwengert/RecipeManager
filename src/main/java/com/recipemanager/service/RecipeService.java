@@ -7,9 +7,24 @@ import com.recipemanager.util.exceptions.NotFoundException;
 import java.util.List;
 
 public interface RecipeService {
+	/**
+	 * @param recipeId Id of Recipe to get the list
+	 * @return list of items from recipe
+	 * @throws NotFoundException id is not found
+	 */
 	List<Recipe> getRecipeByRecipeHeaderId(Long recipeId) throws NotFoundException;
 
+	/**
+	 * @param recipe Recipe item to change
+	 * @return saved Recipe item
+	 */
 	Recipe putRecipe(Recipe recipe);
 
+	/**
+	 * @param recipe item to add to recipe
+	 * @return saved recipe item
+	 * @throws IdNotAllowedException id not allowed to add a new item
+	 * @throws NotFoundException     id of recipe header, food or unit not found
+	 */
 	Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, NotFoundException;
 }
