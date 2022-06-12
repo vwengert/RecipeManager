@@ -59,13 +59,13 @@ class RecipeServiceImplTest {
 	}
 
 	@Test
-	void putRecipeThrowsWhenUsingId() {
+	void postRecipeThrowsWhenUsingId() {
 
 		assertThrows(IdNotAllowedException.class, () -> recipeService.postRecipe(recipe));
 	}
 
 	@Test
-	void putRecipeThrowsWhenRecipeHeaderNotFound() {
+	void postRecipeThrowsWhenRecipeHeaderNotFound() {
 		recipe.setId(null);
 		when(recipeHeaderRepository.existsById(recipe.getRecipeHeader().getId())).thenReturn(false);
 		when(foodRepository.existsById(any())).thenReturn(true);
@@ -74,7 +74,7 @@ class RecipeServiceImplTest {
 	}
 
 	@Test
-	void putRecipeThrowsWhenFoodNotFound() {
+	void postRecipeThrowsWhenFoodNotFound() {
 		recipe.setId(null);
 		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
 		when(foodRepository.existsById(recipe.getRecipeHeader().getId())).thenReturn(false);
@@ -83,7 +83,7 @@ class RecipeServiceImplTest {
 	}
 
 	@Test
-	void putRecipeReturnsRecipeWithSavedId() throws NotFoundException, IdNotAllowedException {
+	void postRecipeReturnsRecipeWithSavedId() throws NotFoundException, IdNotAllowedException {
 		Long newId = 7L;
 		recipe.setId(null);
 		Recipe savedRecipe = new Recipe(newId, recipe.getRecipeHeader(), recipe.getFood(), recipe.getQuantity());
