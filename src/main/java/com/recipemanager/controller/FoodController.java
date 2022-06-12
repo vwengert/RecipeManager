@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/")
 public class FoodController {
 	private final FoodService foodService;
-	private static final ModelMapper modelMapper = new ModelMapper();
+	private final ModelMapper modelMapper = new ModelMapper();
 
 	@GetMapping(path = "foodById/{foodId}")
 	public FoodDto getFoodById(@PathVariable Long foodId) throws NotFoundException {

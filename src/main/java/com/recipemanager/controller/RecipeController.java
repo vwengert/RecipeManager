@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/")
 public class RecipeController {
 	final private RecipeService recipeService;
-	private static final ModelMapper modelMapper = new ModelMapper();
+	private final ModelMapper modelMapper = new ModelMapper();
 
 	@GetMapping(path = "recipeByRecipeHeaderId/{recipeHeaderId}")
 	public List<RecipeDto> getRecipe(@PathVariable Long recipeHeaderId) throws NotFoundException {
