@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import javax.transaction.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -264,6 +264,37 @@ class RecipeControllerIntegrationTest {
 				"\"foodUnitId\":" + recipe.getFood().getUnit().getId() + "," +
 				"\"foodUnitName\":\"" + recipe.getFood().getUnit().getName() + "\"," +
 				"\"quantity\":" + recipe.getQuantity() + "}";
+	}
+
+	@IntegrationTest
+	@Transactional
+	void deleteReturns200WhenRecipeIsDeleted() throws Exception {
+		Unit unit = unitRepository.save(new Unit(null, "unit not deleting!"));
+		Food food = foodRepository.save(new Food(null, "delete me", unit));
+		RecipeHeader recipeHeader = recipeHeaderRepository.save(new RecipeHeader(null, "don't delete Recipe", "new Recipe not to delete", 3));
+		Recipe recipe = recipeRepository.save(new Recipe(null, recipeHeader, food, 3.0));
+
+		mockMvc.perform(delete("/api/v1/recipe/" + recipe.getId())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+		assertTrue(unitRepository.existsById(unit.getId()));
+		assertTrue(foodRepository.existsById(food.getId()));
+		assertTrue(recipeHeaderRepository.existsById(recipeHeader.getId()));
+		assertFalse(recipeRepository.existsById(recipe.getId()));
+	}
+
+	@IntegrationTest
+	@Transactional
+	void deleteTrowsNotFoundWhenRecipeIsNotThere() throws Exception {
+		Unit unit = new Unit(9999L, "i don't exist");
+		Food food = new Food(9999L, "i don't exist", unit);
+		RecipeHeader recipeHeader = new RecipeHeader(9999L, "i don't exist", "i really don't exist", 3);
+		Recipe recipe = new Recipe(9999L, recipeHeader, food, 3.0);
+
+		mockMvc.perform(delete("/api/v1/recipe/" + recipe.getId())
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNoContent());
 	}
 
 }

@@ -5,6 +5,7 @@ import com.recipemanager.repository.FoodRepository;
 import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.repository.RecipeRepository;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
+import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,14 @@ public class RecipeServiceImpl implements RecipeService {
 			throw new NotFoundException();
 
 		return recipeRepository.save(recipe);
+	}
+
+	@Override
+	public void delete(Long id) throws NoContentException {
+		if (!recipeRepository.existsById(id))
+			throw new NoContentException();
+
+		recipeRepository.deleteById(id);
 	}
 
 }

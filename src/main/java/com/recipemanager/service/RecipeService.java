@@ -2,6 +2,7 @@ package com.recipemanager.service;
 
 import com.recipemanager.model.Recipe;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
+import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 
 import java.util.List;
@@ -28,4 +29,10 @@ public interface RecipeService {
 	 * @throws NotFoundException     id of recipe header, food or unit not found
 	 */
 	Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, NotFoundException;
+
+	/**
+	 * @param id recipe id to delete
+	 * @throws NoContentException when id is not found
+	 */
+	void delete(Long id) throws NoContentException;
 }
