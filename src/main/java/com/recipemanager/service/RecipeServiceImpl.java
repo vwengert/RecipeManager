@@ -28,8 +28,17 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public Recipe putRecipe(Recipe recipe) {
-		return null;
+	public Recipe putRecipe(Recipe recipe) throws NotFoundException {
+		Recipe originalRecipe = recipeRepository.findById(recipe.getId()).orElseThrow(NotFoundException::new);
+
+		if (!recipeHeaderRepository.existsById(recipe.getRecipeHeader().getId()))
+			throw new NotFoundException();
+		originalRecipe.setRecipeHeader(recipe.getRecipeHeader());
+		if (!foodRepository.existsById(recipe.getFood().getId()))
+			throw new NotFoundException();
+		originalRecipe.setFood(recipe.getFood());
+
+		return recipeRepository.save(originalRecipe);
 	}
 
 	@Override

@@ -21,8 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import javax.transaction.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -167,6 +166,63 @@ class RecipeControllerIntegrationTest {
 								"\"foodUnitName\":\"" + recipeSuppe.getFood().getUnit().getName() + "\"," +
 								"\"quantity\":" + recipeSuppe.getQuantity() + "}"))
 				.andExpect(status().isCreated());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void putReturnsNotFoundWhenIdNotExist() throws Exception {
+
+		mockMvc.perform(put("/api/v1/recipe/")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"id\":" + recipeSuppe.getId() + 9999 + "," +
+								"\"recipeHeaderId\":" + recipeSuppe.getRecipeHeader().getId() + 999L + "," +
+								"\"recipeHeaderName\":\"" + recipeSuppe.getRecipeHeader().getName() + "\"," +
+								"\"recipeHeaderDescription\":\"" + recipeSuppe.getRecipeHeader().getDescription() + "\"," +
+								"\"recipeHeaderPortions\":" + recipeSuppe.getRecipeHeader().getPortions() + "," +
+								"\"foodId\":" + recipeSuppe.getFood().getId() + "," +
+								"\"foodName\":\"" + recipeSuppe.getFood().getName() + "\"," +
+								"\"foodUnitId\":" + recipeSuppe.getFood().getUnit().getId() + "," +
+								"\"foodUnitName\":\"" + recipeSuppe.getFood().getUnit().getName() + "\"," +
+								"\"quantity\":" + recipeSuppe.getQuantity() + "}"))
+				.andExpect(status().isNotFound());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void putReturnsNotFoundWhenRecipeHeaderIdNotExist() throws Exception {
+
+		mockMvc.perform(put("/api/v1/recipe/")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"id\":" + recipeSuppe.getId() + "," +
+								"\"recipeHeaderId\":" + recipeSuppe.getRecipeHeader().getId() + 999L + "," +
+								"\"recipeHeaderName\":\"" + recipeSuppe.getRecipeHeader().getName() + "\"," +
+								"\"recipeHeaderDescription\":\"" + recipeSuppe.getRecipeHeader().getDescription() + "\"," +
+								"\"recipeHeaderPortions\":" + recipeSuppe.getRecipeHeader().getPortions() + "," +
+								"\"foodId\":" + recipeSuppe.getFood().getId() + "," +
+								"\"foodName\":\"" + recipeSuppe.getFood().getName() + "\"," +
+								"\"foodUnitId\":" + recipeSuppe.getFood().getUnit().getId() + "," +
+								"\"foodUnitName\":\"" + recipeSuppe.getFood().getUnit().getName() + "\"," +
+								"\"quantity\":" + recipeSuppe.getQuantity() + "}"))
+				.andExpect(status().isNotFound());
+	}
+
+	@IntegrationTest
+	@Transactional
+	void putReturnsNotFoundWhenFoodIdNotExist() throws Exception {
+
+		mockMvc.perform(put("/api/v1/recipe/")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("{\"id\":" + recipeSuppe.getId() + "," +
+								"\"recipeHeaderId\":" + recipeSuppe.getRecipeHeader().getId() + "," +
+								"\"recipeHeaderName\":\"" + recipeSuppe.getRecipeHeader().getName() + "\"," +
+								"\"recipeHeaderDescription\":\"" + recipeSuppe.getRecipeHeader().getDescription() + "\"," +
+								"\"recipeHeaderPortions\":" + recipeSuppe.getRecipeHeader().getPortions() + "," +
+								"\"foodId\":" + recipeSuppe.getFood().getId() + 999 + "," +
+								"\"foodName\":\"" + recipeSuppe.getFood().getName() + "\"," +
+								"\"foodUnitId\":" + recipeSuppe.getFood().getUnit().getId() + "," +
+								"\"foodUnitName\":\"" + recipeSuppe.getFood().getUnit().getName() + "\"," +
+								"\"quantity\":" + recipeSuppe.getQuantity() + "}"))
+				.andExpect(status().isNotFound());
 	}
 
 }

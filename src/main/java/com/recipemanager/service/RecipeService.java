@@ -18,7 +18,7 @@ public interface RecipeService {
 	 * @param recipe Recipe item to change
 	 * @return saved Recipe item
 	 */
-	Recipe putRecipe(Recipe recipe);
+	Recipe putRecipe(Recipe recipe) throws NotFoundException;
 
 	/**
 	 * @param recipe item to add to recipe

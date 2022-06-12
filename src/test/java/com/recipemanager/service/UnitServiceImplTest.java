@@ -97,6 +97,13 @@ class UnitServiceImplTest {
 	}
 
 	@UnitTest
+	public void postUnitThrowsWhenIdIsSetOnPut() {
+		when(unitRepository.existsByName(any())).thenReturn(true);
+
+		assertThrows(IdNotAllowedException.class, () -> unitService.postUnit(new Unit(999L, unitList.get(0).getName())));
+	}
+
+	@UnitTest
 	public void putUnitReturnsChangedUnit() throws NotFoundException {
 		when(unitRepository.findById(any())).thenReturn(Optional.of(unitList.get(0)));
 		when(unitRepository.save(any())).thenReturn(new Unit(unitList.get(0).getId(), unitList.get(1).getName()));
