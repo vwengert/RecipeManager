@@ -9,13 +9,13 @@ import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,10 +31,10 @@ public class FoodController {
 
 	@GetMapping(path = "food")
 	public List<FoodDto> getFood() {
-		return foodService.getFood()
-				.stream()
-				.map(x -> modelMapper.map(x, FoodDto.class))
-				.collect(Collectors.toList());
+		return modelMapper.map(
+				foodService.getFood(),
+				new TypeToken<List<FoodDto>>() {
+				}.getType());
 	}
 
 	@GetMapping(path = "foodByName/{name}")
@@ -47,14 +47,14 @@ public class FoodController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public FoodDto postFood(@RequestBody FoodDto foodDto) throws IdNotAllowedException, NotFoundException, FoundException {
-		return modelMapper.map( foodService.postFood( modelMapper.map(foodDto, Food.class) ), FoodDto.class);
+		return modelMapper.map(foodService.postFood(modelMapper.map(foodDto, Food.class)), FoodDto.class);
 	}
 
 	@PutMapping(path = "food",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public FoodDto putFood(@RequestBody FoodDto foodDto) throws NotFoundException {
-		return modelMapper.map( foodService.putFood( modelMapper.map(foodDto, Food.class) ), FoodDto.class);
+		return modelMapper.map(foodService.putFood(modelMapper.map(foodDto, Food.class)), FoodDto.class);
 	}
 
 	@DeleteMapping(path = "food/{foodId}")
