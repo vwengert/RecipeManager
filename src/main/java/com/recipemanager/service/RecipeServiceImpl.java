@@ -32,11 +32,9 @@ public class RecipeServiceImpl implements RecipeService {
 	public Recipe putRecipe(Recipe recipe) throws NotFoundException {
 		Recipe originalRecipe = recipeRepository.findById(recipe.getId()).orElseThrow(NotFoundException::new);
 
-		if (!recipeHeaderRepository.existsById(recipe.getRecipeHeader().getId()))
-			throw new NotFoundException();
+		checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(recipe);
+
 		originalRecipe.setRecipeHeader(recipe.getRecipeHeader());
-		if (!foodRepository.existsById(recipe.getFood().getId()))
-			throw new NotFoundException();
 		originalRecipe.setFood(recipe.getFood());
 
 		return recipeRepository.save(originalRecipe);
@@ -46,13 +44,11 @@ public class RecipeServiceImpl implements RecipeService {
 	public Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, NotFoundException {
 		if (recipe.getId() != null)
 			throw new IdNotAllowedException();
-		if (!recipeHeaderRepository.existsById(recipe.getRecipeHeader().getId()))
-			throw new NotFoundException();
-		if (!foodRepository.existsById(recipe.getFood().getId()))
-			throw new NotFoundException();
+		checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(recipe);
 
 		return recipeRepository.save(recipe);
 	}
+
 
 	@Override
 	public void delete(Long id) throws NoContentException {
@@ -62,4 +58,10 @@ public class RecipeServiceImpl implements RecipeService {
 		recipeRepository.deleteById(id);
 	}
 
+	private void checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(Recipe recipe) throws NotFoundException {
+		if (!recipeHeaderRepository.existsById(recipe.getRecipeHeader().getId()))
+			throw new NotFoundException();
+		if (!foodRepository.existsById(recipe.getFood().getId()))
+			throw new NotFoundException();
+	}
 }
