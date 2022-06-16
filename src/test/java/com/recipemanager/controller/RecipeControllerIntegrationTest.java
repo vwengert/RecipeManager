@@ -253,6 +253,21 @@ class RecipeControllerIntegrationTest {
 		assertEquals(kaese.getName(), newRecipe.getFood().getName());
 	}
 
+	@IntegrationTest
+	@Transactional
+	void putReturns200AndChangedQuantity() throws Exception {
+		Recipe recipe = new Recipe(recipeSuppe.getId(), recipeSuppe.getRecipeHeader(), recipeSuppe.getFood(), 111.1);
+
+		mockMvc.perform(put("/api/v1/recipe/")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(createContentStringFrom(recipe)))
+				.andExpect(status().isOk());
+
+		recipeRepository.flush();
+		Recipe newRecipe = recipeRepository.findById(recipeSuppe.getId()).orElse(new Recipe());
+		assertEquals(recipe.getQuantity(), newRecipe.getQuantity());
+	}
+
 	String createContentStringFrom(Recipe recipe) {
 		return "{\"id\":" + recipe.getId() + "," +
 				"\"recipeHeaderId\":" + recipe.getRecipeHeader().getId() + "," +

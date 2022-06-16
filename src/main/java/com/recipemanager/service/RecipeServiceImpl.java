@@ -1,12 +1,11 @@
 package com.recipemanager.service;
 
 import com.recipemanager.model.Recipe;
-import com.recipemanager.repository.FoodRepository;
-import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.repository.RecipeRepository;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
 import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
+import com.recipemanager.validator.RecipeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +15,8 @@ import java.util.List;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 	private final RecipeRepository recipeRepository;
-	private final RecipeHeaderRepository recipeHeaderRepository;
-	private final FoodRepository foodRepository;
+	private final RecipeValidator recipeValidator;
+
 
 	@Override
 	public List<Recipe> getRecipeByRecipeHeaderId(Long recipeHeaderId) throws NotFoundException {
@@ -32,11 +31,7 @@ public class RecipeServiceImpl implements RecipeService {
 	public Recipe putRecipe(Recipe recipe) throws NotFoundException {
 		Recipe originalRecipe = recipeRepository.findById(recipe.getId()).orElseThrow(NotFoundException::new);
 
-		checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(recipe);
-
-		originalRecipe.setRecipeHeader(recipe.getRecipeHeader());
-		originalRecipe.setFood(recipe.getFood());
-
+		recipeValidator.validateNewRecipeAndFixEmptyFields(recipe, originalRecipe);
 		return recipeRepository.save(originalRecipe);
 	}
 
@@ -44,11 +39,12 @@ public class RecipeServiceImpl implements RecipeService {
 	public Recipe postRecipe(Recipe recipe) throws IdNotAllowedException, NotFoundException {
 		if (recipe.getId() != null)
 			throw new IdNotAllowedException();
-		checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(recipe);
+		if (recipe.getRecipeHeader() == null || recipe.getFood() == null || recipe.getQuantity() == null)
+			throw new NotFoundException();
+		recipeValidator.checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(recipe);
 
 		return recipeRepository.save(recipe);
 	}
-
 
 	@Override
 	public void delete(Long id) throws NoContentException {
@@ -58,10 +54,4 @@ public class RecipeServiceImpl implements RecipeService {
 		recipeRepository.deleteById(id);
 	}
 
-	private void checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(Recipe recipe) throws NotFoundException {
-		if (!recipeHeaderRepository.existsById(recipe.getRecipeHeader().getId()))
-			throw new NotFoundException();
-		if (!foodRepository.existsById(recipe.getFood().getId()))
-			throw new NotFoundException();
-	}
 }

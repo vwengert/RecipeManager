@@ -10,6 +10,8 @@ import com.recipemanager.repository.RecipeRepository;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
 import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
+import com.recipemanager.validator.RecipeValidator;
+import com.recipemanager.validator.RecipeValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +27,8 @@ class RecipeServiceImplTest {
 	private final RecipeRepository recipeRepository = mock(RecipeRepository.class);
 	private final RecipeHeaderRepository recipeHeaderRepository = mock(RecipeHeaderRepository.class);
 	private final FoodRepository foodRepository = mock(FoodRepository.class);
-	private final RecipeService recipeService = new RecipeServiceImpl(recipeRepository, recipeHeaderRepository, foodRepository);
+	private final RecipeValidator recipeValidator = new RecipeValidatorImpl(recipeHeaderRepository, foodRepository);
+	private final RecipeService recipeService = new RecipeServiceImpl(recipeRepository, recipeValidator);
 
 	private Recipe recipe;
 
@@ -130,17 +133,33 @@ class RecipeServiceImplTest {
 
 	@Test
 	void putRecipeReturnsRecipeWhenSaved() throws NotFoundException {
+		Recipe putRecipe = new Recipe(recipe.getId(), recipe.getRecipeHeader(), recipe.getFood(), 1.11);
 		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
 		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
 		when(foodRepository.existsById(any())).thenReturn(true);
-		when(recipeRepository.save(recipe)).thenReturn(recipe);
+		when(recipeRepository.save(recipe)).thenReturn(putRecipe);
 
-		Recipe savedRecipe = recipeService.putRecipe(recipe);
+		Recipe savedRecipe = recipeService.putRecipe(putRecipe);
 
 		assertEquals(recipe.getQuantity(), savedRecipe.getQuantity());
 		assertEquals(recipe.getRecipeHeader().getName(), savedRecipe.getRecipeHeader().getName());
 		assertEquals(recipe.getFood().getName(), savedRecipe.getFood().getName());
 		assertEquals(recipe.getFood().getUnit().getName(), savedRecipe.getFood().getUnit().getName());
+	}
+
+	@Test
+	void putRecipeReturnsOldRecipeWhenNoParametersAreIn() throws NotFoundException {
+		Recipe putRecipe = new Recipe(recipe.getId(), null, null, null);
+		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
+		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
+		when(foodRepository.existsById(any())).thenReturn(true);
+		when(recipeRepository.save(recipe)).thenReturn(recipe);
+
+		Recipe savedRecipe = recipeService.putRecipe(putRecipe);
+
+		assertNotNull(savedRecipe.getQuantity());
+		assertNotNull(savedRecipe.getRecipeHeader());
+		assertNotNull(savedRecipe.getFood());
 	}
 
 	@Test

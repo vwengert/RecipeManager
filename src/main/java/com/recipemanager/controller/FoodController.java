@@ -31,7 +31,8 @@ public class FoodController {
 
 	@GetMapping(path = "food")
 	public List<FoodDto> getFood() {
-		return modelMapper.map(foodService.getFood(),new TypeToken<List<FoodDto>>() {}.getType());
+		return modelMapper.map(foodService.getFood(), new TypeToken<List<FoodDto>>() {
+		}.getType());
 	}
 
 	@GetMapping(path = "foodByName/{name}")
