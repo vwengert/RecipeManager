@@ -85,13 +85,13 @@ task unitTest(type: Test) {
     }
 }
 
-task IntegrationTest(type: Test) {
+task integrationTest(type: Test) {
     useJUnitPlatform() {
         excludeTags 'Unit'
     }
 
-dockerCompose.isRequiredBy(IntegrationTest)
-dockerCompose.isRequiredBy(test)
+//dockerCompose.isRequiredBy(IntegrationTest)
+//dockerCompose.isRequiredBy(test)
 
 dockerCompose {
     projectName = 'recipe'
