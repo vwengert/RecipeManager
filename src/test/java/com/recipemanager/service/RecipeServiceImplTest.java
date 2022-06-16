@@ -7,11 +7,12 @@ import com.recipemanager.model.Unit;
 import com.recipemanager.repository.FoodRepository;
 import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.repository.RecipeRepository;
+import com.recipemanager.service.implementation.RecipeServiceImpl;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
 import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
 import com.recipemanager.validator.RecipeValidator;
-import com.recipemanager.validator.RecipeValidatorImpl;
+import com.recipemanager.validator.implementation.RecipeValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

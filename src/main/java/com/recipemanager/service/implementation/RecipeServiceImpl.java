@@ -1,7 +1,8 @@
-package com.recipemanager.service;
+package com.recipemanager.service.implementation;
 
 import com.recipemanager.model.Recipe;
 import com.recipemanager.repository.RecipeRepository;
+import com.recipemanager.service.RecipeService;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
 import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;

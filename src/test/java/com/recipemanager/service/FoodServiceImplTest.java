@@ -4,6 +4,7 @@ import com.recipemanager.model.Food;
 import com.recipemanager.model.Unit;
 import com.recipemanager.repository.FoodRepository;
 import com.recipemanager.repository.UnitRepository;
+import com.recipemanager.service.implementation.FoodServiceImpl;
 import com.recipemanager.util.annotations.UnitTest;
 import com.recipemanager.util.exceptions.FoundException;
 import com.recipemanager.util.exceptions.IdNotAllowedException;

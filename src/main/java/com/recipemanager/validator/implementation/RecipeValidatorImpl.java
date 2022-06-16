@@ -1,4 +1,4 @@
-package com.recipemanager.validator;
+package com.recipemanager.validator.implementation;
 
 import com.recipemanager.model.Food;
 import com.recipemanager.model.Recipe;
@@ -6,6 +6,7 @@ import com.recipemanager.model.RecipeHeader;
 import com.recipemanager.repository.FoodRepository;
 import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.util.exceptions.NotFoundException;
+import com.recipemanager.validator.RecipeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
