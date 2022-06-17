@@ -5,6 +5,7 @@ import com.recipemanager.model.RecipeHeader;
 import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.util.annotations.UnitTest;
 import com.recipemanager.util.exceptions.NotFoundException;
+import com.recipemanager.validator.RecipeRecipeHeaderValidator;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 class RecipeRecipeHeaderValidatorImplTest {
 	private final RecipeHeaderRepository recipeHeaderRepository = mock(RecipeHeaderRepository.class);
-	private final RecipeRecipeHeaderValidatorImpl recipeRecipeHeaderValidator = new RecipeRecipeHeaderValidatorImpl(recipeHeaderRepository);
+	private final RecipeRecipeHeaderValidator recipeRecipeHeaderValidator = new RecipeRecipeHeaderValidatorImpl(recipeHeaderRepository);
 
 	private RecipeHeader recipeHeader;
 	private Recipe originalRecipe;
