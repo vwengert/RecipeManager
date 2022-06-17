@@ -77,6 +77,31 @@ class RecipeServiceImplTest {
 	}
 
 	@Test
+	void postRecipeThrowsWhenMissingAnIdForRecipeHeader() {
+		recipe.setId(null);
+		recipe.setRecipeHeader(null);
+
+		assertThrows(NotFoundException.class, () -> recipeService.postRecipe(recipe));
+
+	}
+
+	@Test
+	void postRecipeThrowsWhenMissingAnIdForFood() {
+		recipe.setId(null);
+		recipe.setFood(null);
+
+		assertThrows(NotFoundException.class, () -> recipeService.postRecipe(recipe));
+	}
+
+	@Test
+	void postRecipeThrowsWhenQuantityIsNull() {
+		recipe.setId(null);
+		recipe.setQuantity(null);
+
+		assertThrows(NotFoundException.class, () -> recipeService.postRecipe(recipe));
+	}
+
+	@Test
 	void postRecipeThrowsWhenRecipeHeaderNotFound() {
 		recipe.setId(null);
 		when(recipeHeaderRepository.existsById(recipe.getRecipeHeader().getId())).thenReturn(false);
