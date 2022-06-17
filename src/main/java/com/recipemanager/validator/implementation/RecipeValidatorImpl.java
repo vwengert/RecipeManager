@@ -3,7 +3,7 @@ package com.recipemanager.validator.implementation;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.util.exceptions.NotFoundException;
 import com.recipemanager.validator.RecipeFoodValidator;
-import com.recipemanager.validator.RecipeHeaderValidator;
+import com.recipemanager.validator.RecipeRecipeHeaderValidator;
 import com.recipemanager.validator.RecipeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class RecipeValidatorImpl implements RecipeValidator {
-	private final RecipeHeaderValidator recipeHeaderValidator;
+	private final RecipeRecipeHeaderValidator recipeHeaderValidator;
 	private final RecipeFoodValidator foodValidator;
 
 	@Override

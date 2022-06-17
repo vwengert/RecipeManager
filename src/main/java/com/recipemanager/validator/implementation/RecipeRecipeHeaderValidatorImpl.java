@@ -4,13 +4,13 @@ import com.recipemanager.model.Recipe;
 import com.recipemanager.model.RecipeHeader;
 import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.util.exceptions.NotFoundException;
-import com.recipemanager.validator.RecipeHeaderValidator;
+import com.recipemanager.validator.RecipeRecipeHeaderValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class RecipeHeaderValidatorImpl implements RecipeHeaderValidator {
+public class RecipeRecipeHeaderValidatorImpl implements RecipeRecipeHeaderValidator {
 	private final RecipeHeaderRepository recipeHeaderRepository;
 
 	@Override

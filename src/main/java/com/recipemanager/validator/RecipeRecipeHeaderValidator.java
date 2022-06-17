@@ -4,7 +4,7 @@ import com.recipemanager.model.Recipe;
 import com.recipemanager.model.RecipeHeader;
 import com.recipemanager.util.exceptions.NotFoundException;
 
-public interface RecipeHeaderValidator {
+public interface RecipeRecipeHeaderValidator {
 	/**
 	 * @param recipeHeader recipe header to check for in repository
 	 * @throws NotFoundException if recipe header not exists

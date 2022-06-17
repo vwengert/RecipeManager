@@ -13,9 +13,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class FoodValidatorImplTest {
+class RecipeFoodValidatorImplTest {
 	private final FoodRepository foodRepository = mock(FoodRepository.class);
-	private final RecipeFoodValidatorImpl foodValidator = new RecipeFoodValidatorImpl(foodRepository);
+	private final RecipeFoodValidatorImpl recipeFoodValidator = new RecipeFoodValidatorImpl(foodRepository);
 
 	private Unit unit;
 	private Food food;
@@ -32,42 +32,42 @@ class FoodValidatorImplTest {
 	void checkNewFoodChangeRecipeFoodToOriginalRecipeWhenRecipeFoodIsNull() throws NotFoundException {
 		Recipe recipe = new Recipe(2L, null, null, 0.0);
 
-		foodValidator.checkNewFood(recipe, originalRecipe);
+		recipeFoodValidator.checkNewFood(recipe, originalRecipe);
 
 		assertEquals(recipe.getFood(), originalRecipe.getFood());
 	}
 
 	@UnitTest
-	void checkNewFoodThrowWhenRecipeFoodIsNotInRepository() throws NotFoundException {
+	void checkNewFoodThrowWhenRecipeFoodIsNotInRepository() {
 		Recipe recipe = new Recipe(2L, null, new Food(2L, "NotThere", unit), 0.0);
 		when(foodRepository.existsById(any())).thenReturn(false);
 
-		assertThrows(NotFoundException.class, () -> foodValidator.checkNewFood(recipe, this.originalRecipe));
+		assertThrows(NotFoundException.class, () -> recipeFoodValidator.checkNewFood(recipe, originalRecipe));
 
 	}
 
 	@UnitTest
-	void checkNewFoodNotThrowingWhenRecipeFoodIsInRepositoryAndNotNull() throws NotFoundException {
-		Recipe recipe = new Recipe(2L, null, new Food(2L, "NotThere", unit), 0.0);
+	void checkNewFoodNotThrowingWhenRecipeFoodIsInRepositoryAndNotNull() {
+		Recipe recipe = new Recipe(2L, null, food, 0.0);
 		when(foodRepository.existsById(any())).thenReturn(true);
 
-		assertDoesNotThrow(() -> foodValidator.checkNewFood(recipe, this.originalRecipe));
+		assertDoesNotThrow(() -> recipeFoodValidator.checkNewFood(recipe, originalRecipe));
 
 	}
 
 	@UnitTest
-	void checkFoodthrowWhenRecipeFoodIsNotInRepository() throws NotFoundException {
+	void checkFoodthrowWhenRecipeFoodIsNotInRepository() {
 		when(foodRepository.existsById(any())).thenReturn(false);
 
-		assertThrows(NotFoundException.class, () -> foodValidator.checkFoodExistsOrElseThrowException(food));
+		assertThrows(NotFoundException.class, () -> recipeFoodValidator.checkFoodExistsOrElseThrowException(food));
 
 	}
 
 	@UnitTest
-	void checkFoodnotThrowingWhenRecipeFoodIsInRepositoryAndNotNull() throws NotFoundException {
+	void checkFoodnotThrowingWhenRecipeFoodIsInRepositoryAndNotNull() {
 		when(foodRepository.existsById(any())).thenReturn(true);
 
-		assertDoesNotThrow(() -> foodValidator.checkFoodExistsOrElseThrowException(food));
+		assertDoesNotThrow(() -> recipeFoodValidator.checkFoodExistsOrElseThrowException(food));
 
 	}
 
