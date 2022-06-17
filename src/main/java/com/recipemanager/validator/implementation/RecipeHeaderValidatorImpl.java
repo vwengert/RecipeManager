@@ -14,7 +14,8 @@ public class RecipeHeaderValidatorImpl implements RecipeHeaderValidator {
 
 	@Override
 	public void checkRecipeHeaderExistsOrElseThrowException(RecipeHeader recipeHeader) throws NotFoundException {
-		if (!recipeHeaderRepository.existsById(recipeHeader.getId())) throw new NotFoundException();
+		if (!recipeHeaderRepository.existsById(recipeHeader.getId()))
+			throw new NotFoundException();
 	}
 
 }
