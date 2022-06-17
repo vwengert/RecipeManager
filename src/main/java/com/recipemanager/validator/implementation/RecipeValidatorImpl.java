@@ -1,11 +1,9 @@
 package com.recipemanager.validator.implementation;
 
-import com.recipemanager.model.Food;
 import com.recipemanager.model.Recipe;
-import com.recipemanager.model.RecipeHeader;
-import com.recipemanager.repository.FoodRepository;
-import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.util.exceptions.NotFoundException;
+import com.recipemanager.validator.FoodValidator;
+import com.recipemanager.validator.RecipeHeaderValidator;
 import com.recipemanager.validator.RecipeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +11,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class RecipeValidatorImpl implements RecipeValidator {
-	private final RecipeHeaderRepository recipeHeaderRepository;
-	private final FoodRepository foodRepository;
+	private final RecipeHeaderValidator recipeHeaderValidator;
+	private final FoodValidator foodValidator;
 
 	@Override
 	public void validateNewRecipeAndFixEmptyFields(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
@@ -24,14 +22,14 @@ public class RecipeValidatorImpl implements RecipeValidator {
 
 	@Override
 	public void checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(Recipe recipe) throws NotFoundException {
-		checkRecipeHeaderExistsOrElseThrowException(recipe.getRecipeHeader());
-		checkFoodExistsOrElseThrowException(recipe.getFood());
+		recipeHeaderValidator.checkRecipeHeaderExistsOrElseThrowException(recipe.getRecipeHeader());
+		foodValidator.checkFoodExistsOrElseThrowException(recipe.getFood());
 	}
 
 	private void validateNewRecipe(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
 		checkNewQuantity(recipe, originalRecipe);
-		checkNewRecipeHeader(recipe, originalRecipe);
-		checkNewFood(recipe, originalRecipe);
+		recipeHeaderValidator.checkNewRecipeHeader(recipe, originalRecipe);
+		foodValidator.checkNewFood(recipe, originalRecipe);
 	}
 
 	private void changeOriginalRecipe(Recipe recipe, Recipe originalRecipe) {
@@ -40,33 +38,10 @@ public class RecipeValidatorImpl implements RecipeValidator {
 		originalRecipe.setQuantity(recipe.getQuantity());
 	}
 
-	private void checkNewFood(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
-		if (recipe.getFood() == null)
-			recipe.setFood(originalRecipe.getFood());
-		else
-			checkFoodExistsOrElseThrowException(recipe.getFood());
-	}
-
-	private void checkNewRecipeHeader(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
-		if (recipe.getRecipeHeader() == null)
-			recipe.setRecipeHeader(originalRecipe.getRecipeHeader());
-		else
-			checkRecipeHeaderExistsOrElseThrowException(recipe.getRecipeHeader());
-	}
 
 	private void checkNewQuantity(Recipe recipe, Recipe originalRecipe) {
 		if (recipe.getQuantity() == null)
 			recipe.setQuantity(originalRecipe.getQuantity());
-	}
-
-	private void checkRecipeHeaderExistsOrElseThrowException(RecipeHeader recipeHeader) throws NotFoundException {
-		if (!recipeHeaderRepository.existsById(recipeHeader.getId()))
-			throw new NotFoundException();
-	}
-
-	private void checkFoodExistsOrElseThrowException(Food food) throws NotFoundException {
-		if (!foodRepository.existsById(food.getId()))
-			throw new NotFoundException();
 	}
 
 }
