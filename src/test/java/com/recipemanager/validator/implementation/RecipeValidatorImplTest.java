@@ -6,7 +6,7 @@ import com.recipemanager.model.RecipeHeader;
 import com.recipemanager.model.Unit;
 import com.recipemanager.util.annotations.UnitTest;
 import com.recipemanager.util.exceptions.NotFoundException;
-import com.recipemanager.validator.RecipeFoodValidator;
+import com.recipemanager.validator.FoodValidator;
 import com.recipemanager.validator.RecipeRecipeHeaderValidator;
 import com.recipemanager.validator.RecipeValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +18,8 @@ import static org.mockito.Mockito.mock;
 
 class RecipeValidatorImplTest {
 	private final RecipeRecipeHeaderValidator recipeRecipeHeaderValidator = mock(RecipeRecipeHeaderValidator.class);
-	private final RecipeFoodValidator recipeFoodValidator = mock(RecipeFoodValidator.class);
-	private final RecipeValidator recipeValidator = new RecipeValidatorImpl(recipeRecipeHeaderValidator, recipeFoodValidator);
+	private final FoodValidator foodValidator = mock(FoodValidator.class);
+	private final RecipeValidator recipeValidator = new RecipeValidatorImpl(recipeRecipeHeaderValidator, foodValidator);
 
 	private Recipe orginialRecipe;
 	private Recipe recipe;
@@ -61,7 +61,7 @@ class RecipeValidatorImplTest {
 	@UnitTest
 	void validateNewRecipeAndFixEmptyFieldsThrowsNotFoundWhenFoodNotInRepository() throws NotFoundException {
 		doThrow(NotFoundException.class)
-				.when(recipeFoodValidator).checkNewFood(any(), any());
+				.when(foodValidator).checkFoodExistsOrElseThrowException(any());
 
 		assertThrows(NotFoundException.class, () -> recipeValidator.validateNewRecipeAndFixEmptyFields(recipe, orginialRecipe));
 	}
@@ -78,7 +78,7 @@ class RecipeValidatorImplTest {
 	@UnitTest
 	void checkIfRecipeHeaderAndFoodIdExistsThrowsWhenFoodNotExist() throws NotFoundException {
 		doThrow(NotFoundException.class)
-				.when(recipeFoodValidator).checkFoodExistsOrElseThrowException(any());
+				.when(foodValidator).checkFoodExistsOrElseThrowException(any());
 
 		assertThrows(NotFoundException.class, () -> recipeValidator.checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(recipe));
 	}
