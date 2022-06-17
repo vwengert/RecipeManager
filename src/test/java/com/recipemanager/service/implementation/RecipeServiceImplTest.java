@@ -4,37 +4,25 @@ import com.recipemanager.model.Food;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.model.RecipeHeader;
 import com.recipemanager.model.Unit;
-import com.recipemanager.repository.FoodRepository;
-import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.repository.RecipeRepository;
 import com.recipemanager.service.RecipeService;
+import com.recipemanager.util.annotations.UnitTest;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
 import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
-import com.recipemanager.validator.RecipeFoodValidator;
-import com.recipemanager.validator.RecipeRecipeHeaderValidator;
 import com.recipemanager.validator.RecipeValidator;
-import com.recipemanager.validator.implementation.RecipeFoodValidatorImpl;
-import com.recipemanager.validator.implementation.RecipeRecipeHeaderValidatorImpl;
-import com.recipemanager.validator.implementation.RecipeValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class RecipeServiceImplTest {
 	private final RecipeRepository recipeRepository = mock(RecipeRepository.class);
-	private final RecipeHeaderRepository recipeHeaderRepository = mock(RecipeHeaderRepository.class);
-	private final RecipeRecipeHeaderValidator recipeHeaderValidator = new RecipeRecipeHeaderValidatorImpl(recipeHeaderRepository);
-	private final FoodRepository foodRepository = mock(FoodRepository.class);
-	private final RecipeFoodValidator foodValidator = new RecipeFoodValidatorImpl(foodRepository);
-	private final RecipeValidator recipeValidator = new RecipeValidatorImpl(recipeHeaderValidator, foodValidator);
+	private final RecipeValidator recipeValidator = mock(RecipeValidator.class);
 	private final RecipeService recipeService = new RecipeServiceImpl(recipeRepository, recipeValidator);
 
 	private Recipe recipe;
@@ -48,14 +36,14 @@ class RecipeServiceImplTest {
 				0.4);
 	}
 
-	@Test
+	@UnitTest
 	void getRecipeByIdThrowsWhenNothingFound() {
 		when(recipeRepository.findByRecipeHeaderId(1L)).thenReturn(List.of());
 
 		assertThrows(NotFoundException.class, () -> recipeService.getRecipeByRecipeHeaderId(999L));
 	}
 
-	@Test
+	@UnitTest
 	void getRecipeByIdReturnsAList() throws NotFoundException {
 		when(recipeRepository.findByRecipeHeaderId(1L)).thenReturn(List.of(recipe));
 
@@ -70,13 +58,13 @@ class RecipeServiceImplTest {
 
 	}
 
-	@Test
+	@UnitTest
 	void postRecipeThrowsWhenUsingId() {
 
 		assertThrows(IdNotAllowedException.class, () -> recipeService.postRecipe(recipe));
 	}
 
-	@Test
+	@UnitTest
 	void postRecipeThrowsWhenMissingAnIdForRecipeHeader() {
 		recipe.setId(null);
 		recipe.setRecipeHeader(null);
@@ -85,7 +73,7 @@ class RecipeServiceImplTest {
 
 	}
 
-	@Test
+	@UnitTest
 	void postRecipeThrowsWhenMissingAnIdForFood() {
 		recipe.setId(null);
 		recipe.setFood(null);
@@ -93,7 +81,7 @@ class RecipeServiceImplTest {
 		assertThrows(NotFoundException.class, () -> recipeService.postRecipe(recipe));
 	}
 
-	@Test
+	@UnitTest
 	void postRecipeThrowsWhenQuantityIsNull() {
 		recipe.setId(null);
 		recipe.setQuantity(null);
@@ -101,32 +89,21 @@ class RecipeServiceImplTest {
 		assertThrows(NotFoundException.class, () -> recipeService.postRecipe(recipe));
 	}
 
-	@Test
-	void postRecipeThrowsWhenRecipeHeaderNotFound() {
+	@UnitTest
+	void postRecipeThrowsWhenRecipeHeaderOrFoodNotFound() throws NotFoundException {
 		recipe.setId(null);
-		when(recipeHeaderRepository.existsById(recipe.getRecipeHeader().getId())).thenReturn(false);
-		when(foodRepository.existsById(any())).thenReturn(true);
+		doThrow(NotFoundException.class)
+				.when(recipeValidator).checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(any());
 
 		assertThrows(NotFoundException.class, () -> recipeService.postRecipe(recipe));
 	}
 
-	@Test
-	void postRecipeThrowsWhenFoodNotFound() {
-		recipe.setId(null);
-		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
-		when(foodRepository.existsById(recipe.getRecipeHeader().getId())).thenReturn(false);
-
-		assertThrows(NotFoundException.class, () -> recipeService.postRecipe(recipe));
-	}
-
-	@Test
+	@UnitTest
 	void postRecipeReturnsRecipeWithSavedId() throws NotFoundException, IdNotAllowedException {
 		Long newId = 7L;
 		recipe.setId(null);
 		Recipe savedRecipe = new Recipe(newId, recipe.getRecipeHeader(), recipe.getFood(), recipe.getQuantity());
 		when(recipeRepository.save(recipe)).thenReturn(savedRecipe);
-		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
-		when(foodRepository.existsById(any())).thenReturn(true);
 
 		Recipe result = recipeService.postRecipe(recipe);
 
@@ -136,7 +113,7 @@ class RecipeServiceImplTest {
 		assertEquals(recipe.getQuantity(), result.getQuantity());
 	}
 
-	@Test
+	@UnitTest
 	void putRecipeThrowsWhenRecipeIdNotExists() {
 		Long wrongId = 999L;
 		recipe.setId(wrongId);
@@ -145,46 +122,33 @@ class RecipeServiceImplTest {
 		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipe));
 	}
 
-	@Test
-	void putRecipeThrowsWhenRecipeHeaderIdNotExists() {
+	@UnitTest
+	void putRecipeThrowsWhenRecipeHeaderOrFoodIdNotExists() throws NotFoundException {
 		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
-		when(recipeHeaderRepository.existsById(any())).thenReturn(false);
-		when(foodRepository.existsById(any())).thenReturn(true);
+		doThrow(NotFoundException.class)
+				.when(recipeValidator).validateNewRecipeAndFixEmptyFields(any(), any());
 
 		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipe));
 	}
 
-	@Test
-	void putRecipeThrowsWhenFoodIdNotExists() {
-		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
-		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
-		when(foodRepository.existsById(any())).thenReturn(false);
-
-		assertThrows(NotFoundException.class, () -> recipeService.putRecipe(recipe));
-	}
-
-	@Test
+	@UnitTest
 	void putRecipeReturnsRecipeWhenSaved() throws NotFoundException {
 		Recipe putRecipe = new Recipe(recipe.getId(), recipe.getRecipeHeader(), recipe.getFood(), 1.11);
 		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
-		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
-		when(foodRepository.existsById(any())).thenReturn(true);
 		when(recipeRepository.save(recipe)).thenReturn(putRecipe);
 
 		Recipe savedRecipe = recipeService.putRecipe(putRecipe);
 
-		assertEquals(recipe.getQuantity(), savedRecipe.getQuantity());
+		assertEquals(1.11, savedRecipe.getQuantity());
 		assertEquals(recipe.getRecipeHeader().getName(), savedRecipe.getRecipeHeader().getName());
 		assertEquals(recipe.getFood().getName(), savedRecipe.getFood().getName());
 		assertEquals(recipe.getFood().getUnit().getName(), savedRecipe.getFood().getUnit().getName());
 	}
 
-	@Test
+	@UnitTest
 	void putRecipeReturnsOldRecipeWhenNoParametersAreIn() throws NotFoundException {
 		Recipe putRecipe = new Recipe(recipe.getId(), null, null, null);
 		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
-		when(recipeHeaderRepository.existsById(any())).thenReturn(true);
-		when(foodRepository.existsById(any())).thenReturn(true);
 		when(recipeRepository.save(recipe)).thenReturn(recipe);
 
 		Recipe savedRecipe = recipeService.putRecipe(putRecipe);
@@ -194,14 +158,14 @@ class RecipeServiceImplTest {
 		assertNotNull(savedRecipe.getFood());
 	}
 
-	@Test
+	@UnitTest
 	void deleteThrowsWhenRecipeIsNotInRepository() {
 		when(recipeRepository.existsById(any())).thenReturn(false);
 
 		assertThrows(NoContentException.class, () -> recipeService.delete(recipe.getId()));
 	}
 
-	@Test
+	@UnitTest
 	void deleteDontThrowsWhenRecipeIsDeleted() {
 		when(recipeRepository.existsById(any())).thenReturn(true);
 
