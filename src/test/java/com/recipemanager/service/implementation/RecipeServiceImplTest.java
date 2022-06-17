@@ -11,10 +11,10 @@ import com.recipemanager.service.RecipeService;
 import com.recipemanager.util.exceptions.IdNotAllowedException;
 import com.recipemanager.util.exceptions.NoContentException;
 import com.recipemanager.util.exceptions.NotFoundException;
-import com.recipemanager.validator.FoodValidator;
+import com.recipemanager.validator.RecipeFoodValidator;
 import com.recipemanager.validator.RecipeHeaderValidator;
 import com.recipemanager.validator.RecipeValidator;
-import com.recipemanager.validator.implementation.FoodValidatorImpl;
+import com.recipemanager.validator.implementation.RecipeFoodValidatorImpl;
 import com.recipemanager.validator.implementation.RecipeHeaderValidatorImpl;
 import com.recipemanager.validator.implementation.RecipeValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,7 @@ class RecipeServiceImplTest {
 	private final RecipeHeaderRepository recipeHeaderRepository = mock(RecipeHeaderRepository.class);
 	private final RecipeHeaderValidator recipeHeaderValidator = new RecipeHeaderValidatorImpl(recipeHeaderRepository);
 	private final FoodRepository foodRepository = mock(FoodRepository.class);
-	private final FoodValidator foodValidator = new FoodValidatorImpl(foodRepository);
+	private final RecipeFoodValidator foodValidator = new RecipeFoodValidatorImpl(foodRepository);
 	private final RecipeValidator recipeValidator = new RecipeValidatorImpl(recipeHeaderValidator, foodValidator);
 	private final RecipeService recipeService = new RecipeServiceImpl(recipeRepository, recipeValidator);
 

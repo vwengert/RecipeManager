@@ -2,7 +2,7 @@ package com.recipemanager.validator.implementation;
 
 import com.recipemanager.model.Recipe;
 import com.recipemanager.util.exceptions.NotFoundException;
-import com.recipemanager.validator.FoodValidator;
+import com.recipemanager.validator.RecipeFoodValidator;
 import com.recipemanager.validator.RecipeHeaderValidator;
 import com.recipemanager.validator.RecipeValidator;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RecipeValidatorImpl implements RecipeValidator {
 	private final RecipeHeaderValidator recipeHeaderValidator;
-	private final FoodValidator foodValidator;
+	private final RecipeFoodValidator foodValidator;
 
 	@Override
 	public void validateNewRecipeAndFixEmptyFields(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
