@@ -7,7 +7,7 @@ import com.recipemanager.model.Unit;
 import com.recipemanager.util.annotations.UnitTest;
 import com.recipemanager.util.exceptions.NotFoundException;
 import com.recipemanager.validator.FoodValidator;
-import com.recipemanager.validator.RecipeRecipeHeaderValidator;
+import com.recipemanager.validator.RecipeHeaderValidator;
 import com.recipemanager.validator.RecipeValidator;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -17,9 +17,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
 class RecipeValidatorImplTest {
-	private final RecipeRecipeHeaderValidator recipeRecipeHeaderValidator = mock(RecipeRecipeHeaderValidator.class);
+	private final RecipeHeaderValidator recipeHeaderValidator = mock(RecipeHeaderValidator.class);
 	private final FoodValidator foodValidator = mock(FoodValidator.class);
-	private final RecipeValidator recipeValidator = new RecipeValidatorImpl(recipeRecipeHeaderValidator, foodValidator);
+	private final RecipeValidator recipeValidator = new RecipeValidatorImpl(recipeHeaderValidator, foodValidator);
 
 	private Recipe orginialRecipe;
 	private Recipe recipe;
@@ -53,7 +53,7 @@ class RecipeValidatorImplTest {
 	@UnitTest
 	void validateNewRecipeAndFixEmptyFieldsThrowsNotFoundWhenRecipeHeaderNotInRepository() throws NotFoundException {
 		doThrow(NotFoundException.class)
-				.when(recipeRecipeHeaderValidator).checkNewRecipeHeader(any(), any());
+				.when(recipeHeaderValidator).checkRecipeHeaderExistsOrElseThrowException(any());
 
 		assertThrows(NotFoundException.class, () -> recipeValidator.validateNewRecipeAndFixEmptyFields(recipe, orginialRecipe));
 	}
@@ -70,7 +70,7 @@ class RecipeValidatorImplTest {
 	@UnitTest
 	void checkIfRecipeHeaderAndFoodIdExistsThrowsWhenRecipeHeaderNotExist() throws NotFoundException {
 		doThrow(NotFoundException.class)
-				.when(recipeRecipeHeaderValidator).checkRecipeHeaderExistsOrElseThrowException(any());
+				.when(recipeHeaderValidator).checkRecipeHeaderExistsOrElseThrowException(any());
 
 		assertThrows(NotFoundException.class, () -> recipeValidator.checkIfRecipeHeaderAndFoodIdExistsOrElseThrowException(recipe));
 	}
