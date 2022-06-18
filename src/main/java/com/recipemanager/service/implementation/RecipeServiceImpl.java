@@ -32,8 +32,8 @@ public class RecipeServiceImpl implements RecipeService {
 	public Recipe putRecipe(Recipe recipe) throws NotFoundException {
 		Recipe originalRecipe = recipeRepository.findById(recipe.getId()).orElseThrow(NotFoundException::new);
 
-		recipeValidator.validateNewRecipeAndFixEmptyFields(recipe, originalRecipe);
-		return recipeRepository.save(originalRecipe);
+		return recipeRepository.save(
+				recipeValidator.validateNewRecipeAndFixEmptyFields(recipe, originalRecipe));
 	}
 
 	@Override

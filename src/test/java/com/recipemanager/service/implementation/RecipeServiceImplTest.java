@@ -135,7 +135,7 @@ class RecipeServiceImplTest {
 	void putRecipeReturnsRecipeWhenSaved() throws NotFoundException {
 		Recipe putRecipe = new Recipe(recipe.getId(), recipe.getRecipeHeader(), recipe.getFood(), 1.11);
 		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
-		when(recipeRepository.save(recipe)).thenReturn(putRecipe);
+		when(recipeRepository.save(any())).thenReturn(putRecipe);
 
 		Recipe savedRecipe = recipeService.putRecipe(putRecipe);
 
@@ -149,7 +149,7 @@ class RecipeServiceImplTest {
 	void putRecipeReturnsOldRecipeWhenNoParametersAreIn() throws NotFoundException {
 		Recipe putRecipe = new Recipe(recipe.getId(), null, null, null);
 		when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
-		when(recipeRepository.save(recipe)).thenReturn(recipe);
+		when(recipeRepository.save(any())).thenReturn(recipe);
 
 		Recipe savedRecipe = recipeService.putRecipe(putRecipe);
 

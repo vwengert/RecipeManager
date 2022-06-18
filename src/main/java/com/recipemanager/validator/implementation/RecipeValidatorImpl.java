@@ -15,9 +15,8 @@ public class RecipeValidatorImpl implements RecipeValidator {
 	private final FoodValidator foodValidator;
 
 	@Override
-	public void validateNewRecipeAndFixEmptyFields(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
-		validateNewRecipe(recipe, originalRecipe);
-		changeOriginalRecipe(recipe, originalRecipe);
+	public Recipe validateNewRecipeAndFixEmptyFields(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
+		return validateNewRecipe(recipe, originalRecipe);
 	}
 
 	@Override
@@ -26,35 +25,32 @@ public class RecipeValidatorImpl implements RecipeValidator {
 		foodValidator.checkFoodExistsOrElseThrowException(recipe.getFood());
 	}
 
-	private void validateNewRecipe(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
-		validateAndChangeQuantity(recipe, originalRecipe);
-		validateAndChangeRecipeHeader(recipe, originalRecipe);
-		validateAndChangeFood(recipe, originalRecipe);
+	private Recipe validateNewRecipe(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
+		recipe = validateAndChangeQuantity(recipe, originalRecipe);
+		recipe = validateAndChangeRecipeHeader(recipe, originalRecipe);
+		return validateAndChangeFood(recipe, originalRecipe);
 	}
 
-	private void validateAndChangeFood(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
+	private Recipe validateAndChangeFood(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
 		if (recipe.getFood() == null)
 			recipe.setFood(originalRecipe.getFood());
 		else
 			foodValidator.checkFoodExistsOrElseThrowException(recipe.getFood());
+		return recipe;
 	}
 
-	private void validateAndChangeRecipeHeader(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
+	private Recipe validateAndChangeRecipeHeader(Recipe recipe, Recipe originalRecipe) throws NotFoundException {
 		if (recipe.getRecipeHeader() == null)
 			recipe.setRecipeHeader(originalRecipe.getRecipeHeader());
 		else
 			recipeHeaderValidator.checkRecipeHeaderExistsOrElseThrowException(recipe.getRecipeHeader());
+		return recipe;
 	}
 
-	private void changeOriginalRecipe(Recipe recipe, Recipe originalRecipe) {
-		originalRecipe.setRecipeHeader(recipe.getRecipeHeader());
-		originalRecipe.setFood(recipe.getFood());
-		originalRecipe.setQuantity(recipe.getQuantity());
-	}
-
-	private void validateAndChangeQuantity(Recipe recipe, Recipe originalRecipe) {
+	private Recipe validateAndChangeQuantity(Recipe recipe, Recipe originalRecipe) {
 		if (recipe.getQuantity() == null)
 			recipe.setQuantity(originalRecipe.getQuantity());
+		return recipe;
 	}
 
 }
