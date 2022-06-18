@@ -109,7 +109,7 @@ class FoodControllerIntegrationTest {
 
 		mockMvc.perform(post("/api/v1/food")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"name\":\"" + apple + "\",\"unitName\":\"" + piece + "\"}"))
+						.content("{\"name\":\"" + apple + "\",\"unitId\":\"" + unitPiece.getId() + "\"}"))
 				.andExpect(status().isCreated());
 
 		assertEquals(apple, foodRepository.findByName(apple).orElse(new Food(null, "", new Unit(null, ""))).getName());
@@ -121,7 +121,7 @@ class FoodControllerIntegrationTest {
 
 		mockMvc.perform(post("/api/v1/food")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"name\":\"" + cake + "\",\"unitName\":\"" + piece + "\"}"))
+						.content("{\"name\":\"" + cake + "\",\"unitId\":\"" + unitPiece.getId() + "\"}"))
 				.andExpect(status().isOk());
 	}
 
@@ -131,7 +131,7 @@ class FoodControllerIntegrationTest {
 
 		mockMvc.perform(put("/api/v1/food")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"id\":\"" + food.getId() + "\",\"name\":\"" + apple + "\",\"unitName\":\"" + unit.getName() + "\"}"))
+						.content("{\"id\":\"" + food.getId() + "\",\"name\":\"" + apple + "\",\"unitId\":\"" + unit.getId() + "\"}"))
 				.andExpect(status().isOk());
 
 		assertEquals(apple, foodRepository.findById(food.getId()).orElse(new Food(1L, "", new Unit(1L, ""))).getName());
@@ -143,7 +143,7 @@ class FoodControllerIntegrationTest {
 
 		mockMvc.perform(put("/api/v1/food")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content("{\"id\":\"" + food.getId() + "\",\"name\":\"" + food.getName() + "\",\"unitName\":\"" + changedUnit.getName() + "\"}"))
+						.content("{\"id\":\"" + food.getId() + "\",\"name\":\"" + food.getName() + "\",\"unitId\":\"" + changedUnit.getId() + "\"}"))
 				.andExpect(status().isOk());
 
 		assertEquals(changedUnit.getName(), foodRepository.findById(food.getId()).orElse(new Food(1L, "", new Unit(1L, ""))).getUnit().getName());

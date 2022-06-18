@@ -62,7 +62,7 @@ public class RecipeHeaderController {
 	@Operation(summary = "Post a new recipe header", responses = {
 			@ApiResponse(description = "Recipe header created", responseCode = "201",
 					content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeHeader.class))),
-			@ApiResponse(description = "Unit found", responseCode = "200",
+			@ApiResponse(description = "Recipe Header found", responseCode = "200",
 					content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeHeader.class))),
 			@ApiResponse(description = "Id not allowed", responseCode = "406",
 					content = @Content),
