@@ -43,7 +43,7 @@ public class FoodServiceImpl implements FoodService {
 		if (foodRepository.existsByName(food.getName()))
 			throw new FoundException();
 
-		Unit unit = unitRepository.findByName(food.getUnit().getName()).orElseThrow(NotFoundException::new);
+		Unit unit = unitRepository.findById(food.getUnit().getId()).orElseThrow(NotFoundException::new);
 		food.setUnit(unit);
 
 		return foodRepository.save(food);
@@ -55,7 +55,7 @@ public class FoodServiceImpl implements FoodService {
 				NotFoundException::new);
 
 		food.setName(foodRequest.getName());
-		Unit unit = unitRepository.findByName(foodRequest.getUnit().getName()).orElseThrow(
+		Unit unit = unitRepository.findById(foodRequest.getUnit().getId()).orElseThrow(
 				NotFoundException::new);
 
 		food.setUnit(unit);

@@ -119,7 +119,7 @@ class FoodServiceImplTest {
 
 	@UnitTest
 	public void postFoodSavesAndReturnsFoodWhenNameIsNewAndUnitExists() throws FoundException, NotFoundException, IdNotAllowedException {
-		when(unitRepository.findByName(piece)).thenReturn(Optional.of(unitList.get(0)));
+		when(unitRepository.findById(any())).thenReturn(Optional.of(unitList.get(0)));
 		when(foodRepository.findByName(apple)).thenReturn(Optional.empty());
 		when(foodRepository.save(any())).thenReturn(new Food(3L, apple, new Unit(1L, piece)));
 
@@ -131,7 +131,7 @@ class FoodServiceImplTest {
 	@UnitTest
 	public void putFoodSavesChangedFoodWhenIdExists() throws NotFoundException {
 		when(foodRepository.findById(any())).thenReturn(Optional.of(foodList.get(0)));
-		when(unitRepository.findByName(any())).thenReturn(Optional.of(foodList.get(0).getUnit()));
+		when(unitRepository.findById(any())).thenReturn(Optional.of(foodList.get(0).getUnit()));
 		Food foodToChange = foodList.get(0);
 		foodToChange.setName("changed");
 		when(foodRepository.save(any()))
@@ -145,7 +145,7 @@ class FoodServiceImplTest {
 	@UnitTest
 	public void putFoodSavesChangedUnitWhenIdExists() throws NotFoundException {
 		when(foodRepository.findById(any())).thenReturn(Optional.of(foodList.get(0)));
-		when(unitRepository.findByName(any())).thenReturn(Optional.of(foodList.get(0).getUnit()));
+		when(unitRepository.findById(any())).thenReturn(Optional.of(foodList.get(0).getUnit()));
 		Food FoodToChange = foodList.get(0);
 		FoodToChange.getUnit().setName("changed");
 		when(foodRepository.save(any()))
