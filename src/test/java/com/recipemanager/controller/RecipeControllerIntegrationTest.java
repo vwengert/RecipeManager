@@ -1,6 +1,8 @@
 package com.recipemanager.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipemanager.RecipeManagerApplication;
+import com.recipemanager.dto.RecipeDto;
 import com.recipemanager.model.Food;
 import com.recipemanager.model.Recipe;
 import com.recipemanager.model.RecipeHeader;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import javax.transaction.Transactional;
@@ -98,12 +101,17 @@ class RecipeControllerIntegrationTest {
 
 	@IntegrationTest
 	@Transactional
-	void postReturnIdNotAllowedWhenIdIsUsed() throws Exception {
+	void postReturnCreatedWhenIdIsUsedBecausePostDtoIgnoresId() throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
 
-		mockMvc.perform(post("/api/v1/recipe/")
+		MvcResult result = mockMvc.perform(post("/api/v1/recipe/")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(createContentStringFrom(recipeSuppe)))
-				.andExpect(status().isNotAcceptable());
+				.andExpect(status().isCreated())
+				.andReturn();
+		RecipeDto recipe = mapper.readValue(result.getResponse().getContentAsString(), RecipeDto.class);
+
+		assertNotEquals(recipeSuppe.getId(), recipe.getId());
 	}
 
 	@IntegrationTest
