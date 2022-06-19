@@ -95,7 +95,7 @@ public class FoodController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public FoodDto putFood(
 			@Parameter(
-					description = "Food id and name and unit id of the changed food",
+					description = "Food id and name and unit id of food to change",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
 			@RequestBody FoodPutDto foodPutDto) throws NotFoundException {
 		return modelMapper.map(foodService.putFood(modelMapper.map(foodPutDto, Food.class)), FoodDto.class);
