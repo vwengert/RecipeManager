@@ -21,7 +21,7 @@ apply plugin: 'docker-compose'
 
 group = 'de.kochen'
 version = '0.0.1'
-sourceCompatibility = '11'
+sourceCompatibility = JavaVersion.VERSION_17
 
 configurations {
     compileOnly {
