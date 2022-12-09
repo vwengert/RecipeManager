@@ -2,7 +2,7 @@ package com.recipemanager.model;
 
 import lombok.*;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @RequiredArgsConstructor
