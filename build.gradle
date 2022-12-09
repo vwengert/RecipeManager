@@ -90,7 +90,7 @@ task integrationTest(type: Test) {
         excludeTags 'Unit'
     }
 
-//dockerCompose.isRequiredBy(IntegrationTest)
+//dockerCompose.isRequiredBy(integrationTest)
 //dockerCompose.isRequiredBy(test)
 
 dockerCompose {
