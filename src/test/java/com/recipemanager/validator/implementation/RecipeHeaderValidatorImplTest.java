@@ -1,6 +1,5 @@
 package com.recipemanager.validator.implementation;
 
-import com.recipemanager.model.Recipe;
 import com.recipemanager.model.RecipeHeader;
 import com.recipemanager.repository.RecipeHeaderRepository;
 import com.recipemanager.util.annotations.UnitTest;
@@ -18,12 +17,10 @@ class RecipeHeaderValidatorImplTest {
 	private final RecipeHeaderValidator recipeHeaderValidator = new RecipeHeaderValidatorImpl(recipeHeaderRepository);
 
 	private RecipeHeader recipeHeader;
-	private Recipe originalRecipe;
 
 	@BeforeEach
 	void setUp() {
 		recipeHeader = new RecipeHeader(1L, "name", "description", 2);
-		originalRecipe = new Recipe(1L, recipeHeader, null, 0.0);
 	}
 
 	@UnitTest
