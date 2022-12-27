@@ -155,7 +155,7 @@ class FoodControllerIntegrationTest {
 		Unit unit = unitRepository.save(new Unit(null, "unit not deleting!"));
 		Food food = foodRepository.save(new Food(null, "delete me", unit));
 
-		mockMvc.perform(delete("/api/v1/food/" + unit.getId())
+		mockMvc.perform(delete("/api/v1/food/" + food.getId())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 
@@ -169,7 +169,7 @@ class FoodControllerIntegrationTest {
 		Unit unit = new Unit(9999L, "i don't exist");
 		Food food = new Food(9999L, "i don't exist", unit);
 
-		mockMvc.perform(delete("/api/v1/food/" + unit.getId())
+		mockMvc.perform(delete("/api/v1/food/" + food.getId())
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
 	}

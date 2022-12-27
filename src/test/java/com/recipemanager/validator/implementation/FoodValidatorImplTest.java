@@ -1,7 +1,6 @@
 package com.recipemanager.validator.implementation;
 
 import com.recipemanager.model.Food;
-import com.recipemanager.model.Recipe;
 import com.recipemanager.model.Unit;
 import com.recipemanager.repository.FoodRepository;
 import com.recipemanager.util.annotations.UnitTest;
@@ -20,13 +19,11 @@ class FoodValidatorImplTest {
 
 	private Unit unit;
 	private Food food;
-	private Recipe originalRecipe;
 
 	@BeforeEach
 	void setUp() {
 		unit = new Unit(1L, "Unit");
 		food = new Food(1L, "Testfood", unit);
-		originalRecipe = new Recipe(1L, null, food, 0.0);
 	}
 
 	@UnitTest
