@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -104,7 +104,7 @@ class RecipeControllerIntegrationTest {
 	void postReturnCreatedWhenIdIsUsedBecausePostDtoIgnoresId() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 
-		MvcResult result = mockMvc.perform(post("/api/v1/recipe/")
+		MvcResult result = mockMvc.perform(post("/api/v1/recipe")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(createContentStringFrom(recipeSuppe)))
 				.andExpect(status().isCreated())
@@ -164,7 +164,7 @@ class RecipeControllerIntegrationTest {
 				.quantity(recipeSuppe.getQuantity())
 				.build();
 
-		mockMvc.perform(post("/api/v1/recipe/")
+		mockMvc.perform(post("/api/v1/recipe")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(createContentStringFrom(recipe)))
 				.andExpect(status().isCreated());
@@ -235,7 +235,7 @@ class RecipeControllerIntegrationTest {
 		Recipe recipe = recipeSuppe;
 		recipe.setRecipeHeader(brot);
 
-		mockMvc.perform(put("/api/v1/recipe/")
+		mockMvc.perform(put("/api/v1/recipe")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(createContentStringFrom(recipe)))
 				.andExpect(status().isOk());
@@ -251,7 +251,7 @@ class RecipeControllerIntegrationTest {
 		Recipe recipe = recipeSuppe;
 		recipe.setFood(kaese);
 
-		mockMvc.perform(put("/api/v1/recipe/")
+		mockMvc.perform(put("/api/v1/recipe")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(createContentStringFrom(recipeSuppe)))
 				.andExpect(status().isOk());
@@ -266,7 +266,7 @@ class RecipeControllerIntegrationTest {
 	void putReturns200AndChangedQuantity() throws Exception {
 		Recipe recipe = new Recipe(recipeSuppe.getId(), recipeSuppe.getRecipeHeader(), recipeSuppe.getFood(), 111.1);
 
-		mockMvc.perform(put("/api/v1/recipe/")
+		mockMvc.perform(put("/api/v1/recipe")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(createContentStringFrom(recipe)))
 				.andExpect(status().isOk());
